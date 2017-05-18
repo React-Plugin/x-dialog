@@ -1,10 +1,56 @@
+@charset "UTF-8";
 .dialog {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  box-sizing: border-box;
+  opacity: 0;
+  -webkit-transition: opacity 0.15s linear;
+  transition: opacity 0.15s linear; }
   .dialog .mask {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.3); }
+  .dialog.opacity-animate {
+    opacity: 1; }
+  .dialog.opacity-animate-hide {
+    opacity: 0; }
+  .dialog .dialog-content {
+    box-sizing: border-box;
+    overflow: auto;
+    /*定义滚动条轨道 内阴影+圆角*/
+    /*定义滑块 内阴影+圆角*/
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem; }
+    .dialog .dialog-content::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      background-color: #F5F5F5;
+      -webkit-transition: opacity 0.15s linear;
+      transition: opacity 0.15s linear; }
+    .dialog .dialog-content::-webkit-scrollbar:hover {
+      display: block; }
+    .dialog .dialog-content::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: #F5F5F5; }
+    .dialog .dialog-content::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: #555; }
+    .dialog .dialog-content .dialog-title {
+      padding: 15px 15px 15px 15px; }
+    .dialog .dialog-content .dialog-body {
+      padding: 15px; }
