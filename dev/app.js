@@ -18,8 +18,19 @@ class App extends React.Component {
         <button onClick={this.testFunc.bind(this)}>测试方法</button>
         <Dialog 
         isShow={this.state.isShow}
+        mask={true}
+        title={<div>我是标题啊</div>}
+        closeIcon={"x"}
         >
-          内容
+          <div>You're looking at an example modal in the dashboard theme.</div>
+          <div>You're looking at an example modal in the dashboard theme.</div>
+          <div>You're looking at an example modal in the dashboard theme.</div>
+          <div>You're looking at an example modal in the dashboard theme.</div>
+          <div>You're looking at an example modal in the dashboard theme.</div>
+          <div>You're looking at an example modal in the dashboard theme.</div>
+          <div>You're looking at an example modal in the dashboard theme.</div>
+          <div>You're looking at an example modal in the dashboard theme.</div>
+          <div>You're looking at an example modal in the dashboard theme.</div>
         </Dialog>
       </div>
     )

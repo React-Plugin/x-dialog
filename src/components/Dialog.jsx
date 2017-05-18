@@ -6,66 +6,50 @@
  * Time: 20:00:00
  * Contact: 55342775@qq.com
  */
-import React, { Component, PropTypes } from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
+import DialogPortal from './DialogPortal';
+const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer;
 
 export default class Dialog extends Component {
   static propTypes = {
     isShow: PropTypes.bool.isRequired,
-		mask:PropTypes.bool,
+    mask: PropTypes.bool,
     children: PropTypes.node
   };
   static defaultProps = {
     isShow: false,
-		mask:true
+    mask: true
   };
   constructor(props) {
     super(props);
     this.state = { isShow: props.isShow };
   }
+	//props有更新时调用事件,更新portal组件，相当于render。
   componentWillReceiveProps(newProps) {
-    console.log(newProps.isShow, this.state.isShow);
-    if (newProps.isShow && !this.state.isShow) {
-      this.show();
-    } else if (!newProps.isShow && this.state.isShow) {
-      this.hide();
-    }
+    this.renderPortal(newProps);
   }
-  timerHide() {
-    if (this.props.timer) {
-      this.clearTimer();
-      this.timer = setTimeout(() => {
-        this.hide();
-      }, this.props.timer);
-    }
+	//初始化时插入父级和渲染一次portal组件
+  componentDidMount() {
+    this.node = document.createElement("div");
+    document.body.appendChild(this.node);
+    this.renderPortal(this.props);
   }
+	//模拟render方法，调用portal组件时传入父级容器
+  renderPortal(props) {
+    renderSubtreeIntoContainer(
+      this,
+      <DialogPortal {...props}/>,
+      this.node
+    );
+  }
+	//组件销毁时触发,移除绑定
   componentWillUnmount() {
-    this.clearTimer();
-  }
-  clearTimer() {
-    this.timer && clearTimeout(this.timer);
-  }
-  show() {
-    console.log("show");
-    this.clearTimer();
-    this.setState({ isShow: true });
-    this.timerHide();
-  }
-  hide() {
-    console.log("hide");
-    this.setState({ isShow: false });
+		ReactDOM.unmountComponentAtNode(this.node);
+		this.node.parentNode.removeChild(this.node);
   }
   render() {
-    console.log(12345);
-    return this.state.isShow
-      ? (<div className="dialog">
-          <div className="dialog-content">
-						<div className="dialog-title">{this.props.title}</div>
-						<div className="dialog-body">{this.props.children}</div>
-						<div className="dialog-action"></div>
-					</div>
-					{this.props.mask?<div className="mask"/>:undefined}
-        </div>)
-      : <div />;
+    return <div />;
   }
 }
