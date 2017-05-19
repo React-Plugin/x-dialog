@@ -1,55 +1,32 @@
-.dialog {
+.x-dialog-continer {
+    width: 100%;
+    height: 100%;
     position: fixed;
+    left: 0;
+    top: 0;
+    &.x-dialog-mask {
+        background-color: rgba(0, 0, 0, .3);
+    }
+}
+
+.x-dialog {
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    .mask {
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, .3);
+    letter-spacing: 0;
+    opacity: 0;
+    -webkit-transition: opacity 0.15s linear;
+    transition: opacity 0.15s linear;
+    &.opacity-animate {
+        opacity: 1;
     }
-    
+    &.opacity-animate-hide {
         opacity: 0;
-        -webkit-transition: opacity 0.15s linear;
-        transition: opacity 0.15s linear;
-        &.opacity-animate {
-            opacity: 1;
-        }
-        &.opacity-animate-hide{
-            opacity: 0;
-        }
+    }
     .dialog-content {
-        box-sizing: border-box;
-        overflow: auto;
-        &::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-            background-color: #F5F5F5;
-            -webkit-transition: opacity 0.15s linear;
-            transition: opacity 0.15s linear;
-        }
-        &::-webkit-scrollbar:hover{
-            display: block;
-        }
-        /*定义滚动条轨道 内阴影+圆角*/  
-        &::-webkit-scrollbar-track  
-        {  
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
-            border-radius: 10px;  
-            background-color: #F5F5F5;  
-        }  
-        
-        /*定义滑块 内阴影+圆角*/  
-        &::-webkit-scrollbar-thumb  
-        {  
-            border-radius: 10px;  
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
-            box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
-            background-color: #555;  
-        }
+        box-sizing: inherit;
         margin: auto;
         position: absolute;
         top: 50%;
@@ -60,11 +37,131 @@
         background-color: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 0.3rem;
+        .dialog-body {
+            box-sizing: inherit;
+            overflow: auto;
+            &::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+                background-color: #F5F5F5;
+                -webkit-transition: opacity 0.15s linear;
+                transition: opacity 0.15s linear;
+            }
+            &::-webkit-scrollbar:hover {
+                display: block;
+            }
+            /*定义滚动条轨道 内阴影+圆角*/
+            &::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+                box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+                border-radius: 10px;
+                background-color: #F5F5F5;
+            }
+            /*定义滑块 内阴影+圆角*/
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+                box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+                background-color: #555;
+            }
+        }
         .dialog-title {
-            padding: 15px 15px 15px 15px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #f5f5f5;
+            h4 {
+                margin: 0;
+                line-height: 1.5;
+                font-weight: 300;
+                font-size: 1.5rem;
+                display: inline-block;
+            }
+        }
+        .dialog-close-con {
+            float: right;
+        }
+        .dialog-close {
+            float: right;
+            font-size: 1.5rem;
+            font-weight: bold;
+            line-height: 1;
+            color: #000;
+            text-shadow: 0 1px 0 #fff;
+            opacity: .5;
+            font-style: normal;
+            font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            padding: 0;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            -webkit-appearance: none;
+            &:hover {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+                opacity: .75;
+            }
         }
         .dialog-body {
             padding: 15px;
+        }
+        .dialog-action {
+            padding:15px;
+            text-align: right;
+            button {
+                cursor: pointer;
+                color: #333333;
+                background-color: #ffffff;
+                border-color: #333333;
+                margin-left:10px;
+                &.d-ok {
+                    color: #fff;
+                    background-color: #1997c6;
+                    border-color: #1997c6;
+                }
+                display: inline-block;
+                font-weight: normal;
+                line-height: 1.25;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                border: 1px solid transparent;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                border-radius: 0.25rem;
+                -webkit-transition: all 0.2s ease-in-out;
+                transition: all 0.2s ease-in-out;
+                &:focus,
+                &:hover {
+                    text-decoration: none;
+                }
+                &:focus,
+                &.pa {
+                    outline: 0;
+                    box-shadow: 0 0 0 2px rgba(25, 151, 198, 0.25);
+                }
+                &.disabled,
+                &:disabled {
+                    cursor: not-allowed;
+                    opacity: .65;
+                }
+                &:active,
+                &.active {
+                    background-image: none;
+                }
+            }
         }
     }
 }

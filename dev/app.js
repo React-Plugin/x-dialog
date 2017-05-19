@@ -19,8 +19,7 @@ class App extends React.Component {
         <Dialog 
         isShow={this.state.isShow}
         mask={true}
-        title={<div>我是标题啊</div>}
-        closeIcon={"x"}
+        title={"我是标题啊"}
         >
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
