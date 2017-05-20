@@ -20,6 +20,7 @@ class App extends React.Component {
         isShow={this.state.isShow}
         mask={true}
         title={"我是标题啊"}
+        buttons={false}
         >
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>

@@ -26,12 +26,18 @@ export default class Dialog extends Component {
     mask: true,
     className: "",
     zIndex: 9,
-    closeIcon: <button className="dialog-close"><span>×</span></button>,
-    buttons:[{text:'确定',className:'d-ok',handle:Dialog.hide.bind(this)}] //<div><button className="d-ok">确认</button><button className="d-cancel" onClick={this.hide.bind(this)}>返回</button></div>
+    closeIcon: <button className="dialog-close"><span>×</span></button>
   };
   constructor(props) {
     super(props);
     this.state = { isShow: props.isShow };
+    if( typeof this.props.buttons ==='undefined'){
+      this.buttons = <div><button className="d-ok">确认</button><button className="d-cancel" onClick={this.hide.bind(this)}>返回</button></div>
+    }else if(this.props.buttons){
+      this.buttons = this.props.buttons;
+    }else{
+      this.buttons = undefined;
+    }
   }
   componentWillReceiveProps(newProps) {
     console.log(newProps.isShow, this.state.isShow);
@@ -113,8 +119,8 @@ export default class Dialog extends Component {
                 {this.props.children}
               </div>
               <div ref="dialogFooter">
-                {this.props.buttons
-                  ? <div className="dialog-action">{this.props.buttons}</div>
+                {this.buttons
+                  ? <div className="dialog-action">{this.buttons}</div>
                   : undefined}
               </div>
             </div>
