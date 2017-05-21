@@ -38,6 +38,7 @@ export default class Dialog extends Component {
   }
 	//模拟render方法，调用portal组件时传入父级容器
   renderPortal(props) {
+    console.log(props)
     renderSubtreeIntoContainer(
       this,
       <DialogPortal {...props}/>,
@@ -50,6 +51,6 @@ export default class Dialog extends Component {
 		this.node.parentNode.removeChild(this.node);
   }
   render() {
-    return <div />;
+    return null;
   }
 }

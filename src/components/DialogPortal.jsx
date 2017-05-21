@@ -18,67 +18,74 @@ export default class Dialog extends Component {
     className: PropTypes.string,
     zIndex: PropTypes.number,
     height: PropTypes.number,
-    buttons: PropTypes.array,
-    closeIcon: PropTypes.node
+    buttons: PropTypes.any,
+    closeIcon: PropTypes.node,
+    afterHide:PropTypes.func,
+    afterShow:PropTypes.func
   };
   static defaultProps = {
     isShow: false,
     mask: true,
     className: "",
     zIndex: 9,
-    closeIcon: <button className="dialog-close"><span>×</span></button>
+    closeIcon: <button className="dialog-close"><span>×</span></button>,
+    afterHide:()=>{},
+    afterShow:()=>{}
   };
   constructor(props) {
     super(props);
     this.state = { isShow: props.isShow };
-    if( typeof this.props.buttons ==='undefined'){
-      this.buttons = <div><button className="d-ok">确认</button><button className="d-cancel" onClick={this.hide.bind(this)}>返回</button></div>
-    }else if(this.props.buttons){
-      this.buttons = this.props.buttons;
-    }else{
-      this.buttons = undefined;
-    }
   }
   componentWillReceiveProps(newProps) {
     console.log(newProps.isShow, this.state.isShow);
     if (newProps.isShow && !this.state.isShow) {
-      this.show();
+      this.show(newProps);
     } else if (!newProps.isShow && this.state.isShow) {
-      this.hide();
+      this.hide(newProps);
     }
   }
-  timerHide() {
-    if (this.props.timer) {
+  timerHide(newProps) {
+    if (newProps.timer) {
       this.clearTimer();
       this.timer = setTimeout(() => {
         this.hide();
-      }, this.props.timer);
+      }, newProps.timer);
     }
   }
   componentWillUnmount() {
     this.clearTimer();
+    console.log('unmount');
+    document.removeEventListener('keydown',this.keyBind.bind(this));
+  }
+  componentDidMount(){
+    document.addEventListener('keydown',this.keyBind.bind(this));
+  }
+  keyBind(e){
+    console.log(e)
+    if(e.keyCode === 27){
+      this.hide();
+    }
   }
   clearTimer() {
     this.timer && clearTimeout(this.timer);
   }
-  show() {
+  show(newProps) {
     console.log("show");
     this.clearTimer();
     this.setState({ isShow: true }, () => {
       setTimeout(() => this.refs.dialog.className += " opacity-animate", 0);
       let height = Number(this.refs.dialogContent.offsetHeight);
-      let maxHeight = Number(document.documentElement.clientHeight);
-      if (height > maxHeight) {
+      let maxHeight = newProps.height || Number(document.documentElement.clientHeight);
+      if (height >= maxHeight) {
         this.refs.dialogContent.style.height = maxHeight + "px";
-        this.refs.dialogBody.style.height =
-          maxHeight -
-          this.refs.dialogHeader.offsetHeight -
-          this.refs.dialogFooter.offsetHeight +
-          "px";
-        console.log(maxHeight,this.refs.dialogHeader.offsetHeight,this.refs.dialogFooter.offsetHeight,this.refs.dialogBody.style.height);
+        let bodyHeight = maxHeight - (this.refs.dialogHeader.offsetHeight || 0) - (this.refs.dialogFooter.offsetHeight || 0);
+        this.refs.dialogBody.style.height = bodyHeight + 'px';
+        console.log(bodyHeight)
+        console.log(maxHeight, this.refs.dialogHeader.offsetHeight, this.refs.dialogFooter.offsetHeight, this.refs.dialogBody.style.height);
       }
+      this.props.afterShow();
     });
-    this.timerHide();
+    this.timerHide(newProps);
   }
   hide() {
     console.log("hide");
@@ -90,42 +97,52 @@ export default class Dialog extends Component {
     setTimeout(this._hide.bind(this), 300);
   }
   _hide() {
-    this.setState({ isShow: false });
+    this.setState({ isShow: false },()=>{
+      this.props.afterHide();
+    });
   }
   render() {
+    if (typeof this.props.buttons === 'undefined') {
+      this.buttons = <div><button className="d-ok">确认</button><button className="d-cancel" onClick={this.hide.bind(this)}>返回</button></div>
+    } else if (this.props.buttons) {
+      this.buttons = this.props.buttons;
+    } else {
+      this.buttons = undefined;
+    }
     return this.state.isShow
-      ? <div className={ this.props.mask ? "x-dialog-continer x-dialog-mask" : "x-dialog-continer"}>
+      ? <div className={this.props.mask ? "x-dialog-continer x-dialog-mask" : "x-dialog-continer"}
+        style={{ zIndex: this.props.zIndex }}>
+        <div
+          className="x-dialog"
+          ref="dialog"
+        >
           <div
-            className="x-dialog"
-            ref="dialog"
-            style={{ zIndex: this.props.zIndex }}
+            className={"dialog-content " + this.props.className}
+            ref="dialogContent"
+            style={{ width: this.props.width || 'auto', height: this.props.height || 'auto' }}
           >
-            <div
-              className={"dialog-content " + this.props.className}
-              ref="dialogContent"
-            >
-              {this.props.title
-                ? <div className="dialog-title" ref="dialogHeader">
-                    <h4>{this.props.title}</h4>
-                    <div
-                      onClick={this.hide.bind(this)}
-                      className="dialog-close-con"
-                    >
-                      {this.props.closeIcon}
-                    </div>
-                  </div>
+            {this.props.title
+              ? <div className="dialog-title" ref="dialogHeader">
+                <h4>{this.props.title}</h4>
+                <div
+                  onClick={this.hide.bind(this)}
+                  className="dialog-close-con"
+                >
+                  {this.props.closeIcon}
+                </div>
+              </div>
+              : undefined}
+            <div className="dialog-body" ref="dialogBody">
+              {this.props.children}
+            </div>
+            <div ref="dialogFooter">
+              {this.buttons
+                ? <div className="dialog-action">{this.buttons}</div>
                 : undefined}
-              <div className="dialog-body" ref="dialogBody">
-                {this.props.children}
-              </div>
-              <div ref="dialogFooter">
-                {this.buttons
-                  ? <div className="dialog-action">{this.buttons}</div>
-                  : undefined}
-              </div>
             </div>
           </div>
         </div>
+      </div>
       : <div />;
   }
 }
