@@ -35,6 +35,7 @@ export default class Dialog extends Component {
   constructor(props) {
     super(props);
     this.state = { isShow: props.isShow };
+    this.keyBind= this.keyBind.bind(this);//方便移除事件绑定.每次bind会生成新的对象
   }
   componentWillReceiveProps(newProps) {
     console.log(newProps.isShow, this.state.isShow);
@@ -48,17 +49,17 @@ export default class Dialog extends Component {
     if (newProps.timer) {
       this.clearTimer();
       this.timer = setTimeout(() => {
-        this.hide();
+        this.state.isShow && this.hide();
       }, newProps.timer);
     }
   }
   componentWillUnmount() {
     this.clearTimer();
     console.log('unmount');
-    document.removeEventListener('keydown',this.keyBind.bind(this));
+    document.removeEventListener('keydown',this.keyBind);
   }
   componentDidMount(){
-    document.addEventListener('keydown',this.keyBind.bind(this));
+    document.addEventListener('keydown',this.keyBind);
   }
   keyBind(e){
     console.log(e)

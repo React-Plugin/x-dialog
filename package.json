@@ -15,7 +15,12 @@
   "scripts": {
     "example": "node scripts/dev-examples",
     "start": "node scripts/dev-src",
-    "prepublish": "babel src -d lib & webpack --config webpack.dist.config.js"
+    "prepublish": "babel src -d lib & webpack --config webpack.dist.config.js",
+    "doc-dev":"npm-run-all docs:clean docs:prepare docs:build:watch",
+    "docs:clean":"rimraf _book",
+    "docs:prepare": "gitbook install",
+    "docs:build": "gitbook build -g react-plugin/x-dialog",
+    "docs:build:watch": "gitbook serve"
   },
   "authors": [
     "tianxiangbing"
@@ -33,20 +38,18 @@
     "babel-preset-stage-2": "^6.18.0",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "gitbook-cli": "^2.3.0",
     "node-sass": "^3.5.3",
     "npm-run-all": "^3.1.2",
     "react": "^15.0.0",
     "react-addons-test-utils": "^15.0.0",
     "react-dom": "^15.0.0",
+    "rimraf": "^2.6.1",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
     "uglify-js": "2.4.24",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"
-  },
-  "dependencies": {
-    "element-class": "^0.2.0",
-    "exenv": "1.2.0"
   },
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0",
