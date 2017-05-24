@@ -10,6 +10,6 @@
 使用 [npm](https://npmjs.org/) 安装, 运行
 
 ```bash
-$ npm install react-modal
+$ npm install x-dialog
 ```
 
