@@ -1,6 +1,6 @@
 {
   "name": "x-dialog",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "react dialog component",
   "main": "./lib/index.js",
   "repository": {
@@ -17,14 +17,15 @@
     "exserver":"node scripts/dev-examples",
     "start": "node scripts/dev-src",
     "build":"webpack --config webpack.dist.config.js",
-    "prepublish": "babel src -d lib && webpack --config webpack.css.config.js",
+    "lib":"babel src -d lib && webpack --config webpack.css.config.js",
+    "prepublish": "npm-run-all lib build",
     "docs": "npm-run-all docs:*",
     "doc-dev":"npm-run-all docs:clean docs:prepare docs:build:watch",
     "docs:clean":"rimraf _book",
     "docs:prepare": "gitbook install",
     "docs:build": "gitbook build -g react-plugin/x-dialog",
     "docs:build:watch": "gitbook serve",
-    "docs:publish": "cd _book && git init && git checkout -b gh-pages && git add . && git commit -am 'update book' && git push git@github.com:react-plugin/x-dialog gh-pages --force"
+    "docs:publish": "cd _book && git init && git checkout -b gh-pages && git add --all && git commit -am \"update book\" && git push git@github.com:react-plugin/x-dialog gh-pages --force"
   },
   "authors": [
     "tianxiangbing"

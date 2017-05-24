@@ -1202,13 +1202,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "componentWillUnmount",
 	    value: function componentWillUnmount() {
 	      this.clearTimer();
-	      console.log('unmount');
-	      document.removeEventListener('keydown', this.keyBind);
+	      console.log("unmount");
+	      document.removeEventListener("keydown", this.keyBind);
 	    }
 	  }, {
 	    key: "componentDidMount",
 	    value: function componentDidMount() {
-	      document.addEventListener('keydown', this.keyBind);
+	      document.addEventListener("keydown", this.keyBind);
 	    }
 	  }, {
 	    key: "keyBind",
@@ -1239,7 +1239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (height >= maxHeight) {
 	          _this3.refs.dialogContent.style.height = maxHeight + "px";
 	          var bodyHeight = maxHeight - (_this3.refs.dialogHeader.offsetHeight || 0) - (_this3.refs.dialogFooter.offsetHeight || 0);
-	          _this3.refs.dialogBody.style.height = bodyHeight + 'px';
+	          _this3.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
 	          console.log(bodyHeight);
 	          console.log(maxHeight, _this3.refs.dialogHeader.offsetHeight, _this3.refs.dialogFooter.offsetHeight, _this3.refs.dialogBody.style.height);
 	        }
@@ -1267,21 +1267,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      if (typeof this.props.buttons === 'undefined') {
-	        this.buttons = _react2.default.createElement("div", null, _react2.default.createElement("button", { className: "d-ok" }, "\u786E\u8BA4"), _react2.default.createElement("button", { className: "d-cancel", onClick: this.hide.bind(this) }, "\u8FD4\u56DE"));
+	      if (typeof this.props.buttons === "undefined") {
+	        this.buttons = _react2.default.createElement("div", null, _react2.default.createElement("button", { className: "d-ok", onClick: this.props.okCallback.bind(this) }, "\u786E\u8BA4"), _react2.default.createElement("button", { className: "d-cancel", onClick: this.hide.bind(this) }, "\u8FD4\u56DE"));
 	      } else if (this.props.buttons) {
 	        this.buttons = this.props.buttons;
 	      } else {
 	        this.buttons = undefined;
 	      }
-	      return this.state.isShow ? _react2.default.createElement("div", { className: this.props.mask ? "x-dialog-continer x-dialog-mask" : "x-dialog-continer",
-	        style: { zIndex: this.props.zIndex } }, _react2.default.createElement("div", {
-	        className: "x-dialog",
-	        ref: "dialog"
-	      }, _react2.default.createElement("div", {
+	      console.log(this.buttons);
+	      return this.state.isShow ? _react2.default.createElement("div", {
+	        className: this.props.mask ? "x-dialog-continer x-dialog-mask" : "x-dialog-continer",
+	        style: { zIndex: this.props.zIndex }
+	      }, _react2.default.createElement("div", { className: "x-dialog", ref: "dialog" }, _react2.default.createElement("div", {
 	        className: "dialog-content " + this.props.className,
 	        ref: "dialogContent",
-	        style: { width: this.props.width || 'auto', height: this.props.height || 'auto' }
+	        style: {
+	          width: this.props.width || "auto",
+	          height: this.props.height || "auto"
+	        }
 	      }, this.props.title ? _react2.default.createElement("div", { className: "dialog-title", ref: "dialogHeader" }, _react2.default.createElement("h4", null, this.props.title), _react2.default.createElement("div", {
 	        onClick: this.hide.bind(this),
 	        className: "dialog-close-con"
@@ -1302,7 +1305,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  buttons: _propTypes2.default.any,
 	  closeIcon: _propTypes2.default.node,
 	  afterHide: _propTypes2.default.func,
-	  afterShow: _propTypes2.default.func
+	  afterShow: _propTypes2.default.func,
+	  okCallback: _propTypes2.default.func
 	};
 	Dialog.defaultProps = {
 	  isShow: false,
@@ -1311,7 +1315,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  zIndex: 9,
 	  closeIcon: _react2.default.createElement("button", { className: "dialog-close" }, _react2.default.createElement("span", null, "\xD7")),
 	  afterHide: function afterHide() {},
-	  afterShow: function afterShow() {}
+	  afterShow: function afterShow() {},
+	  okCallback: function okCallback() {}
 	};
 	exports.default = Dialog;
 

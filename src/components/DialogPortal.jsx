@@ -21,7 +21,8 @@ export default class Dialog extends Component {
     buttons: PropTypes.any,
     closeIcon: PropTypes.node,
     afterHide: PropTypes.func,
-    afterShow: PropTypes.func
+    afterShow: PropTypes.func,
+    okCallback: PropTypes.func
   };
   static defaultProps = {
     isShow: false,
@@ -30,7 +31,8 @@ export default class Dialog extends Component {
     zIndex: 9,
     closeIcon: <button className="dialog-close"><span>×</span></button>,
     afterHide: () => {},
-    afterShow: () => {}
+    afterShow: () => {},
+    okCallback: () => {}
   };
   constructor(props) {
     super(props);
@@ -84,7 +86,7 @@ export default class Dialog extends Component {
           maxHeight -
           (this.refs.dialogHeader.offsetHeight || 0) -
           (this.refs.dialogFooter.offsetHeight || 0);
-        this.refs.dialogBody.style.height = Math.max(0,bodyHeight) + "px";
+        this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
         console.log(bodyHeight);
         console.log(
           maxHeight,
@@ -115,7 +117,9 @@ export default class Dialog extends Component {
     if (typeof this.props.buttons === "undefined") {
       this.buttons = (
         <div>
-          <button className="d-ok">确认</button>
+          <button className="d-ok" onClick={this.props.okCallback.bind(this)}>
+            确认
+          </button>
           <button className="d-cancel" onClick={this.hide.bind(this)}>
             返回
           </button>
@@ -126,7 +130,7 @@ export default class Dialog extends Component {
     } else {
       this.buttons = undefined;
     }
-    console.log(this.buttons)
+    console.log(this.buttons);
     return this.state.isShow
       ? <div
           className={

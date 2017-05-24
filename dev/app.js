@@ -16,7 +16,9 @@ class App extends React.Component {
     this.setState({});
   }
   defaultDialog(){
-    this.state ={isShow:true,title:"我是标题啊"};
+    this.state ={isShow:true,title:"我是标题啊",okCallback:()=>{
+      alert('我点了确定')
+    }};
     this.setState({});
   }
   noheadfoottimer(){
