@@ -1,6 +1,6 @@
 {
   "gitbook": ">=3.2.2",
-  "title": "react-modal",
+  "title": "x-dialog",
   "root": "./docs",
   "plugins": [
     "codepen",
@@ -12,8 +12,8 @@
   ],
   "pluginsConfig": {
     "codepen": {
-      "height": 1000,
-      "defaultTab": "js"
+      "height": 500,
+      "defaultTab": "result"
     },
     "edit-link": {
       "base": "https://github.com/react-plugin/x-dialog/tree/master/docs",

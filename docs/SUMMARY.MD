@@ -1,12 +1,12 @@
 # Summary
 
-* [Read Me](/README.md)
-* [Styles](styles/README.md)
-  * [Using CSS Classes](styles/classes.md)
-  * [Overriding Defaults](styles/defaults.md)
+* [关于x-dialog](/README.md)
+* [样式](styles/README.md)
+  * [传递className](styles/classes.md)
+  * [覆盖默认样式](styles/defaults.md)
 
 
-* [例子](examples/README.md)
+* 例子
   * [默认的](examples/default.md)
   * [不带按钮](examples/nobuttons.md)
   * [没有头尾的定时关闭的](examples/noheadfooter.md)

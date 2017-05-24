@@ -24,7 +24,7 @@ class App extends React.Component {
     this.setState({});
   }
   setWH(){
-    this.state = {isShow:true,title:'固定宽高的浮层',height:400,width:300};
+    this.state = {isShow:true,title:'固定宽高的浮层',height:100,width:300};
     this.setState({});
   }
   showCallback(){
@@ -42,6 +42,15 @@ class App extends React.Component {
   hide(){
     this.setState({isShow:false});
   }
+  
+  showClassName() {
+    this.state = {
+      isShow: true,
+      title: "这是一个传递样式的例子1",
+      className:"myClass"
+    };
+    this.setState({});
+  }
   render() {
     return (
       <div>
@@ -52,6 +61,7 @@ class App extends React.Component {
         <button onClick={this.showCallback.bind(this)}>显示的回调方式</button>
         <button onClick={this.hideCallback.bind(this)}>隐藏的回调方式</button>
         <button onClick={this.showButtons.bind(this)}>自定义按钮</button>
+        <button onClick={this.showClassName.bind(this)}>传递样式名称</button>
         <Dialog 
         {...this.state}
         >
