@@ -7,4 +7,5 @@
  * Contact: 55342775@qq.com
  */
 import Dialog from './components/Dialog';
-export default Dialog;
+// export default Dialog;
+module.exports= Dialog;
