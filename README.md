@@ -6,6 +6,8 @@
 
 演示地址： [x-dialog各种案例演示](https://react-plugin.github.io/x-dialog/)
 
+源文件地址：[https://github.com/react-plugin/x-dialog](https://github.com/react-plugin/x-dialog)
+
 ## npm安装 
 
 使用 [npm](https://www.npmjs.com/package/x-dialog) 安装, 运行
@@ -41,3 +43,7 @@ $ npm install x-dialog --save-dev
 ### `okCallback`:func类型，当默认按钮的情况下时，点击`确定`时的回调方法，点`取消`时直接隐藏，如果需要定制更多的方法，建议传递`buttons`属性。
 ### `afterShow`:func类型，显示的回调方法
 ### `afterHide`:func类型，关闭隐藏时的回调方法
+
+
+### 关于作者
+[https://github.com/tianxiangbing](https://github.com/tianxiangbing)
