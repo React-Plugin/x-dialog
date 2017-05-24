@@ -1,49 +1,57 @@
-var fs = require("fs");
-var path = require("path");
-var webpack = require("webpack");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var EXAMPLES_DIR = path.resolve(__dirname, "examples");
+var webpack = require('webpack');
+var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 
-var extractCSS = new ExtractTextPlugin("index.css");
-var modulesDirectories = ["web_modules", "node_modules", "bower_components","src"];
+var reactExternal = {
+  root: 'React',
+  commonjs2: 'react',
+  commonjs: 'react',
+  amd: 'react'
+};
+var reactDOMExternal = {
+  root: 'ReactDOM',
+  commonjs2: 'react-dom',
+  commonjs: 'react-dom',
+  amd: 'react-dom'
+};
+
 module.exports = {
-  entry:{app:['./src/_index.scss']},
+
+  entry: {
+    'x-dialog': './lib/index.js',
+    'x-dialog.min': './lib/index.js'
+  },
+
+  externals: {
+    'react': reactExternal,
+    'react-dom': reactDOMExternal
+  },
+
   output: {
-    filename: "index.css",
-    // chunkFilename: "index.chunk.js",
-    path: "lib"
+    filename: '[name].js',
+    chunkFilename: '[id].chunk.js',
+    path: 'dist',
+    publicPath: '/',
+    libraryTarget: 'umd',
+    library: 'Dialog'
   },
-  resolve: {
-      modulesDirectories: modulesDirectories,
-      extensions: ['', '.js', '.jsx', '.css','.scss']
-  },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    }),
+    new UglifyJsPlugin({
+      include: /\.min\.js$/,
+      minimize: true,
+      compress: {
+        warnings: false
+      }
+    })
+  ],
+
   module: {
     loaders: [
-      {
-        test: /\.(eot|woff|ttf|svg)/,
-        loader: "file-loader?name=[name].[ext]"
-      },
-      {
-        test: /\.scss$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: extractCSS.extract('style-loader', 'css?!sass?&includePaths[]=' + path.resolve(__dirname, 'src'))
-      },
-      {
-        test: /\.css$/,
-        loader: extractCSS.extract(
-          "style-loader",
-          "css?includePaths[]=" + path.resolve(__dirname, "src")
-        )
-      },
-      {
-        test: /\.html$/,
-        loader: "html-loader"
-      },
-      {
-        test: /\.png$/,
-        loader: "file-loader?name=[name].[ext]"
-      }
+      { test: /\.js?$/, exclude: /node_modules/, loader: 'babel'}
     ]
-  },
-  plugins: [extractCSS,new webpack.optimize.DedupePlugin()]
+  }
+
 };

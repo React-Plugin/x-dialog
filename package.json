@@ -1,6 +1,6 @@
 {
   "name": "x-dialog",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "react dialog component",
   "main": "./lib/index.js",
   "repository": {
@@ -13,9 +13,11 @@
     "example": "examples"
   },
   "scripts": {
-    "example": "node scripts/dev-examples",
+    "example": "npm-run-all prepublish exserver",
+    "exserver":"node scripts/dev-examples",
     "start": "node scripts/dev-src",
-    "prepublish": "babel src -d lib & webpack --config webpack.dist.config.js",
+    "build":"webpack --config webpack.dist.config.js",
+    "prepublish": "babel src -d lib && webpack --config webpack.css.config.js",
     "doc-dev":"npm-run-all docs:clean docs:prepare docs:build:watch",
     "docs:clean":"rimraf _book",
     "docs:prepare": "gitbook install",
