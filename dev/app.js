@@ -26,7 +26,7 @@ class App extends React.Component {
     this.setState({});
   }
   setWH(){
-    this.state = {isShow:true,title:'固定宽高的浮层',height:100,width:300};
+    this.state = {isShow:true,title:'固定宽高的浮层',height:150,width:300};
     this.setState({});
   }
   showCallback(){
