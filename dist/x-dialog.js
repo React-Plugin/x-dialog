@@ -176,7 +176,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "renderPortal",
 	    value: function renderPortal(props) {
-	      console.log(props);
+	      // console.log(props)
 	      renderSubtreeIntoContainer(this, _react2.default.createElement(_DialogPortal2.default, props), this.node);
 	    }
 	    //组件销毁时触发,移除绑定
@@ -1179,7 +1179,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Dialog, [{
 	    key: "componentWillReceiveProps",
 	    value: function componentWillReceiveProps(newProps) {
-	      console.log(newProps.isShow, this.state.isShow);
+	      // console.log(newProps.isShow, this.state.isShow);
 	      if (newProps.isShow && !this.state.isShow) {
 	        this.show(newProps);
 	      } else if (!newProps.isShow && this.state.isShow) {
@@ -1202,7 +1202,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "componentWillUnmount",
 	    value: function componentWillUnmount() {
 	      this.clearTimer();
-	      console.log("unmount");
+	      // console.log("unmount");
 	      document.removeEventListener("keydown", this.keyBind);
 	    }
 	  }, {
@@ -1228,11 +1228,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function show(newProps) {
 	      var _this3 = this;
 
-	      console.log("show");
+	      // console.log("show");
 	      this.clearTimer();
 	      this.setState({ isShow: true }, function () {
 	        setTimeout(function () {
-	          return _this3.refs.dialog.className += " opacity-animate";
+	          _this3.refs.dialog.className ? _this3.refs.dialog.className += " opacity-animate" : undefined;
 	        }, 0);
 	        var height = Number(_this3.refs.dialogContent.offsetHeight);
 	        var maxHeight = newProps.height || Number(document.documentElement.clientHeight);
@@ -1240,8 +1240,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this3.refs.dialogContent.style.height = maxHeight + "px";
 	          var bodyHeight = maxHeight - (_this3.refs.dialogHeader.offsetHeight || 0) - (_this3.refs.dialogFooter.offsetHeight || 0);
 	          _this3.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
-	          console.log(bodyHeight);
-	          console.log(maxHeight, _this3.refs.dialogHeader.offsetHeight, _this3.refs.dialogFooter.offsetHeight, _this3.refs.dialogBody.style.height);
+	          // console.log(bodyHeight);
+	          // console.log(
+	          //   maxHeight,
+	          //   this.refs.dialogHeader.offsetHeight,
+	          //   this.refs.dialogFooter.offsetHeight,
+	          //   this.refs.dialogBody.style.height
+	          // );
 	        }
 	        _this3.props.afterShow();
 	      });
@@ -1250,7 +1255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "hide",
 	    value: function hide() {
-	      console.log("hide");
+	      // console.log("hide");
 	      var cls = this.refs.dialog.className;
 	      this.refs.dialog.className = cls.replace("opacity-animate", "opacity-animate-hide");
 	      setTimeout(this._hide.bind(this), 300);
@@ -1274,7 +1279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else {
 	        this.buttons = undefined;
 	      }
-	      console.log(this.buttons);
+	      // console.log(this.buttons);
 	      return this.state.isShow ? _react2.default.createElement("div", {
 	        className: this.props.mask ? "x-dialog-continer x-dialog-mask" : "x-dialog-continer",
 	        style: { zIndex: this.props.zIndex }

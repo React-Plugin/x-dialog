@@ -30,9 +30,9 @@ export default class Dialog extends Component {
     className: "",
     zIndex: 9,
     closeIcon: <button className="dialog-close"><span>×</span></button>,
-    afterHide: () => {},
-    afterShow: () => {},
-    okCallback: () => {}
+    afterHide: () => { },
+    afterShow: () => { },
+    okCallback: () => { }
   };
   constructor(props) {
     super(props);
@@ -40,7 +40,7 @@ export default class Dialog extends Component {
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
   }
   componentWillReceiveProps(newProps) {
-    console.log(newProps.isShow, this.state.isShow);
+    // console.log(newProps.isShow, this.state.isShow);
     if (newProps.isShow && !this.state.isShow) {
       this.show(newProps);
     } else if (!newProps.isShow && this.state.isShow) {
@@ -57,7 +57,7 @@ export default class Dialog extends Component {
   }
   componentWillUnmount() {
     this.clearTimer();
-    console.log("unmount");
+    // console.log("unmount");
     document.removeEventListener("keydown", this.keyBind);
   }
   componentDidMount() {
@@ -73,10 +73,10 @@ export default class Dialog extends Component {
     this.timer && clearTimeout(this.timer);
   }
   show(newProps) {
-    console.log("show");
+    // console.log("show");
     this.clearTimer();
     this.setState({ isShow: true }, () => {
-      setTimeout(() => this.refs.dialog.className += " opacity-animate", 0);
+      setTimeout(() => { this.refs.dialog.className ? this.refs.dialog.className += " opacity-animate":undefined; }, 0);
       let height = Number(this.refs.dialogContent.offsetHeight);
       let maxHeight =
         newProps.height || Number(document.documentElement.clientHeight);
@@ -87,20 +87,20 @@ export default class Dialog extends Component {
           (this.refs.dialogHeader.offsetHeight || 0) -
           (this.refs.dialogFooter.offsetHeight || 0);
         this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
-        console.log(bodyHeight);
-        console.log(
-          maxHeight,
-          this.refs.dialogHeader.offsetHeight,
-          this.refs.dialogFooter.offsetHeight,
-          this.refs.dialogBody.style.height
-        );
+        // console.log(bodyHeight);
+        // console.log(
+        //   maxHeight,
+        //   this.refs.dialogHeader.offsetHeight,
+        //   this.refs.dialogFooter.offsetHeight,
+        //   this.refs.dialogBody.style.height
+        // );
       }
       this.props.afterShow();
     });
     this.timerHide(newProps);
   }
   hide() {
-    console.log("hide");
+    // console.log("hide");
     let cls = this.refs.dialog.className;
     this.refs.dialog.className = cls.replace(
       "opacity-animate",
@@ -130,47 +130,47 @@ export default class Dialog extends Component {
     } else {
       this.buttons = undefined;
     }
-    console.log(this.buttons);
+    // console.log(this.buttons);
     return this.state.isShow
       ? <div
-          className={
-            this.props.mask
-              ? "x-dialog-continer x-dialog-mask"
-              : "x-dialog-continer"
-          }
-          style={{ zIndex: this.props.zIndex }}
-        >
-          <div className="x-dialog" ref="dialog">
-            <div
-              className={"dialog-content " + this.props.className}
-              ref="dialogContent"
-              style={{
-                width: this.props.width || "auto",
-                height: this.props.height || "auto"
-              }}
-            >
-              {this.props.title
-                ? <div className="dialog-title" ref="dialogHeader">
-                    <h4>{this.props.title}</h4>
-                    <div
-                      onClick={this.hide.bind(this)}
-                      className="dialog-close-con"
-                    >
-                      {this.props.closeIcon}
-                    </div>
-                  </div>
+        className={
+          this.props.mask
+            ? "x-dialog-continer x-dialog-mask"
+            : "x-dialog-continer"
+        }
+        style={{ zIndex: this.props.zIndex }}
+      >
+        <div className="x-dialog" ref="dialog">
+          <div
+            className={"dialog-content " + this.props.className}
+            ref="dialogContent"
+            style={{
+              width: this.props.width || "auto",
+              height: this.props.height || "auto"
+            }}
+          >
+            {this.props.title
+              ? <div className="dialog-title" ref="dialogHeader">
+                <h4>{this.props.title}</h4>
+                <div
+                  onClick={this.hide.bind(this)}
+                  className="dialog-close-con"
+                >
+                  {this.props.closeIcon}
+                </div>
+              </div>
+              : undefined}
+            <div className="dialog-body" ref="dialogBody">
+              {this.props.children}
+            </div>
+            <div ref="dialogFooter">
+              {this.buttons
+                ? <div className="dialog-action">{this.buttons}</div>
                 : undefined}
-              <div className="dialog-body" ref="dialogBody">
-                {this.props.children}
-              </div>
-              <div ref="dialogFooter">
-                {this.buttons
-                  ? <div className="dialog-action">{this.buttons}</div>
-                  : undefined}
-              </div>
             </div>
           </div>
         </div>
+      </div>
       : <div />;
   }
 }
