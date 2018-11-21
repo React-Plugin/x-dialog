@@ -63,7 +63,7 @@ export default class Dialog extends Component {
   componentDidMount() {
     document.addEventListener("keydown", this.keyBind);
     if(this.props.isShow){
-      this.show()
+      this.show(this.props)
     }
   }
   keyBind(e) {

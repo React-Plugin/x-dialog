@@ -1201,7 +1201,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function componentDidMount() {
 	      document.addEventListener("keydown", this.keyBind);
 	      if (this.props.isShow) {
-	        this.show();
+	        this.show(this.props);
 	      }
 	    }
 	  }, {
