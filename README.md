@@ -20,14 +20,16 @@ $ npm install x-dialog --save-dev
 ```
 ## 调用方式
 ```js
+import Dialog from 'x-dialog';
+import 'x-dialog/lib/index.css';
 <Dialog 
-      isShow: true
-      title: "这是一个例子"
-      className:"myClass"
-      timer:2000
-      width:300
-      height:300
-      buttons: <div><button className="d-ok" onClick={this.hide.bind(this)}>我知道了</button><button className="d-cancel" onClick={this.hide.bind(this)}>关闭</button></div>
+      isShow={true}
+      title="这是一个例子"
+      className="myClass"
+      timer=2000
+      width=300
+      height=300
+      buttons=<div><button className="d-ok" onClick={this.hide.bind(this)}>我知道了</button><button className="d-cancel" onClick={this.hide.bind(this)}>关闭</button></div>
       afterShow:()=>alert('我显示出来了')
       afterHide:()=>alert('我又隐藏了')
         >

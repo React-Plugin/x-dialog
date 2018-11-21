@@ -7,7 +7,7 @@ var appElement = document.getElementById('example');
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isShow: false };
+    this.state = { isShow: true };
   }
   noAction() {
     // this.setState({ isShow:true });
