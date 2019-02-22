@@ -1,6 +1,6 @@
 {
   "name": "x-dialog",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "react dialog component",
   "main": "./lib/index.js",
   "repository": {
@@ -46,9 +46,9 @@
     "gitbook-cli": "^2.3.0",
     "node-sass": "^3.5.3",
     "npm-run-all": "^3.1.2",
-    "react": "^15.0.0",
+    "react": "^16.0.0",
     "react-addons-test-utils": "^15.0.0",
-    "react-dom": "^15.0.0",
+    "react-dom": "^16.0.0",
     "rimraf": "^2.6.1",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
@@ -57,8 +57,8 @@
     "webpack-dev-server": "^1.14.1"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.5.4",
-    "react-dom": "^0.14.0 || ^15.5.4"
+    "react": "^16.0.0 || ^16.8.0",
+    "react-dom": "^16.0.0 || ^16.8.0"
   },
   "tags": [
     "react",
@@ -72,5 +72,8 @@
     "react-component",
     "dialog",
     "react-plugin"
-  ]
+  ],
+  "dependencies": {
+    "x-i18n": "0.0.3"
+  }
 }

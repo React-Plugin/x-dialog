@@ -58,7 +58,8 @@ import 'x-dialog/lib/index.css';
     显示的回调方法
 ### `afterHide`:func类型
     关闭隐藏时的回调方法
-
+### `local`:object
+    国际化语言配置,默认中文，可以传递x-i18n中的其他语言包
 
 ### 关于作者
 [https://github.com/tianxiangbing](https://github.com/tianxiangbing)

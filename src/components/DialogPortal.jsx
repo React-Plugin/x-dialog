@@ -117,19 +117,20 @@ export default class Dialog extends Component {
     });
   }
   render() {
-    if (typeof this.props.buttons === "undefined") {
+    let {local,buttons,okCallback} = this.props;
+    if (typeof buttons === "undefined") {
       this.buttons = (
         <div>
-          <button className="d-ok" onClick={this.props.okCallback.bind(this)}>
-            确认
+          <button className="d-ok" onClick={okCallback.bind(this)}>
+            {local.submit}
           </button>
           <button className="d-cancel" onClick={this.hide.bind(this)}>
-            返回
+            {local.cancel}
           </button>
         </div>
       );
-    } else if (this.props.buttons) {
-      this.buttons = this.props.buttons;
+    } else if (buttons) {
+      this.buttons = buttons;
     } else {
       this.buttons = undefined;
     }

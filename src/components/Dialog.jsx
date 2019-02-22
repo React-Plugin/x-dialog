@@ -10,6 +10,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import DialogPortal from './DialogPortal';
+import I18n from 'x-i18n';
+
 const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer;
 
 export default class Dialog extends Component {
@@ -27,23 +29,32 @@ export default class Dialog extends Component {
     this.state = { isShow: props.isShow };
   }
 	//props有更新时调用事件,更新portal组件，相当于render。
-  componentWillReceiveProps(newProps) {
-    this.renderPortal(newProps);
+  // componentWillReceiveProps(newProps) {
+  //   this.renderPortal(newProps);
+  // }
+  componentDidUpdate(){
+    this.renderPortal();
   }
 	//初始化时插入父级和渲染一次portal组件
   componentDidMount() {
     this.node = document.createElement("div");
     document.body.appendChild(this.node);
-    this.renderPortal(this.props);
+    this.renderPortal();
   }
 	//模拟render方法，调用portal组件时传入父级容器
-  renderPortal(props) {
-    // console.log(props)
+  renderPortal() {
+    console.log(this.props)
     renderSubtreeIntoContainer(
       this,
-      <DialogPortal {...props}/>,
+      <I18n componentName="Dialog" defaultValue={this.props.local}>
+      {this.renderContent}
+      </I18n>,
       this.node
     );
+  }
+  renderContent=(local)=>{
+    console.log(this.props)
+    return <DialogPortal {...this.props} local={local}/>
   }
 	//组件销毁时触发,移除绑定
   componentWillUnmount() {
