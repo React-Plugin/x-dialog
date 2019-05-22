@@ -1,4 +1,3 @@
-@charset "UTF-8";
 .x-dialog-continer {
   width: 100%;
   height: 100%;
@@ -36,27 +35,7 @@
     border-radius: 0.3rem; }
     .x-dialog .dialog-content .dialog-body {
       box-sizing: inherit;
-      overflow: auto;
-      /*定义滚动条轨道 内阴影+圆角*/
-      /*定义滑块 内阴影+圆角*/ }
-      .x-dialog .dialog-content .dialog-body::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-        background-color: #F5F5F5;
-        -webkit-transition: opacity 0.15s linear;
-        transition: opacity 0.15s linear; }
-      .x-dialog .dialog-content .dialog-body::-webkit-scrollbar:hover {
-        display: block; }
-      .x-dialog .dialog-content .dialog-body::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
-        background-color: #F5F5F5; }
-      .x-dialog .dialog-content .dialog-body::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        background-color: #555; }
+      overflow: auto; }
     .x-dialog .dialog-content .dialog-title {
       display: -webkit-box;
       display: -ms-flexbox;
