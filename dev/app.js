@@ -13,11 +13,11 @@ class App extends React.Component {
   noAction() {
     // this.setState({ isShow:true });
     // this.replaceState()
-    let state ={isShow:true,title:"我是标题啊"} ;
+    let state ={isShow:true,title:"我是标题啊",mask:false} ;
     this.setState({"dialog":state});
   }
   defaultDialog(){
-    let state ={isShow:true,title:"我是标题啊",local:local,okCallback:()=>{
+    let state ={isShow:true,title:"我是标题啊",draggable:true,mask:false, local:local,okCallback:()=>{
       alert('我点了确定')
     }};    
     this.setState({"dialog":state});

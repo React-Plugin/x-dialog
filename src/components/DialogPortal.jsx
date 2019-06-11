@@ -9,6 +9,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+import Draggable from 'react-draggable';
 
 export default class Dialog extends Component {
   static propTypes = {
@@ -22,7 +23,9 @@ export default class Dialog extends Component {
     closeIcon: PropTypes.node,
     afterHide: PropTypes.func,
     afterShow: PropTypes.func,
-    okCallback: PropTypes.func
+    okCallback: PropTypes.func,
+    dragHandle:PropTypes.string,
+    draggable:PropTypes.bool,
   };
   static defaultProps = {
     isShow: false,
@@ -30,13 +33,15 @@ export default class Dialog extends Component {
     className: "",
     zIndex: 9,
     closeIcon: <button className="dialog-close"><span>×</span></button>,
+    dragHandle:'.dialog-title',
+    draggable:false,
     afterHide: () => { },
     afterShow: () => { },
     okCallback: () => { }
   };
   constructor(props) {
     super(props);
-    this.state = { isShow: props.isShow };
+    this.state = { isShow: props.isShow,defaultPosition:{} ,bounds:{}};
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
   }
   componentWillReceiveProps(newProps) {
@@ -62,12 +67,12 @@ export default class Dialog extends Component {
   }
   componentDidMount() {
     document.addEventListener("keydown", this.keyBind);
-    if(this.props.isShow){
+    if (this.props.isShow) {
       this.show(this.props)
     }
   }
   keyBind(e) {
-    console.log(e);
+    // console.log(e);
     if (e.keyCode === 27) {
       this.hide();
     }
@@ -79,10 +84,32 @@ export default class Dialog extends Component {
     // console.log("show");
     this.clearTimer();
     this.setState({ isShow: true }, () => {
-      setTimeout(() => { this.refs.dialog.className ? this.refs.dialog.className += " opacity-animate":undefined; }, 0);
-      let height = Number(this.refs.dialogContent.offsetHeight);
+      let st = setTimeout(() => {
+        clearTimeout(st);
+        this.refs.dialog.className ? this.refs.dialog.className += " opacity-animate" : undefined; 
+        // console.log(this.refs.dialogContent.offsetHeight)
+        // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+        this.setState({
+            defaultPosition:{
+              x:parseInt((document.documentElement.clientWidth - this.refs.dialogContent.offsetWidth)/2),
+              y:parseInt((document.documentElement.clientHeight-this.refs.dialogContent.offsetHeight)/2)
+            },
+        },()=>{
+          // console.log(this.state.bounds);
+          this.setState({
+            bounds:{
+              left:-this.refs.dialogContent.offsetLeft,
+              top:-this.refs.dialogContent.offsetTop,
+              right:this.refs.dialogContent.offsetLeft,
+              bottom:this.refs.dialogContent.offsetTop,
+            }
+          });
+        });
+        // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+      }, 0);
+      let height = parseInt(this.refs.dialogContent.offsetHeight);
       let maxHeight =
-        newProps.height || Number(document.documentElement.clientHeight);
+        newProps.height || parseInt(document.documentElement.clientHeight);
       if (height >= maxHeight) {
         this.refs.dialogContent.style.height = maxHeight + "px";
         let bodyHeight =
@@ -109,15 +136,16 @@ export default class Dialog extends Component {
       "opacity-animate",
       "opacity-animate-hide"
     );
-    setTimeout(this._hide.bind(this), 300);
+    this.refs.dialog.addEventListener('transitionend',this._hide.bind(this));
+    // setTimeout(this._hide.bind(this), 300);
   }
   _hide() {
     this.setState({ isShow: false }, () => {
       this.props.afterHide();
     });
   }
-  render() {
-    let {local,buttons,okCallback} = this.props;
+  renderHTML() {
+    let { local, buttons, okCallback } = this.props;
     if (typeof buttons === "undefined") {
       this.buttons = (
         <div>
@@ -135,22 +163,55 @@ export default class Dialog extends Component {
       this.buttons = undefined;
     }
     // console.log(this.buttons);
-    return this.state.isShow
-      ? <div
+    // console.log(this.state.bounds)
+    if(this.state.isShow){
+      let DD =  this.props.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds="parent" bounds={this.state.bounds}>{this.renderDialog()}</Draggable>:this.renderDialog();
+      if(this.props.mask){
+        return <div
         className={
           this.props.mask
             ? "x-dialog-continer x-dialog-mask"
             : "x-dialog-continer"
         }
         style={{ zIndex: this.props.zIndex }}
-      >
+        >
         <div className="x-dialog" ref="dialog">
-          <div
+          {DD}
+        </div>
+      </div>
+      }else{
+        return  <div className="x-dialog" ref="dialog">
+                    {DD}
+                  </div>
+      }
+    }else{
+      return null;
+    }
+    // return this.state.isShow
+    //   ? <div
+    //     className={
+    //       this.props.mask
+    //         ? "x-dialog-continer x-dialog-mask"
+    //         : "x-dialog-continer"
+    //     }
+    //     style={{ zIndex: this.props.zIndex }}
+    //   >
+    //     <div className="x-dialog" ref="dialog">
+    //       <Draggable bounds="parent">{this.renderDialog()}</Draggable>
+    //     </div>
+    //   </div>
+    //   : <div />;
+  }
+  renderDialog(){
+    let { local, buttons, okCallback } = this.props;
+    return <div
             className={"dialog-content " + this.props.className}
             ref="dialogContent"
             style={{
               width: this.props.width || "auto",
-              height: this.props.height || "auto"
+              height: this.props.height || "auto",
+              top:this.state.defaultPosition.y,
+              left:this.state.defaultPosition.x
             }}
           >
             {this.props.title
@@ -173,8 +234,8 @@ export default class Dialog extends Component {
                 : undefined}
             </div>
           </div>
-        </div>
-      </div>
-      : <div />;
+  }
+  render() {
+    return this.renderHTML();
   }
 }

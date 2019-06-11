@@ -7,6 +7,9 @@
   .x-dialog-continer.x-dialog-mask {
     background-color: rgba(0, 0, 0, 0.3); }
 
+.react-draggable .dialog-title {
+  cursor: move; }
+
 .x-dialog {
   top: 0;
   left: 0;
@@ -14,7 +17,7 @@
   height: 100%;
   box-sizing: border-box;
   letter-spacing: 0;
-  opacity: 0;
+  opacity: 0.1;
   -webkit-transition: opacity 0.15s linear;
   transition: opacity 0.15s linear; }
   .x-dialog.opacity-animate {
@@ -25,11 +28,6 @@
     box-sizing: inherit;
     margin: auto;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
     background-color: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.3rem; }

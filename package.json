@@ -1,6 +1,6 @@
 {
   "name": "x-dialog",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "react dialog component",
   "main": "./lib/index.js",
   "repository": {
@@ -74,6 +74,7 @@
     "react-plugin"
   ],
   "dependencies": {
+    "react-draggable": "^3.3.0",
     "x-i18n": "0.0.3"
   }
 }

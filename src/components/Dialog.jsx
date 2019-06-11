@@ -43,7 +43,7 @@ export default class Dialog extends Component {
   }
 	//模拟render方法，调用portal组件时传入父级容器
   renderPortal() {
-    console.log(this.props)
+    // console.log(this.props)
     renderSubtreeIntoContainer(
       this,
       <I18n componentName="Dialog" defaultValue={this.props.local}>
@@ -53,8 +53,14 @@ export default class Dialog extends Component {
     );
   }
   renderContent=(local)=>{
-    console.log(this.props)
-    return <DialogPortal {...this.props} local={local}/>
+    // console.log(this.props)
+    if(this.props.draggable){
+      return (
+          <DialogPortal {...this.props} local={local}/>
+      )
+    }else{
+      return <DialogPortal {...this.props} local={local}/>
+    }
   }
 	//组件销毁时触发,移除绑定
   componentWillUnmount() {
@@ -65,3 +71,4 @@ export default class Dialog extends Component {
     return null;
   }
 }
+

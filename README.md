@@ -60,6 +60,9 @@ import 'x-dialog/lib/index.css';
     关闭隐藏时的回调方法
 ### `local`:object
     国际化语言配置,默认中文，可以传递x-i18n中的其他语言包
-
+### `draggable`:bool
+    是否可以拖动
+### `dragHandle`:string
+    可拖动的handle，只有在`draggable`为`true`时有效，默认为`.dialog-title`
 ### 关于作者
 [https://github.com/tianxiangbing](https://github.com/tianxiangbing)
