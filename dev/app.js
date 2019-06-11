@@ -31,7 +31,7 @@ class App extends React.Component {
     this.setState({"dialog":state});
   }
   showCallback(){
-    let state ={isShow:true,title:"这是一个显示的回调例子",afterShow:()=>alert('我显示出来了')};
+    let state ={isShow:true,title:"这是一个显示的回调例子",draggable:true, afterShow:()=>alert('我显示出来了')};
     this.setState({"dialog":state});
   }
   hideCallback(){
@@ -69,6 +69,8 @@ class App extends React.Component {
         <Dialog 
         {...this.state.dialog}
         >
+          <div>You're looking at an example modal in the dashboard theme.</div>
+          <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>

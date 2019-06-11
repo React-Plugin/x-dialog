@@ -1,12 +1,11 @@
-.x-dialog-continer {
+&.x-dialog-mask {
+    position: fixed;
     width: 100%;
     height: 100%;
-    position: fixed;
     left: 0;
     top: 0;
-    &.x-dialog-mask {
-        background-color: rgba(0, 0, 0, .3);
-    }
+    background-color: rgba(0, 0, 0, .3);
+    z-index:1;
 }
 .react-draggable{
     .dialog-title{
@@ -23,6 +22,8 @@
     opacity: 0.1;
     -webkit-transition: opacity 0.15s linear;
     transition: opacity 0.15s linear;
+    z-index: 99;
+    position: absolute;
     &.opacity-animate {
         opacity: 1;
     }
