@@ -6,12 +6,12 @@
  * Time: 20:00:00
  * Contact: 55342775@qq.com
  */
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import Draggable from 'react-draggable';
 
-export default class Dialog extends Component {
+export default class Dialog extends PureComponent {
   static propTypes = {
     isShow: PropTypes.bool.isRequired,
     mask: PropTypes.bool,
@@ -144,12 +144,14 @@ export default class Dialog extends Component {
   }
   hide() {
     // console.log("hide");
+    // this._hide();
     let cls = this.refs.dialog.className;
     this.refs.dialog.className = cls.replace(
       "opacity-animate",
       "opacity-animate-hide"
     );
-    this.refs.dialog.addEventListener('transitionend', this._hide.bind(this));
+    this._hide();
+    // this.refs.dialog.addEventListener('transitionend', this._hide.bind(this));
     // setTimeout(this._hide.bind(this), 300);
   }
   _hide() {

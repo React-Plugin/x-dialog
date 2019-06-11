@@ -1494,8 +1494,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Contact: 55342775@qq.com
 	   */
 
-	var Dialog = function (_Component) {
-	  _inherits(Dialog, _Component);
+	var Dialog = function (_PureComponent) {
+	  _inherits(Dialog, _PureComponent);
 
 	  function Dialog(props) {
 	    _classCallCheck(this, Dialog);
@@ -1624,9 +1624,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "hide",
 	    value: function hide() {
 	      // console.log("hide");
+	      // this._hide();
 	      var cls = this.refs.dialog.className;
 	      this.refs.dialog.className = cls.replace("opacity-animate", "opacity-animate-hide");
-	      this.refs.dialog.addEventListener('transitionend', this._hide.bind(this));
+	      this._hide();
+	      // this.refs.dialog.addEventListener('transitionend', this._hide.bind(this));
 	      // setTimeout(this._hide.bind(this), 300);
 	    }
 	  }, {
@@ -1713,7 +1715,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 
 	  return Dialog;
-	}(_react.Component);
+	}(_react.PureComponent);
 
 	Dialog.propTypes = {
 	  isShow: _propTypes2.default.bool.isRequired,

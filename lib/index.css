@@ -17,15 +17,19 @@
   height: 100%;
   box-sizing: border-box;
   letter-spacing: 0;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
   opacity: 0.1;
-  -webkit-transition: opacity 0.15s linear;
-  transition: opacity 0.15s linear;
+  -webkit-transition: opacity 0.1s linear;
+  transition: opacity 0.1s linear;
   z-index: 99;
   position: absolute; }
   .x-dialog.opacity-animate {
     opacity: 1; }
   .x-dialog.opacity-animate-hide {
-    opacity: 0; }
+    opacity: 0.1; }
   .x-dialog .dialog-content {
     box-sizing: inherit;
     margin: auto;
@@ -102,9 +106,7 @@
         border: 1px solid transparent;
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
-        border-radius: 0.25rem;
-        -webkit-transition: all 0.2s ease-in-out;
-        transition: all 0.2s ease-in-out; }
+        border-radius: 0.25rem; }
         .x-dialog .dialog-content .dialog-action button.d-ok {
           color: #fff;
           background-color: #1997c6;
