@@ -1591,21 +1591,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	          }, function () {
 	            // console.log(this.state.bounds);
-	            _this3.setState({
-	              bounds: {
-	                left: -_this3.refs.dialogContent.offsetLeft,
-	                top: -_this3.refs.dialogContent.offsetTop,
-	                right: Math.max(document.body.scrollWidth, document.documentElement.offsetWidth) - _this3.refs.dialogContent.offsetLeft - _this3.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
-	                bottom: Math.max(document.body.scrollHeight, document.documentElement.offsetHeight, ch) - _this3.refs.dialogContent.offsetTop - _this3.refs.dialogContent.offsetHeight
-	              }
-	            });
+	            // this.setState({
+	            //   bounds: {
+	            //     left: -this.refs.dialogContent.offsetLeft,
+	            //     top: -this.refs.dialogContent.offsetTop,
+	            //     right: Math.max(document.body.scrollWidth,document.documentElement.offsetWidth)-this.refs.dialogContent.offsetLeft -this.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
+	            //     bottom: Math.max(document.body.scrollHeight,document.documentElement.offsetHeight,ch)-this.refs.dialogContent.offsetTop -this.refs.dialogContent.offsetHeight,
+	            //   }
+	            // });
 	          });
 	          // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+	          // console.log(this.refs.dialogContent.clientHeight,this.refs.dialogContent.offsetHeight)
 	          var height = parseInt(_this3.refs.dialogContent.offsetHeight);
 	          var maxHeight = newProps.height || parseInt(document.documentElement.clientHeight);
 	          if (height >= maxHeight) {
 	            _this3.refs.dialogContent.style.height = maxHeight + "px";
-	            var bodyHeight = maxHeight - (_this3.refs.dialogHeader.offsetHeight || 0) - (_this3.refs.dialogFooter.offsetHeight || 0);
+	            var bodyHeight = maxHeight - (_this3.refs.dialogHeader.offsetHeight || 0) - (_this3.refs.dialogFooter.offsetHeight || 0) - 2;
 	            _this3.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
 	            // console.log(bodyHeight);
 	            // console.log(
@@ -1658,7 +1659,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // console.log(this.buttons);
 	      // console.log(this.state.bounds)
 	      if (this.state.isShow) {
-	        var DD = this.props.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: this.state.bounds }, this.renderDialog()) : this.renderDialog();
+	        var DD = this.props.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: "html" }, this.renderDialog()) : this.renderDialog();
 	        if (this.props.mask) {
 	          return _react2.default.createElement("div", {
 	            className: "x-dialog-continer",

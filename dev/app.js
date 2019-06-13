@@ -17,7 +17,7 @@ class App extends React.Component {
     this.setState({"dialog":state});
   }
   defaultDialog(){
-    let state ={isShow:true,title:"我是标题啊",draggable:true,mask:false, local:local,okCallback:()=>{
+    let state ={isShow:true,title:"我是标题啊",draggable:true,mask:false,buttons:null, local:local,okCallback:()=>{
       alert('我点了确定')
     }};    
     this.setState({"dialog":state});
@@ -69,6 +69,7 @@ class App extends React.Component {
         <Dialog 
         {...this.state.dialog}
         >
+          <div style={{background:"red"}}>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
@@ -80,6 +81,7 @@ class App extends React.Component {
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
+          </div>
         </Dialog>
       </div>
     )

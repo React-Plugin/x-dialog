@@ -109,16 +109,17 @@ export default class Dialog extends PureComponent {
           },
         }, () => {
           // console.log(this.state.bounds);
-          this.setState({
-            bounds: {
-              left: -this.refs.dialogContent.offsetLeft,
-              top: -this.refs.dialogContent.offsetTop,
-              right: Math.max(document.body.scrollWidth,document.documentElement.offsetWidth)-this.refs.dialogContent.offsetLeft -this.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
-              bottom: Math.max(document.body.scrollHeight,document.documentElement.offsetHeight,ch)-this.refs.dialogContent.offsetTop -this.refs.dialogContent.offsetHeight,
-            }
-          });
+          // this.setState({
+          //   bounds: {
+          //     left: -this.refs.dialogContent.offsetLeft,
+          //     top: -this.refs.dialogContent.offsetTop,
+          //     right: Math.max(document.body.scrollWidth,document.documentElement.offsetWidth)-this.refs.dialogContent.offsetLeft -this.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
+          //     bottom: Math.max(document.body.scrollHeight,document.documentElement.offsetHeight,ch)-this.refs.dialogContent.offsetTop -this.refs.dialogContent.offsetHeight,
+          //   }
+          // });
         });
         // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+        // console.log(this.refs.dialogContent.clientHeight,this.refs.dialogContent.offsetHeight)
         let height = parseInt(this.refs.dialogContent.offsetHeight);
         let maxHeight =
           newProps.height || parseInt(document.documentElement.clientHeight);
@@ -127,7 +128,7 @@ export default class Dialog extends PureComponent {
           let bodyHeight =
             maxHeight -
             (this.refs.dialogHeader.offsetHeight || 0) -
-            (this.refs.dialogFooter.offsetHeight || 0);
+            (this.refs.dialogFooter.offsetHeight || 0)-2;
           this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
           // console.log(bodyHeight);
           // console.log(
@@ -180,7 +181,7 @@ export default class Dialog extends PureComponent {
     // console.log(this.buttons);
     // console.log(this.state.bounds)
     if (this.state.isShow) {
-      let DD = this.props.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"}  bounds={this.state.bounds}>{this.renderDialog()}</Draggable> : this.renderDialog();
+      let DD = this.props.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"}  bounds='html'>{this.renderDialog()}</Draggable> : this.renderDialog();
       if (this.props.mask) {
         return <div
           className={ "x-dialog-continer"
