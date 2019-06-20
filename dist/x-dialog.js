@@ -160,15 +160,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Dialog = function (_Component) {
 	  _inherits(Dialog, _Component);
 
-	  _createClass(Dialog, null, [{
+	  _createClass(Dialog, [{
+	    key: "componentWillReceiveProps",
+
+	    // static getDerivedStateFromProps(props, state){
+	    //   if(state.isShow!==props.isShow){
+	    //     return {isShow:props.isShow};
+	    //   }
+	    // }
+	    value: function componentWillReceiveProps(newProps) {
+	      if (newProps.isShow != this.state.isShow) {
+	        this.setState({ isShow: newProps.isShow });
+	      }
+	    }
+	  }], [{
 	    key: "show",
 	    value: function show(config) {
 	      var myRef = _react2.default.createRef;
+	      var div = document.createDocumentFragment('div');
 	      var currentConfig = _extends({}, config, { isShow: true, ref: function ref(_ref) {
 	          return myRef = _ref;
 	        } });
 	      function render(props) {
-	        _reactDom2.default.render(_react2.default.createElement(Dialog, props), document.createDocumentFragment('div'));
+	        _reactDom2.default.render(_react2.default.createElement(Dialog, props), div);
 	      }
 	      render(currentConfig);
 	      return myRef;
@@ -180,18 +194,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, (Dialog.__proto__ || Object.getPrototypeOf(Dialog)).call(this, props));
 
-	    _this.hide = function () {
-	      _this.setState({ isShow: false });
-	    };
-
-	    _this.renderContent = function (local) {
-	      // console.log(this.props)
-	      if (_this.props.draggable) {
-	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, _this.props, _this.state, { local: local }));
-	      } else {
-	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, _this.props, _this.state, { local: local }));
-	      }
-	    };
+	    _initialiseProps.call(_this);
 
 	    _this.state = { isShow: props.isShow };
 	    return _this;
@@ -212,8 +215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "componentDidMount",
 	    value: function componentDidMount() {
-	      this.node = document.createElement("div");
-	      document.body.appendChild(this.node);
+
 	      this.renderPortal();
 	    }
 	    //模拟render方法，调用portal组件时传入父级容器
@@ -222,7 +224,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "renderPortal",
 	    value: function renderPortal() {
 	      // console.log(this.props)
-	      renderSubtreeIntoContainer(this, _react2.default.createElement(_xI18n2.default, { componentName: "Dialog", defaultValue: this.props.local }, this.renderContent), this.node);
+	      var dd = _react2.default.createElement(_xI18n2.default, { componentName: "Dialog", defaultValue: this.props.local }, this.renderContent);
+	      if (!this.state.isShow) {
+	        dd = null;
+	      } else if (!this.node) {
+	        this.node = document.createElement("div");
+	        document.body.appendChild(this.node);
+	        renderSubtreeIntoContainer(this, dd, this.node);
+	      }
 	    }
 	  }, {
 	    key: "componentWillUnmount",
@@ -251,6 +260,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	  isShow: false,
 	  mask: true
 	};
+
+	var _initialiseProps = function _initialiseProps() {
+	  var _this2 = this;
+
+	  this.hide = function () {
+	    _this2.setState({ isShow: false }, function () {
+	      if (_this2.node) {
+	        _reactDom2.default.unmountComponentAtNode(_this2.node);
+	        _this2.node.parentNode.removeChild(_this2.node);
+	        _this2.node = null;
+	      }
+	    });
+	  };
+
+	  this.renderContent = function (local) {
+	    // console.log(this.props)
+	    var props = _extends({}, _this2.props);
+	    props.afterHide = function () {
+	      _this2.props.afterHide && _this2.props.afterHide();
+	      _this2.hide();
+	    };
+	    if (_this2.state.isShow) {
+	      if (_this2.props.draggable) {
+	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, props, _this2.state, { local: local }));
+	      } else {
+	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, props, _this2.state, { local: local }));
+	      }
+	    }
+	  };
+	};
+
 	exports.default = Dialog;
 
 /***/ }),
@@ -1521,12 +1561,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, (Dialog.__proto__ || Object.getPrototypeOf(Dialog)).call(this, props));
 
+	    _this.keyBind = function (e) {
+	      // console.log(e);
+	      if (e.keyCode === 27) {
+	        // console.log(this.dialog)
+	        _this.hide();
+	      }
+	    };
+
 	    _this.maskHandle = function () {
 	      _this.hide();
 	    };
 
+	    _this.dialog = null;
 	    _this.state = { isShow: props.isShow, defaultPosition: {}, bounds: {} };
 	    _this.keyBind = _this.keyBind.bind(_this); //方便移除事件绑定.每次bind会生成新的对象
+	    _this.setDialogRef = function (element) {
+	      _this.dialog = element;
+	    };
 	    return _this;
 	  }
 
@@ -1562,17 +1614,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "componentDidMount",
 	    value: function componentDidMount() {
+	      // console.log(this.dialog)
 	      document.addEventListener("keydown", this.keyBind);
 	      if (this.props.isShow) {
 	        this.show(this.props);
-	      }
-	    }
-	  }, {
-	    key: "keyBind",
-	    value: function keyBind(e) {
-	      // console.log(e);
-	      if (e.keyCode === 27) {
-	        this.hide();
 	      }
 	    }
 	  }, {
@@ -1590,7 +1635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.setState({ isShow: true }, function () {
 	        var st = setTimeout(function () {
 	          clearTimeout(st);
-	          _this3.refs.dialog.className ? _this3.refs.dialog.className += " opacity-animate" : undefined;
+	          _this3.dialog.className ? _this3.dialog.className += " opacity-animate" : undefined;
 	          // console.log(this.refs.dialogContent.offsetHeight)
 	          // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
 	          var ch = document.documentElement.clientHeight;
@@ -1649,10 +1694,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function hide() {
 	      // console.log("hide");
 	      // this._hide();
-	      var cls = this.refs.dialog.className;
-	      this.refs.dialog.className = cls.replace("opacity-animate", "opacity-animate-hide");
+	      if (this.dialog) {
+	        var cls = this.dialog.className;
+	        this.dialog.className = cls.replace("opacity-animate", "opacity-animate-hide");
+	      }
 	      this._hide();
-	      // this.refs.dialog.addEventListener('transitionend', this._hide.bind(this));
+	      // this.dialog.current.addEventListener('transitionend', this._hide.bind(this));
 	      // setTimeout(this._hide.bind(this), 300);
 	    }
 	  }, {
@@ -1687,9 +1734,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _react2.default.createElement("div", {
 	            className: "x-dialog-continer",
 	            style: { zIndex: this.props.zIndex }
-	          }, _react2.default.createElement("div", { className: "x-dialog", ref: "dialog" }, DD, _react2.default.createElement("div", { className: "x-dialog-mask", onClick: this.maskHandle })));
+	          }, _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef }, DD, _react2.default.createElement("div", { className: "x-dialog-mask", onClick: this.maskHandle })));
 	        } else {
-	          return _react2.default.createElement("div", { className: "x-dialog", ref: "dialog" }, DD);
+	          return _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef }, DD);
 	        }
 	      } else {
 	        return null;

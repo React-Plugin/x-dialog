@@ -43,8 +43,12 @@ export default class Dialog extends PureComponent {
   };
   constructor(props) {
     super(props);
+    this.dialog = null;
     this.state = { isShow: props.isShow, defaultPosition: {}, bounds: {} };
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
+    this.setDialogRef = element => {
+      this.dialog = element;
+    };
   }
   componentWillReceiveProps(newProps) {
     // console.log(newProps.isShow, this.state.isShow);
@@ -68,14 +72,16 @@ export default class Dialog extends PureComponent {
     document.removeEventListener("keydown", this.keyBind);
   }
   componentDidMount() {
+    // console.log(this.dialog)
     document.addEventListener("keydown", this.keyBind);
     if (this.props.isShow) {
       this.show(this.props)
     }
   }
-  keyBind(e) {
+  keyBind=(e)=> {
     // console.log(e);
     if (e.keyCode === 27) {
+      // console.log(this.dialog)
       this.hide();
     }
   }
@@ -88,7 +94,7 @@ export default class Dialog extends PureComponent {
     this.setState({ isShow: true }, () => {
       let st = setTimeout(() => {
         clearTimeout(st);
-        this.refs.dialog.className ? this.refs.dialog.className += " opacity-animate" : undefined;
+        this.dialog.className ? this.dialog.className += " opacity-animate" : undefined;
         // console.log(this.refs.dialogContent.offsetHeight)
         // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
         let ch = document.documentElement.clientHeight ;
@@ -148,13 +154,15 @@ export default class Dialog extends PureComponent {
   hide() {
     // console.log("hide");
     // this._hide();
-    let cls = this.refs.dialog.className;
-    this.refs.dialog.className = cls.replace(
-      "opacity-animate",
-      "opacity-animate-hide"
-    );
+    if(this.dialog){
+      let cls = this.dialog.className;
+      this.dialog.className = cls.replace(
+        "opacity-animate",
+        "opacity-animate-hide"
+      );
+    }
     this._hide();
-    // this.refs.dialog.addEventListener('transitionend', this._hide.bind(this));
+    // this.dialog.current.addEventListener('transitionend', this._hide.bind(this));
     // setTimeout(this._hide.bind(this), 300);
   }
   _hide() {
@@ -193,13 +201,13 @@ export default class Dialog extends PureComponent {
           }
           style={{ zIndex: this.props.zIndex }}
         >
-          <div className="x-dialog" ref="dialog">
+          <div className="x-dialog" ref={this.setDialogRef}>
             {DD}
           <div className="x-dialog-mask" onClick={this.maskHandle}></div>
           </div>
         </div>
       } else {
-        return <div className="x-dialog" ref="dialog">
+        return <div className="x-dialog" ref={this.setDialogRef}>
           {DD}
         </div>
       }
