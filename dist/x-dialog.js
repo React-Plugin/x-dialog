@@ -160,31 +160,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Dialog = function (_Component) {
 	  _inherits(Dialog, _Component);
 
+	  _createClass(Dialog, null, [{
+	    key: "show",
+	    value: function show(config) {
+	      var myRef = _react2.default.createRef;
+	      var currentConfig = _extends({}, config, { isShow: true, ref: function ref(_ref) {
+	          return myRef = _ref;
+	        } });
+	      function render(props) {
+	        _reactDom2.default.render(_react2.default.createElement(Dialog, props), document.createDocumentFragment('div'));
+	      }
+	      render(currentConfig);
+	      return myRef;
+	    }
+	  }]);
+
 	  function Dialog(props) {
 	    _classCallCheck(this, Dialog);
 
 	    var _this = _possibleConstructorReturn(this, (Dialog.__proto__ || Object.getPrototypeOf(Dialog)).call(this, props));
 
+	    _this.hide = function () {
+	      _this.setState({ isShow: false });
+	    };
+
 	    _this.renderContent = function (local) {
 	      // console.log(this.props)
 	      if (_this.props.draggable) {
-	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, _this.props, { local: local }));
+	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, _this.props, _this.state, { local: local }));
 	      } else {
-	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, _this.props, { local: local }));
+	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, _this.props, _this.state, { local: local }));
 	      }
 	    };
 
 	    _this.state = { isShow: props.isShow };
 	    return _this;
 	  }
-	  //props有更新时调用事件,更新portal组件，相当于render。
-	  // componentWillReceiveProps(newProps) {
-	  //   this.renderPortal(newProps);
-	  // }
-
 
 	  _createClass(Dialog, [{
 	    key: "componentDidUpdate",
+
+	    //props有更新时调用事件,更新portal组件，相当于render。
+	    // componentWillReceiveProps(newProps) {
+	    //   this.renderPortal(newProps);
+	    // }
 	    value: function componentDidUpdate() {
 	      this.renderPortal();
 	    }
@@ -1502,6 +1521,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, (Dialog.__proto__ || Object.getPrototypeOf(Dialog)).call(this, props));
 
+	    _this.maskHandle = function () {
+	      _this.hide();
+	    };
+
 	    _this.state = { isShow: props.isShow, defaultPosition: {}, bounds: {} };
 	    _this.keyBind = _this.keyBind.bind(_this); //方便移除事件绑定.每次bind会生成新的对象
 	    return _this;
@@ -1664,7 +1687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _react2.default.createElement("div", {
 	            className: "x-dialog-continer",
 	            style: { zIndex: this.props.zIndex }
-	          }, _react2.default.createElement("div", { className: "x-dialog", ref: "dialog" }, DD), _react2.default.createElement("div", { className: "x-dialog-mask" }));
+	          }, _react2.default.createElement("div", { className: "x-dialog", ref: "dialog" }, DD, _react2.default.createElement("div", { className: "x-dialog-mask", onClick: this.maskHandle })));
 	        } else {
 	          return _react2.default.createElement("div", { className: "x-dialog", ref: "dialog" }, DD);
 	        }
@@ -1731,13 +1754,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  afterShow: _propTypes2.default.func,
 	  okCallback: _propTypes2.default.func,
 	  dragHandle: _propTypes2.default.string,
-	  draggable: _propTypes2.default.bool
+	  draggable: _propTypes2.default.bool,
+	  maskHide: _propTypes2.default.bool
 	};
 	Dialog.defaultProps = {
 	  isShow: false,
 	  mask: true,
 	  className: "",
 	  zIndex: 9,
+	  maskHide: true,
 	  closeIcon: _react2.default.createElement("button", { className: "dialog-close" }, _react2.default.createElement("span", null, "\xD7")),
 	  dragHandle: '.dialog-title',
 	  draggable: false,

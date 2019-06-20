@@ -26,12 +26,14 @@ export default class Dialog extends PureComponent {
     okCallback: PropTypes.func,
     dragHandle: PropTypes.string,
     draggable: PropTypes.bool,
+    maskHide:PropTypes.bool
   };
   static defaultProps = {
     isShow: false,
     mask: true,
     className: "",
     zIndex: 9,
+    maskHide:true,
     closeIcon: <button className="dialog-close"><span>×</span></button>,
     dragHandle: '.dialog-title',
     draggable: false,
@@ -160,6 +162,9 @@ export default class Dialog extends PureComponent {
       this.props.afterHide();
     });
   }
+  maskHandle=()=>{
+    this.hide();
+  }
   renderHTML() {
     let { local, buttons, okCallback } = this.props;
     if (typeof buttons === "undefined") {
@@ -190,8 +195,8 @@ export default class Dialog extends PureComponent {
         >
           <div className="x-dialog" ref="dialog">
             {DD}
+          <div className="x-dialog-mask" onClick={this.maskHandle}></div>
           </div>
-          <div className="x-dialog-mask"></div>
         </div>
       } else {
         return <div className="x-dialog" ref="dialog">

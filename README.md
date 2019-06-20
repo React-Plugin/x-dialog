@@ -36,7 +36,13 @@ import 'x-dialog/lib/index.css';
     <div>这里是弹窗的内容区域</div>
 </Dialog>
 ```
-
+或者js函数方式调用，返回`Dialog`的实例
+```
+let ref = Dialog.show({title:'标题',children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')});
+setTimeout(()=>{
+  ref.hide();
+},4000)
+```
 ## 属性方法
 ### `isShow` :bool类型
     控制弹窗的显示隐藏的.
@@ -64,5 +70,7 @@ import 'x-dialog/lib/index.css';
     是否可以拖动
 ### `dragHandle`:string
     可拖动的handle，只有在`draggable`为`true`时有效，默认为`.dialog-title`
+### `maskHide`:bool
+    是否点击背景关闭弹窗，仅在`mask`为`true`时有效，默认值`true`
 ### 关于作者
 [https://github.com/tianxiangbing](https://github.com/tianxiangbing)

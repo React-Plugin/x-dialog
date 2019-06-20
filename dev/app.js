@@ -54,10 +54,17 @@ class App extends React.Component {
     };
     this.setState({dialog:state});
   }
+  funcDialog(){
+    let ref = Dialog.show({title:'标题',children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')});
+    setTimeout(()=>{
+      ref.hide();
+    },4000)
+  }
   render() {
     console.log( {...this.state.dialog})
     return (
       <div>
+        <button onClick={this.funcDialog.bind(this)}>js调用</button>
         <button onClick={this.defaultDialog.bind(this)}>默认弹窗</button>
         <button onClick={this.noAction.bind(this)}>不带按钮</button>
         <button onClick={this.noheadfoottimer.bind(this)}>没有头尾定时关闭</button>
