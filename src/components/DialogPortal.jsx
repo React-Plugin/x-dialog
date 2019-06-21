@@ -174,9 +174,9 @@ export default class Dialog extends PureComponent {
         "opacity-animate-hide"
       );
     }
-    this._hide();
-    // this.dialog.current.addEventListener('transitionend', this._hide.bind(this));
-    // setTimeout(this._hide.bind(this), 300);
+    // this._hide();
+    this.dialog.addEventListener('transitionend', this._hide.bind(this));
+    // setTimeout(this._hide.bind(this), 3000);
   }
   _hide() {
     this.setState({ isShow: false }, () => {
@@ -184,7 +184,7 @@ export default class Dialog extends PureComponent {
     });
   }
   maskHandle = () => {
-    this.hide();
+    this.props.maskHide && this.hide();
   }
   renderHTML() {
     let { local, buttons, okCallback } = this.props;

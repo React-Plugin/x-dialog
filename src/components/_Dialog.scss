@@ -24,15 +24,15 @@
     // -ms-transform: translate3d(0, 0, 0);
     // transform: translate3d(0, 0, 0);
     // opacity: 0.1;
-    // -webkit-transition: opacity 0.1s linear;
-    // transition: opacity 0.1s linear;
+    -webkit-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
     // z-index: 99;
     // position: absolute;
     &.opacity-animate {
         opacity: 1;
     }
     &.opacity-animate-hide {
-        opacity: 0.1;
+        opacity: 0;
     }
     .dialog-content {
         box-sizing: inherit;
@@ -96,6 +96,7 @@
             float: right;
         }
         .dialog-close {
+            outline: none;
             float: right;
             font-size: 1.5rem;
             font-weight: bold;

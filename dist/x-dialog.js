@@ -1595,7 +1595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    _this2.maskHandle = function () {
-	      _this2.hide();
+	      _this2.props.maskHide && _this2.hide();
 	    };
 
 	    _this2.onFocus = function () {
@@ -1741,9 +1741,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var cls = this.dialog.className;
 	        this.dialog.className = cls.replace("opacity-animate", "opacity-animate-hide");
 	      }
-	      this._hide();
-	      // this.dialog.current.addEventListener('transitionend', this._hide.bind(this));
-	      // setTimeout(this._hide.bind(this), 300);
+	      // this._hide();
+	      this.dialog.addEventListener('transitionend', this._hide.bind(this));
+	      // setTimeout(this._hide.bind(this), 3000);
 	    }
 	  }, {
 	    key: "_hide",
