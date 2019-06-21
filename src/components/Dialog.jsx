@@ -14,16 +14,23 @@ import I18n from 'x-i18n';
 
 const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer;
 
+let zIndex=9;
 export default class Dialog extends Component {
   static show(config) {
     let myRef = React.createRef;
     let div = document.createDocumentFragment('div')
-    let currentConfig = { ...config, isShow: true, ref: ref => myRef = ref };
+    let currentConfig = { children:config.content,...config, isShow: true, ref: ref => myRef = ref };
     function render(props) {
       ReactDOM.render(<Dialog {...props} />, div)
     }
     render(currentConfig);
     return myRef;
+  }
+  static hide(){
+    DialogPortal.hide();
+  }
+  static hideAll(){
+    DialogPortal.hideAll()
   }
   static propTypes = {
     isShow: PropTypes.bool.isRequired,
@@ -46,7 +53,7 @@ export default class Dialog extends Component {
   }
   constructor(props) {
     super(props);
-    this.state = { isShow: props.isShow };
+    this.state = { isShow: props.isShow,zIndex:zIndex };
   }
   hide = () => {
     this.setState({ isShow: false },()=>{
@@ -86,6 +93,12 @@ export default class Dialog extends Component {
         dd,
         this.node
       );
+    }else{
+      renderSubtreeIntoContainer(
+        this,
+        dd,
+        this.node
+      );
     }
   }
   renderContent = (local) => {
@@ -98,12 +111,17 @@ export default class Dialog extends Component {
     if (this.state.isShow) {
       if (this.props.draggable) {
         return (
-          <DialogPortal {...props} {...this.state} local={local} />
+          <DialogPortal {...props} {...this.state} local={local}  onClick={this.onFocus}/>
         )
       } else {
-        return <DialogPortal {...props} {...this.state} local={local} />
+        return <DialogPortal {...props} {...this.state} local={local}  onClick={this.onFocus}/>
       }
     }
+  }
+  
+  onFocus=()=>{
+    zIndex++;
+    this.setState({zIndex})
   }
   //组件销毁时触发,移除绑定
   componentWillUnmount() {

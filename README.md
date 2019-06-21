@@ -42,6 +42,8 @@ let ref = Dialog.show({title:'标题',children:'寒梅著花未感动中国械fd
 setTimeout(()=>{
   ref.hide();
 },4000)
+Dialog.hideAll();//关闭所有
+Dialog.hide();//关闭当前
 ```
 ## 属性方法
 ### `isShow` :bool类型
@@ -72,5 +74,13 @@ setTimeout(()=>{
     可拖动的handle，只有在`draggable`为`true`时有效，默认为`.dialog-title`
 ### `maskHide`:bool
     是否点击背景关闭弹窗，仅在`mask`为`true`时有效，默认值`true`
+## 全局方法
+    全局方法是Dialog的静态调用方法，方便于js函数的形式使用
+## show:config
+    显示弹窗,参数为Dialog的组件的props,content对应其内容
+## hide
+    关闭获取焦点的窗口，如果无，则关闭最后一个打开的窗口
+## hideAll
+    关闭所有显示的窗口
 ### 关于作者
 [https://github.com/tianxiangbing](https://github.com/tianxiangbing)

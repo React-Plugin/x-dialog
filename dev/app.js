@@ -55,15 +55,20 @@ class App extends React.Component {
     this.setState({dialog:state});
   }
   funcDialog(){
-    let ref = Dialog.show({title:'标题',children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')});
+    let ref = Dialog.show({title:'标题',mask:false,draggable:true,children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')});
     setTimeout(()=>{
-      ref.hide();
+      // ref.hide();
+      Dialog.hide();
     },4000)
+  }
+  hideAll=()=>{
+    Dialog.hideAll();
   }
   render() {
     console.log( {...this.state.dialog})
     return (
       <div>
+        <button onClick={this.hideAll}>隐藏所有弹窗</button>
         <button onClick={this.funcDialog.bind(this)}>js调用</button>
         <button onClick={this.defaultDialog.bind(this)}>默认弹窗</button>
         <button onClick={this.noAction.bind(this)}>不带按钮</button>

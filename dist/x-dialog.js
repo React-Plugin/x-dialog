@@ -157,6 +157,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var renderSubtreeIntoContainer = _reactDom2.default.unstable_renderSubtreeIntoContainer;
 
+	var zIndex = 9;
+
 	var Dialog = function (_Component) {
 	  _inherits(Dialog, _Component);
 
@@ -178,7 +180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function show(config) {
 	      var myRef = _react2.default.createRef;
 	      var div = document.createDocumentFragment('div');
-	      var currentConfig = _extends({}, config, { isShow: true, ref: function ref(_ref) {
+	      var currentConfig = _extends({ children: config.content }, config, { isShow: true, ref: function ref(_ref) {
 	          return myRef = _ref;
 	        } });
 	      function render(props) {
@@ -186,6 +188,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      render(currentConfig);
 	      return myRef;
+	    }
+	  }, {
+	    key: "hide",
+	    value: function hide() {
+	      _DialogPortal2.default.hide();
+	    }
+	  }, {
+	    key: "hideAll",
+	    value: function hideAll() {
+	      _DialogPortal2.default.hideAll();
 	    }
 	  }]);
 
@@ -196,7 +208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _initialiseProps.call(_this);
 
-	    _this.state = { isShow: props.isShow };
+	    _this.state = { isShow: props.isShow, zIndex: zIndex };
 	    return _this;
 	  }
 
@@ -230,6 +242,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else if (!this.node) {
 	        this.node = document.createElement("div");
 	        document.body.appendChild(this.node);
+	        renderSubtreeIntoContainer(this, dd, this.node);
+	      } else {
 	        renderSubtreeIntoContainer(this, dd, this.node);
 	      }
 	    }
@@ -283,11 +297,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    if (_this2.state.isShow) {
 	      if (_this2.props.draggable) {
-	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, props, _this2.state, { local: local }));
+	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, props, _this2.state, { local: local, onClick: _this2.onFocus }));
 	      } else {
-	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, props, _this2.state, { local: local }));
+	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, props, _this2.state, { local: local, onClick: _this2.onFocus }));
 	      }
 	    }
+	  };
+
+	  this.onFocus = function () {
+	    zIndex++;
+	    _this2.setState({ zIndex: zIndex });
 	  };
 	};
 
@@ -1553,33 +1572,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Contact: 55342775@qq.com
 	   */
 
+	var lastDialog = null,
+	    dialogList = [];
+
 	var Dialog = function (_PureComponent) {
 	  _inherits(Dialog, _PureComponent);
 
 	  function Dialog(props) {
 	    _classCallCheck(this, Dialog);
 
-	    var _this = _possibleConstructorReturn(this, (Dialog.__proto__ || Object.getPrototypeOf(Dialog)).call(this, props));
+	    var _this2 = _possibleConstructorReturn(this, (Dialog.__proto__ || Object.getPrototypeOf(Dialog)).call(this, props));
 
-	    _this.keyBind = function (e) {
+	    _this2.keyBind = function (e) {
 	      // console.log(e);
 	      if (e.keyCode === 27) {
 	        // console.log(this.dialog)
-	        _this.hide();
+	        _this2.hide();
 	      }
 	    };
 
-	    _this.maskHandle = function () {
-	      _this.hide();
+	    _this2.maskHandle = function () {
+	      _this2.hide();
 	    };
 
-	    _this.dialog = null;
-	    _this.state = { isShow: props.isShow, defaultPosition: {}, bounds: {} };
-	    _this.keyBind = _this.keyBind.bind(_this); //方便移除事件绑定.每次bind会生成新的对象
-	    _this.setDialogRef = function (element) {
-	      _this.dialog = element;
+	    _this2.onFocus = function () {
+	      lastDialog = _this2;
+	      _this2.props.onClick();
 	    };
-	    return _this;
+
+	    _this2.id = +new Date();
+	    _this2.dialog = null;
+	    _this2.state = { isShow: props.isShow, defaultPosition: {}, bounds: {} };
+	    _this2.keyBind = _this2.keyBind.bind(_this2); //方便移除事件绑定.每次bind会生成新的对象
+	    _this2.setDialogRef = function (element) {
+	      _this2.dialog = element;
+	    };
+	    return _this2;
 	  }
 
 	  _createClass(Dialog, [{
@@ -1595,20 +1623,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "timerHide",
 	    value: function timerHide(newProps) {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (newProps.timer) {
 	        this.clearTimer();
 	        this.timer = setTimeout(function () {
-	          _this2.state.isShow && _this2.hide();
+	          _this3.state.isShow && _this3.hide();
 	        }, newProps.timer);
 	      }
 	    }
 	  }, {
 	    key: "componentWillUnmount",
 	    value: function componentWillUnmount() {
+	      var _this4 = this;
+
 	      this.clearTimer();
 	      // console.log("unmount");
+	      lastDialog = null;
+	      dialogList.forEach(function (item, i) {
+	        if (item.id === _this4.id) {
+	          dialogList.splice(i, 1);
+	        }
+	      });
 	      document.removeEventListener("keydown", this.keyBind);
 	    }
 	  }, {
@@ -1619,6 +1655,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.props.isShow) {
 	        this.show(this.props);
 	      }
+	      lastDialog = this;
+	      dialogList.push({ instance: this, id: this.id });
 	    }
 	  }, {
 	    key: "clearTimer",
@@ -1628,20 +1666,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "show",
 	    value: function show(newProps) {
-	      var _this3 = this;
-
 	      // console.log("show");
+	      var _this = this;
 	      this.clearTimer();
 	      this.setState({ isShow: true }, function () {
 	        var st = setTimeout(function () {
 	          clearTimeout(st);
-	          _this3.dialog.className ? _this3.dialog.className += " opacity-animate" : undefined;
+	          _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
 	          // console.log(this.refs.dialogContent.offsetHeight)
 	          // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
 	          var ch = document.documentElement.clientHeight;
-	          var dh = _this3.refs.dialogContent.offsetHeight;
+	          var dh = _this.refs.dialogContent.offsetHeight;
 	          var stop = document.documentElement.scrollTop;
-	          var ot = parseInt(_this3.refs.dialogContent.offsetTop);
+	          var ot = parseInt(_this.refs.dialogContent.offsetTop);
 	          var sl = document.documentElement.scrollLeft;
 	          var x = 0,
 	              y = 0;
@@ -1652,12 +1689,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 
 	          // console.log(ot,y)
-	          _this3.setState({
+	          _this.setState({
 	            defaultPosition: {
-	              x: sl + parseInt((document.documentElement.clientWidth - _this3.refs.dialogContent.offsetWidth) / 2),
+	              x: sl + parseInt((document.documentElement.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
 	              y: y //: parseInt((document.documentElement.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
 	            }
 	          }, function () {
+	            _this.props.afterShow();
 	            // console.log(this.state.bounds);
 	            // this.setState({
 	            //   bounds: {
@@ -1670,12 +1708,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          });
 	          // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
 	          // console.log(this.refs.dialogContent.clientHeight,this.refs.dialogContent.offsetHeight)
-	          var height = parseInt(_this3.refs.dialogContent.offsetHeight);
+	          var height = parseInt(_this.refs.dialogContent.offsetHeight);
 	          var maxHeight = newProps.height || parseInt(document.documentElement.clientHeight);
 	          if (height >= maxHeight) {
-	            _this3.refs.dialogContent.style.height = maxHeight + "px";
-	            var bodyHeight = maxHeight - (_this3.refs.dialogHeader.offsetHeight || 0) - (_this3.refs.dialogFooter.offsetHeight || 0) - 2;
-	            _this3.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
+	            _this.refs.dialogContent.style.height = maxHeight + "px";
+	            var bodyHeight = maxHeight - (_this.refs.dialogHeader.offsetHeight || 0) - (_this.refs.dialogFooter.offsetHeight || 0) - 2;
+	            _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
 	            // console.log(bodyHeight);
 	            // console.log(
 	            //   maxHeight,
@@ -1684,7 +1722,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //   this.refs.dialogBody.style.height
 	            // );
 	          }
-	          _this3.props.afterShow();
+	          // _this.refs.dialogContent.style.zIndex = _this.props.zIndex;
+	          // _this.dialog.style.height = _this.refs.dialogBody.clientHeight+'px';
+	          // _this.dialog.style.width = _this.refs.dialogBody.clientWidth+'px';
 	        }, 0);
 	      });
 	      this.timerHide(newProps);
@@ -1705,10 +1745,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "_hide",
 	    value: function _hide() {
-	      var _this4 = this;
+	      var _this5 = this;
 
 	      this.setState({ isShow: false }, function () {
-	        _this4.props.afterHide();
+	        _this5.props.afterHide();
 	      });
 	    }
 	  }, {
@@ -1732,8 +1772,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var DD = this.props.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: "html" }, this.renderDialog()) : this.renderDialog();
 	        if (this.props.mask) {
 	          return _react2.default.createElement("div", {
-	            className: "x-dialog-continer",
-	            style: { zIndex: this.props.zIndex }
+	            className: "x-dialog-continer"
 	          }, _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef }, DD, _react2.default.createElement("div", { className: "x-dialog-mask", onClick: this.maskHandle })));
 	        } else {
 	          return _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef }, DD);
@@ -1767,11 +1806,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _react2.default.createElement("div", {
 	        className: "dialog-content " + this.props.className,
 	        ref: "dialogContent",
+	        onClick: this.onFocus,
 	        style: {
 	          width: this.props.width || "auto",
 	          height: this.props.height || "auto",
 	          top: this.state.defaultPosition.y,
-	          left: this.state.defaultPosition.x
+	          left: this.state.defaultPosition.x,
+	          zIndex: this.props.zIndex
 	        }
 	      }, this.props.title ? _react2.default.createElement("div", { className: "dialog-title", ref: "dialogHeader" }, _react2.default.createElement("h4", null, this.props.title), _react2.default.createElement("div", {
 	        onClick: this.hide.bind(this),
@@ -1782,6 +1823,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "render",
 	    value: function render() {
 	      return this.renderHTML();
+	    }
+	  }], [{
+	    key: "hide",
+	    value: function hide() {
+	      lastDialog && lastDialog.hide();
+	    }
+	  }, {
+	    key: "hideAll",
+	    value: function hideAll() {
+	      dialogList.forEach(function (item) {
+	        item.instance.hide();
+	      });
 	    }
 	  }]);
 
@@ -1808,7 +1861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  isShow: false,
 	  mask: true,
 	  className: "",
-	  zIndex: 9,
+	  zIndex: 0,
 	  maskHide: true,
 	  closeIcon: _react2.default.createElement("button", { className: "dialog-close" }, _react2.default.createElement("span", null, "\xD7")),
 	  dragHandle: '.dialog-title',
