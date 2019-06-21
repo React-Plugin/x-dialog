@@ -252,8 +252,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    //组件销毁时触发,移除绑定
 	    value: function componentWillUnmount() {
-	      _reactDom2.default.unmountComponentAtNode(this.node);
-	      this.node.parentNode.removeChild(this.node);
+	      if (this.node) {
+	        _reactDom2.default.unmountComponentAtNode(this.node);
+	        this.node.parentNode.removeChild(this.node);
+	        this.node = null;
+	      }
 	    }
 	  }, {
 	    key: "render",
