@@ -82,5 +82,7 @@ Dialog.hide();//关闭当前
     关闭获取焦点的窗口，如果无，则关闭最后一个打开的窗口
 ## hideAll
     关闭所有显示的窗口
+## zIndex 
+    zIndex值，默认1000
 ### 关于作者
 [https://github.com/tianxiangbing](https://github.com/tianxiangbing)

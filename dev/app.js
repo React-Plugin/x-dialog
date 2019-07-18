@@ -5,6 +5,7 @@ import '../src/_index.scss';
 import en from 'x-i18n/lib/components/en';
 let local= en.Dialog;
 var appElement = document.getElementById('example');
+Dialog.zIndex = 999;
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +18,7 @@ class App extends React.Component {
     this.setState({"dialog":state});
   }
   defaultDialog(){
-    let state ={isShow:true,title:"我是标题啊",draggable:true,mask:false,buttons:null, local:local,okCallback:()=>{
+    let state ={isShow:true,title:"我是标题啊",zIndex:999, draggable:true,mask:false,local:local,okCallback:()=>{
       alert('我点了确定')
     }};    
     this.setState({"dialog":state});
@@ -57,8 +58,8 @@ class App extends React.Component {
   funcDialog(){
     let ref = Dialog.show({title:'标题',mask:false,draggable:true,children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')});
     setTimeout(()=>{
-      // ref.hide();
-      Dialog.hide();
+      ref.hide();
+      // Dialog.hide();
     },4000)
   }
   hideAll=()=>{

@@ -157,7 +157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var renderSubtreeIntoContainer = _reactDom2.default.unstable_renderSubtreeIntoContainer;
 
-	var zIndex = 9;
+	// let zIndex=9;
 
 	var Dialog = function (_Component) {
 	  _inherits(Dialog, _Component);
@@ -208,7 +208,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _initialiseProps.call(_this);
 
-	    _this.state = { isShow: props.isShow, zIndex: zIndex };
+	    if (typeof props.zIndex !== 'undefined') {
+	      Dialog.zIndex = props.zIndex;
+	    }
+	    _this.state = { isShow: props.isShow, zIndex: Dialog.zIndex };
 	    return _this;
 	  }
 
@@ -308,12 +311,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  this.onFocus = function () {
-	    zIndex++;
-	    _this2.setState({ zIndex: zIndex });
+	    Dialog.zIndex++;
+	    _this2.setState({ zIndex: Dialog.zIndex });
 	  };
 	};
 
 	exports.default = Dialog;
+
+	Dialog.zIndex = 1000;
 
 /***/ }),
 /* 2 */
