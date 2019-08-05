@@ -97,70 +97,75 @@ export default class Dialog extends PureComponent {
   clearTimer() {
     this.timer && clearTimeout(this.timer);
   }
+  setPosition=(newProps)=>{
+    let _this = this;
+    _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
+    // console.log(this.refs.dialogContent.offsetHeight)
+    // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+    let ch = document.documentElement.clientHeight;
+    let dh = _this.refs.dialogContent.offsetHeight
+    let stop = document.documentElement.scrollTop;
+    let ot = parseInt(_this.refs.dialogContent.offsetTop);
+    let sl = document.documentElement.scrollLeft;
+    let x = 0, y = 0;
+    if (ot < 0) {
+      y = 0;
+    } else {
+      y = Math.max(0, parseInt((ch - dh) / 2)) + stop;
+    }
+
+    // console.log(ot,y)
+    _this.setState({
+      defaultPosition: {
+        x: sl + parseInt((document.documentElement.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
+        y//: parseInt((document.documentElement.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
+      },
+    }, () => {
+      _this.props.afterShow();
+      // console.log(this.state.bounds);
+      // this.setState({
+      //   bounds: {
+      //     left: -this.refs.dialogContent.offsetLeft,
+      //     top: -this.refs.dialogContent.offsetTop,
+      //     right: Math.max(document.body.scrollWidth,document.documentElement.offsetWidth)-this.refs.dialogContent.offsetLeft -this.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
+      //     bottom: Math.max(document.body.scrollHeight,document.documentElement.offsetHeight,ch)-this.refs.dialogContent.offsetTop -this.refs.dialogContent.offsetHeight,
+      //   }
+      // });
+    });
+    // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+    // console.log(this.refs.dialogContent.clientHeight,this.refs.dialogContent.offsetHeight)
+    let height = parseInt(_this.refs.dialogContent.offsetHeight);
+    let maxHeight =
+      newProps.height || parseInt(document.documentElement.clientHeight);
+    if (height >= maxHeight) {
+      _this.refs.dialogContent.style.height = maxHeight + "px";
+      let bodyHeight =
+        maxHeight -
+        (_this.refs.dialogHeader.offsetHeight || 0) -
+        (_this.refs.dialogFooter.offsetHeight || 0) - 2;
+        _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
+      // console.log(bodyHeight);
+      // console.log(
+      //   maxHeight,
+      //   this.refs.dialogHeader.offsetHeight,
+      //   this.refs.dialogFooter.offsetHeight,
+      //   this.refs.dialogBody.style.height
+      // );
+    }
+    // _this.refs.dialogContent.style.zIndex = _this.props.zIndex;
+    // _this.dialog.style.height = _this.refs.dialogBody.clientHeight+'px';
+    // _this.dialog.style.width = _this.refs.dialogBody.clientWidth+'px';
+  }
   show(newProps) {
     // console.log("show");
     let _this = this;
     this.clearTimer();
     this.setState({ isShow: true }, () => {
-      let st = setTimeout(() => {
-        clearTimeout(st);
-        _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
-        // console.log(this.refs.dialogContent.offsetHeight)
-        // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-        let ch = document.documentElement.clientHeight;
-        let dh = _this.refs.dialogContent.offsetHeight
-        let stop = document.documentElement.scrollTop;
-        let ot = parseInt(_this.refs.dialogContent.offsetTop);
-        let sl = document.documentElement.scrollLeft;
-        let x = 0, y = 0;
-        if (ot < 0) {
-          y = 0;
-        } else {
-          y = Math.max(0, parseInt((ch - dh) / 2)) + stop;
-        }
-
-        // console.log(ot,y)
-        _this.setState({
-          defaultPosition: {
-            x: sl + parseInt((document.documentElement.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
-            y//: parseInt((document.documentElement.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
-          },
-        }, () => {
-          _this.props.afterShow();
-          // console.log(this.state.bounds);
-          // this.setState({
-          //   bounds: {
-          //     left: -this.refs.dialogContent.offsetLeft,
-          //     top: -this.refs.dialogContent.offsetTop,
-          //     right: Math.max(document.body.scrollWidth,document.documentElement.offsetWidth)-this.refs.dialogContent.offsetLeft -this.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
-          //     bottom: Math.max(document.body.scrollHeight,document.documentElement.offsetHeight,ch)-this.refs.dialogContent.offsetTop -this.refs.dialogContent.offsetHeight,
-          //   }
-          // });
-        });
-        // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-        // console.log(this.refs.dialogContent.clientHeight,this.refs.dialogContent.offsetHeight)
-        let height = parseInt(_this.refs.dialogContent.offsetHeight);
-        let maxHeight =
-          newProps.height || parseInt(document.documentElement.clientHeight);
-        if (height >= maxHeight) {
-          _this.refs.dialogContent.style.height = maxHeight + "px";
-          let bodyHeight =
-            maxHeight -
-            (_this.refs.dialogHeader.offsetHeight || 0) -
-            (_this.refs.dialogFooter.offsetHeight || 0) - 2;
-            _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
-          // console.log(bodyHeight);
-          // console.log(
-          //   maxHeight,
-          //   this.refs.dialogHeader.offsetHeight,
-          //   this.refs.dialogFooter.offsetHeight,
-          //   this.refs.dialogBody.style.height
-          // );
-        }
-        // _this.refs.dialogContent.style.zIndex = _this.props.zIndex;
-        // _this.dialog.style.height = _this.refs.dialogBody.clientHeight+'px';
-        // _this.dialog.style.width = _this.refs.dialogBody.clientWidth+'px';
-      }, 0);
+      this.setPosition(newProps);
+      // let st = setTimeout(() => {
+      //   clearTimeout(st);
+      //     this.setPosition(newProps);
+      // }, 0);
     });
     this.timerHide(newProps);
   }

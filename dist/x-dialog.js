@@ -1599,6 +1599,63 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    };
 
+	    _this2.setPosition = function (newProps) {
+	      var _this = _this2;
+	      _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
+	      // console.log(this.refs.dialogContent.offsetHeight)
+	      // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+	      var ch = document.documentElement.clientHeight;
+	      var dh = _this.refs.dialogContent.offsetHeight;
+	      var stop = document.documentElement.scrollTop;
+	      var ot = parseInt(_this.refs.dialogContent.offsetTop);
+	      var sl = document.documentElement.scrollLeft;
+	      var x = 0,
+	          y = 0;
+	      if (ot < 0) {
+	        y = 0;
+	      } else {
+	        y = Math.max(0, parseInt((ch - dh) / 2)) + stop;
+	      }
+
+	      // console.log(ot,y)
+	      _this.setState({
+	        defaultPosition: {
+	          x: sl + parseInt((document.documentElement.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
+	          y: y //: parseInt((document.documentElement.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
+	        }
+	      }, function () {
+	        _this.props.afterShow();
+	        // console.log(this.state.bounds);
+	        // this.setState({
+	        //   bounds: {
+	        //     left: -this.refs.dialogContent.offsetLeft,
+	        //     top: -this.refs.dialogContent.offsetTop,
+	        //     right: Math.max(document.body.scrollWidth,document.documentElement.offsetWidth)-this.refs.dialogContent.offsetLeft -this.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
+	        //     bottom: Math.max(document.body.scrollHeight,document.documentElement.offsetHeight,ch)-this.refs.dialogContent.offsetTop -this.refs.dialogContent.offsetHeight,
+	        //   }
+	        // });
+	      });
+	      // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+	      // console.log(this.refs.dialogContent.clientHeight,this.refs.dialogContent.offsetHeight)
+	      var height = parseInt(_this.refs.dialogContent.offsetHeight);
+	      var maxHeight = newProps.height || parseInt(document.documentElement.clientHeight);
+	      if (height >= maxHeight) {
+	        _this.refs.dialogContent.style.height = maxHeight + "px";
+	        var bodyHeight = maxHeight - (_this.refs.dialogHeader.offsetHeight || 0) - (_this.refs.dialogFooter.offsetHeight || 0) - 2;
+	        _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
+	        // console.log(bodyHeight);
+	        // console.log(
+	        //   maxHeight,
+	        //   this.refs.dialogHeader.offsetHeight,
+	        //   this.refs.dialogFooter.offsetHeight,
+	        //   this.refs.dialogBody.style.height
+	        // );
+	      }
+	      // _this.refs.dialogContent.style.zIndex = _this.props.zIndex;
+	      // _this.dialog.style.height = _this.refs.dialogBody.clientHeight+'px';
+	      // _this.dialog.style.width = _this.refs.dialogBody.clientWidth+'px';
+	    };
+
 	    _this2.maskHandle = function () {
 	      _this2.props.maskHide && _this2.hide();
 	    };
@@ -1674,66 +1731,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "show",
 	    value: function show(newProps) {
+	      var _this5 = this;
+
 	      // console.log("show");
 	      var _this = this;
 	      this.clearTimer();
 	      this.setState({ isShow: true }, function () {
-	        var st = setTimeout(function () {
-	          clearTimeout(st);
-	          _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
-	          // console.log(this.refs.dialogContent.offsetHeight)
-	          // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-	          var ch = document.documentElement.clientHeight;
-	          var dh = _this.refs.dialogContent.offsetHeight;
-	          var stop = document.documentElement.scrollTop;
-	          var ot = parseInt(_this.refs.dialogContent.offsetTop);
-	          var sl = document.documentElement.scrollLeft;
-	          var x = 0,
-	              y = 0;
-	          if (ot < 0) {
-	            y = 0;
-	          } else {
-	            y = Math.max(0, parseInt((ch - dh) / 2)) + stop;
-	          }
-
-	          // console.log(ot,y)
-	          _this.setState({
-	            defaultPosition: {
-	              x: sl + parseInt((document.documentElement.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
-	              y: y //: parseInt((document.documentElement.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
-	            }
-	          }, function () {
-	            _this.props.afterShow();
-	            // console.log(this.state.bounds);
-	            // this.setState({
-	            //   bounds: {
-	            //     left: -this.refs.dialogContent.offsetLeft,
-	            //     top: -this.refs.dialogContent.offsetTop,
-	            //     right: Math.max(document.body.scrollWidth,document.documentElement.offsetWidth)-this.refs.dialogContent.offsetLeft -this.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
-	            //     bottom: Math.max(document.body.scrollHeight,document.documentElement.offsetHeight,ch)-this.refs.dialogContent.offsetTop -this.refs.dialogContent.offsetHeight,
-	            //   }
-	            // });
-	          });
-	          // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-	          // console.log(this.refs.dialogContent.clientHeight,this.refs.dialogContent.offsetHeight)
-	          var height = parseInt(_this.refs.dialogContent.offsetHeight);
-	          var maxHeight = newProps.height || parseInt(document.documentElement.clientHeight);
-	          if (height >= maxHeight) {
-	            _this.refs.dialogContent.style.height = maxHeight + "px";
-	            var bodyHeight = maxHeight - (_this.refs.dialogHeader.offsetHeight || 0) - (_this.refs.dialogFooter.offsetHeight || 0) - 2;
-	            _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
-	            // console.log(bodyHeight);
-	            // console.log(
-	            //   maxHeight,
-	            //   this.refs.dialogHeader.offsetHeight,
-	            //   this.refs.dialogFooter.offsetHeight,
-	            //   this.refs.dialogBody.style.height
-	            // );
-	          }
-	          // _this.refs.dialogContent.style.zIndex = _this.props.zIndex;
-	          // _this.dialog.style.height = _this.refs.dialogBody.clientHeight+'px';
-	          // _this.dialog.style.width = _this.refs.dialogBody.clientWidth+'px';
-	        }, 0);
+	        _this5.setPosition(newProps);
+	        // let st = setTimeout(() => {
+	        //   clearTimeout(st);
+	        //     this.setPosition(newProps);
+	        // }, 0);
 	      });
 	      this.timerHide(newProps);
 	    }
@@ -1753,10 +1761,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "_hide",
 	    value: function _hide() {
-	      var _this5 = this;
+	      var _this6 = this;
 
 	      this.setState({ isShow: false }, function () {
-	        _this5.props.afterHide();
+	        _this6.props.afterHide();
 	      });
 	    }
 	  }, {
