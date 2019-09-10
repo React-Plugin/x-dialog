@@ -244,7 +244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        dd = null;
 	      } else if (!this.node) {
 	        this.node = document.createElement("div");
-	        document.body.appendChild(this.node);
+	        this.props.container.appendChild(this.node);
 	        renderSubtreeIntoContainer(this, dd, this.node);
 	      } else {
 	        renderSubtreeIntoContainer(this, dd, this.node);
@@ -278,7 +278,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	Dialog.defaultProps = {
 	  isShow: false,
-	  mask: true
+	  mask: true,
+	  container: document.body
 	};
 
 	var _initialiseProps = function _initialiseProps() {
@@ -1591,6 +1592,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this2 = _possibleConstructorReturn(this, (Dialog.__proto__ || Object.getPrototypeOf(Dialog)).call(this, props));
 
+	    _this2.container = document.documentElement;
+	    _this2.bounds = 'html';
+
 	    _this2.keyBind = function (e) {
 	      // console.log(e);
 	      if (e.keyCode === 27) {
@@ -1604,11 +1608,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
 	      // console.log(this.refs.dialogContent.offsetHeight)
 	      // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-	      var ch = document.documentElement.clientHeight;
+	      var ch = _this2.container.clientHeight;
 	      var dh = _this.refs.dialogContent.offsetHeight;
-	      var stop = document.documentElement.scrollTop;
+	      var stop = _this2.container.scrollTop;
 	      var ot = parseInt(_this.refs.dialogContent.offsetTop);
-	      var sl = document.documentElement.scrollLeft;
+	      var sl = _this2.container.scrollLeft;
 	      var x = 0,
 	          y = 0;
 	      if (ot < 0) {
@@ -1620,25 +1624,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // console.log(ot,y)
 	      _this.setState({
 	        defaultPosition: {
-	          x: sl + parseInt((document.documentElement.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
-	          y: y //: parseInt((document.documentElement.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
+	          x: sl + parseInt((_this2.container.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
+	          y: y //: parseInt((this.container.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
 	        }
 	      }, function () {
 	        _this.props.afterShow();
-	        // console.log(this.state.bounds);
-	        // this.setState({
-	        //   bounds: {
-	        //     left: -this.refs.dialogContent.offsetLeft,
-	        //     top: -this.refs.dialogContent.offsetTop,
-	        //     right: Math.max(document.body.scrollWidth,document.documentElement.offsetWidth)-this.refs.dialogContent.offsetLeft -this.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
-	        //     bottom: Math.max(document.body.scrollHeight,document.documentElement.offsetHeight,ch)-this.refs.dialogContent.offsetTop -this.refs.dialogContent.offsetHeight,
-	        //   }
-	        // });
 	      });
-	      // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-	      // console.log(this.refs.dialogContent.clientHeight,this.refs.dialogContent.offsetHeight)
 	      var height = parseInt(_this.refs.dialogContent.offsetHeight);
-	      var maxHeight = newProps.height || parseInt(document.documentElement.clientHeight);
+	      var maxHeight = newProps.height || parseInt(_this2.container.clientHeight);
 	      if (height >= maxHeight) {
 	        _this.refs.dialogContent.style.height = maxHeight + "px";
 	        var bodyHeight = maxHeight - (_this.refs.dialogHeader.offsetHeight || 0) - (_this.refs.dialogFooter.offsetHeight || 0) - 2;
@@ -1667,8 +1660,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this2.id = +new Date();
 	    _this2.dialog = null;
-	    _this2.state = { isShow: props.isShow, defaultPosition: {}, bounds: {} };
+	    _this2.state = { isShow: props.isShow, defaultPosition: {} };
 	    _this2.keyBind = _this2.keyBind.bind(_this2); //方便移除事件绑定.每次bind会生成新的对象
+	    //容器配置
+	    if (document.body != _this2.props.container) {
+	      _this2.container = _this2.props.container;
+	      console.log('position', _this2.container.style.position);
+	      if (_this2.container.style.position == 'static' || _this2.container.style.position == '') {
+	        _this2.container.style.position = 'relative';
+	        _this2.bounds = 'parent';
+	        // console.log({left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight})
+	        // this.bounds = {left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight};
+	      }
+	    } else {
+	      _this2.container = document.documentElement;
+	    }
 	    _this2.setDialogRef = function (element) {
 	      _this2.dialog = element;
 	    };
@@ -1784,12 +1790,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      // console.log(this.buttons);
 	      // console.log(this.state.bounds)
+	      var maskHeight = this.container.offsetHeight + 'px';
 	      if (this.state.isShow) {
-	        var DD = this.props.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: "html" }, this.renderDialog()) : this.renderDialog();
+	        var DD = this.props.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: this.bounds }, this.renderDialog()) : this.renderDialog();
 	        if (this.props.mask) {
 	          return _react2.default.createElement("div", {
 	            className: "x-dialog-continer"
-	          }, _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef }, DD, _react2.default.createElement("div", { className: "x-dialog-mask", onClick: this.maskHandle })));
+	          }, _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef, style: { height: maskHeight } }, DD, _react2.default.createElement("div", { style: { height: maskHeight }, className: "x-dialog-mask", onClick: this.maskHandle })));
 	        } else {
 	          return _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef }, DD);
 	        }
@@ -1884,7 +1891,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  draggable: false,
 	  afterHide: function afterHide() {},
 	  afterShow: function afterShow() {},
-	  okCallback: function okCallback() {}
+	  okCallback: function okCallback() {},
+	  container: document.body
 	};
 	exports.default = Dialog;
 

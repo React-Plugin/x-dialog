@@ -39,7 +39,8 @@ export default class Dialog extends Component {
   };
   static defaultProps = {
     isShow: false,
-    mask: true
+    mask: true,
+    container:document.body
   };
   // static getDerivedStateFromProps(props, state){
   //   if(state.isShow!==props.isShow){
@@ -90,7 +91,7 @@ export default class Dialog extends Component {
       dd = null;
     } else if (!this.node) {
       this.node = document.createElement("div");
-      document.body.appendChild(this.node);
+      this.props.container.appendChild(this.node);
       renderSubtreeIntoContainer(
         this,
         dd,

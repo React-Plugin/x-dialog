@@ -65,6 +65,9 @@ class App extends React.Component {
   hideAll=()=>{
     Dialog.hideAll();
   }
+  showCatainer(){
+    let ref = Dialog.show({mask:true,container:document.getElementById('container'), title:'标题',draggable:true,children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')});
+  }
   render() {
     console.log( {...this.state.dialog})
     return (
@@ -79,6 +82,8 @@ class App extends React.Component {
         <button onClick={this.hideCallback.bind(this)}>隐藏的回调方式</button>
         <button onClick={this.showButtons.bind(this)}>自定义按钮</button>
         <button onClick={this.showClassName.bind(this)}>传递样式名称</button>
+        <button onClick={this.showCatainer.bind(this)}>弹在指定区域</button>
+        <div className="container" style={{backgroundColor:'#cccccc',height:'500px'}} id="container"></div>
         <Dialog 
         {...this.state.dialog}
         >

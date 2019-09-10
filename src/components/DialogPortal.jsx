@@ -39,14 +39,30 @@ export default class Dialog extends PureComponent {
     draggable: false,
     afterHide: () => { },
     afterShow: () => { },
-    okCallback: () => { }
+    okCallback: () => { },
+    container:document.body
   };
+  container=document.documentElement;
+  bounds= 'html';
   constructor(props) {
     super(props);
     this.id =  +new Date();
     this.dialog = null;
-    this.state = { isShow: props.isShow, defaultPosition: {}, bounds: {} };
+    this.state = { isShow: props.isShow, defaultPosition: {}};
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
+    //容器配置
+    if(document.body != this.props.container){
+      this.container = this.props.container;
+      console.log('position',this.container.style.position)
+      if(this.container.style.position=='static' || this.container.style.position=='' ){
+        this.container.style.position = 'relative';
+        this.bounds  = 'parent';
+        // console.log({left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight})
+        // this.bounds = {left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight};
+      }
+    }else{
+      this.container = document.documentElement;
+    }
     this.setDialogRef = element => {
       this.dialog = element;
     };
@@ -102,11 +118,11 @@ export default class Dialog extends PureComponent {
     _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
     // console.log(this.refs.dialogContent.offsetHeight)
     // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-    let ch = document.documentElement.clientHeight;
+    let ch = this.container.clientHeight;
     let dh = _this.refs.dialogContent.offsetHeight
-    let stop = document.documentElement.scrollTop;
+    let stop = this.container.scrollTop;
     let ot = parseInt(_this.refs.dialogContent.offsetTop);
-    let sl = document.documentElement.scrollLeft;
+    let sl = this.container.scrollLeft;
     let x = 0, y = 0;
     if (ot < 0) {
       y = 0;
@@ -117,26 +133,16 @@ export default class Dialog extends PureComponent {
     // console.log(ot,y)
     _this.setState({
       defaultPosition: {
-        x: sl + parseInt((document.documentElement.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
-        y//: parseInt((document.documentElement.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
+        x: sl + parseInt((this.container.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
+        y//: parseInt((this.container.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
       },
     }, () => {
       _this.props.afterShow();
-      // console.log(this.state.bounds);
-      // this.setState({
-      //   bounds: {
-      //     left: -this.refs.dialogContent.offsetLeft,
-      //     top: -this.refs.dialogContent.offsetTop,
-      //     right: Math.max(document.body.scrollWidth,document.documentElement.offsetWidth)-this.refs.dialogContent.offsetLeft -this.refs.dialogContent.offsetWidth, //this.refs.dialogContent.offsetLeft ,
-      //     bottom: Math.max(document.body.scrollHeight,document.documentElement.offsetHeight,ch)-this.refs.dialogContent.offsetTop -this.refs.dialogContent.offsetHeight,
-      //   }
-      // });
+    
     });
-    // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-    // console.log(this.refs.dialogContent.clientHeight,this.refs.dialogContent.offsetHeight)
     let height = parseInt(_this.refs.dialogContent.offsetHeight);
     let maxHeight =
-      newProps.height || parseInt(document.documentElement.clientHeight);
+      newProps.height || parseInt(this.container.clientHeight);
     if (height >= maxHeight) {
       _this.refs.dialogContent.style.height = maxHeight + "px";
       let bodyHeight =
@@ -211,16 +217,17 @@ export default class Dialog extends PureComponent {
     }
     // console.log(this.buttons);
     // console.log(this.state.bounds)
+        let maskHeight = this.container.offsetHeight +'px';
     if (this.state.isShow) {
-      let DD = this.props.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds='html'>{this.renderDialog()}</Draggable> : this.renderDialog();
+      let DD = this.props.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> : this.renderDialog();
       if (this.props.mask) {
         return <div
           className={"x-dialog-continer"
           }
         >
-          <div className="x-dialog" ref={this.setDialogRef}>
+          <div className="x-dialog" ref={this.setDialogRef}  style={{height:maskHeight}}>
             {DD}
-            <div className="x-dialog-mask" onClick={this.maskHandle}></div>
+            <div style={{height:maskHeight}} className="x-dialog-mask" onClick={this.maskHandle}></div>
           </div>
         </div>
       } else {
