@@ -10,7 +10,7 @@ import React, { PureComponent } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import Draggable from 'react-draggable';
-let lastDialog = null,dialogList = [];
+let lastDialog = null, dialogList = [];
 export default class Dialog extends PureComponent {
   static propTypes = {
     isShow: PropTypes.bool.isRequired,
@@ -40,27 +40,27 @@ export default class Dialog extends PureComponent {
     afterHide: () => { },
     afterShow: () => { },
     okCallback: () => { },
-    container:document.body
+    container: document.body
   };
-  container=document.documentElement;
-  bounds= 'html';
+  container = document.documentElement;
+  bounds = 'html';
   constructor(props) {
     super(props);
-    this.id =  +new Date();
+    this.id = +new Date();
     this.dialog = null;
-    this.state = { isShow: props.isShow, defaultPosition: {}};
+    this.state = { isShow: props.isShow, defaultPosition: {} };
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
     //容器配置
-    if(document.body != this.props.container){
+    if (document.body != this.props.container) {
       this.container = this.props.container;
-      console.log('position',this.container.style.position)
-      if(this.container.style.position=='static' || this.container.style.position=='' ){
+      console.log('position', this.container.style.position)
+      if (this.container.style.position == 'static' || this.container.style.position == '') {
         this.container.style.position = 'relative';
-        this.bounds  = 'parent';
+        this.bounds = 'parent';
         // console.log({left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight})
         // this.bounds = {left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight};
       }
-    }else{
+    } else {
       this.container = document.documentElement;
     }
     this.setDialogRef = element => {
@@ -86,10 +86,10 @@ export default class Dialog extends PureComponent {
   componentWillUnmount() {
     this.clearTimer();
     // console.log("unmount");
-    lastDialog =null;
-    dialogList.forEach((item,i)=>{
-      if(item.id ===this.id){
-        dialogList.splice(i,1)
+    lastDialog = null;
+    dialogList.forEach((item, i) => {
+      if (item.id === this.id) {
+        dialogList.splice(i, 1)
       }
     })
     document.removeEventListener("keydown", this.keyBind);
@@ -101,7 +101,7 @@ export default class Dialog extends PureComponent {
       this.show(this.props)
     }
     lastDialog = this;
-    dialogList.push({instance:this,id:this.id});
+    dialogList.push({ instance: this, id: this.id });
   }
   keyBind = (e) => {
     // console.log(e);
@@ -113,7 +113,7 @@ export default class Dialog extends PureComponent {
   clearTimer() {
     this.timer && clearTimeout(this.timer);
   }
-  setPosition=(newProps)=>{
+  setPosition = (newProps) => {
     let _this = this;
     _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
     // console.log(this.refs.dialogContent.offsetHeight)
@@ -138,7 +138,7 @@ export default class Dialog extends PureComponent {
       },
     }, () => {
       _this.props.afterShow();
-    
+
     });
     let height = parseInt(_this.refs.dialogContent.offsetHeight);
     let maxHeight =
@@ -149,7 +149,7 @@ export default class Dialog extends PureComponent {
         maxHeight -
         (_this.refs.dialogHeader.offsetHeight || 0) -
         (_this.refs.dialogFooter.offsetHeight || 0) - 2;
-        _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
+      _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
       // console.log(bodyHeight);
       // console.log(
       //   maxHeight,
@@ -217,7 +217,7 @@ export default class Dialog extends PureComponent {
     }
     // console.log(this.buttons);
     // console.log(this.state.bounds)
-        let maskHeight = this.container.offsetHeight +'px';
+    let maskHeight = this.container == document.body || this.container == document.documentElement ? document.documentElement.clientHeight + 'px' : this.container.offsetHeight + 'px';
     if (this.state.isShow) {
       let DD = this.props.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> : this.renderDialog();
       if (this.props.mask) {
@@ -225,9 +225,9 @@ export default class Dialog extends PureComponent {
           className={"x-dialog-continer"
           }
         >
-          <div className="x-dialog" ref={this.setDialogRef}  style={{height:maskHeight}}>
+          <div className="x-dialog" ref={this.setDialogRef} style={{ height: maskHeight }}>
             {DD}
-            <div style={{height:maskHeight}} className="x-dialog-mask" onClick={this.maskHandle}></div>
+            <div style={{ height: maskHeight }} className="x-dialog-mask" onClick={this.maskHandle}></div>
           </div>
         </div>
       } else {
@@ -253,15 +253,15 @@ export default class Dialog extends PureComponent {
     //   </div>
     //   : <div />;
   }
-  static  hide(){
+  static hide() {
     lastDialog && lastDialog.hide();
   }
-  static hideAll(){
-    dialogList.forEach(item=>{
+  static hideAll() {
+    dialogList.forEach(item => {
       item.instance.hide()
     });
   }
-  onFocus =()=>{
+  onFocus = () => {
     lastDialog = this;
     this.props.onClick();
   }
@@ -276,7 +276,7 @@ export default class Dialog extends PureComponent {
         height: this.props.height || "auto",
         top: this.state.defaultPosition.y,
         left: this.state.defaultPosition.x,
-        zIndex:this.props.zIndex
+        zIndex: this.props.zIndex
       }}
     >
       {this.props.title
