@@ -11,8 +11,14 @@
   cursor: move; }
 
 .x-dialog {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   -webkit-transition: opacity 0.2s linear;
-  transition: opacity 0.2s linear; }
+  transition: opacity 0.2s linear;
+  z-index: 99;
+  position: absolute; }
   .x-dialog.opacity-animate {
     opacity: 1; }
   .x-dialog.opacity-animate-hide {

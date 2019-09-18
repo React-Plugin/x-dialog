@@ -1790,15 +1790,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      // console.log(this.buttons);
 	      // console.log(this.state.bounds)
-	      var maskHeight = this.container == document.body || this.container == document.documentElement ? document.documentElement.clientHeight + 'px' : this.container.offsetHeight + 'px';
+	      var maskHeight = this.container == document.body || this.container == document.documentElement ? document.documentElement.scrollHeight + 'px' : this.container.scrollHeight + 'px';
 	      if (this.state.isShow) {
 	        var DD = this.props.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: this.bounds }, this.renderDialog()) : this.renderDialog();
 	        if (this.props.mask) {
 	          return _react2.default.createElement("div", {
 	            className: "x-dialog-continer"
-	          }, _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef, style: { height: maskHeight } }, DD, _react2.default.createElement("div", { style: { height: maskHeight }, className: "x-dialog-mask", onClick: this.maskHandle })));
+	          }, _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef, style: { height: maskHeight, zIndex: this.props.zIndex } }, DD, _react2.default.createElement("div", { style: { height: maskHeight }, className: "x-dialog-mask", onClick: this.maskHandle })));
 	        } else {
-	          return _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef }, DD);
+	          return _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef, style: { zIndex: this.props.zIndex } }, DD);
 	        }
 	      } else {
 	        return null;

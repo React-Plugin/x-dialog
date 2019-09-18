@@ -51,7 +51,9 @@ class App extends React.Component {
     let state = {
       isShow: true,
       title: "这是一个传递样式的例子1",
-      className:"myClass"
+      className:"myClass",
+      zIndex:888,
+      
     };
     this.setState({dialog:state});
   }
