@@ -217,7 +217,16 @@ export default class Dialog extends PureComponent {
     }
     // console.log(this.buttons);
     // console.log(this.state.bounds)
-    let maskHeight = this.container == document.body || this.container == document.documentElement ? document.documentElement.scrollHeight + 'px' : this.container.scrollHeight + 'px';
+    let maskStyle ={ }
+    if(this.container == document.body || this.container == document.documentElement ){
+      maskStyle  = { 
+        position:'fixed'
+      }
+    }else{
+      maskStyle = {
+        height:this.container.scrollHeight + 'px'
+      }
+    } 
     if (this.state.isShow) {
       let DD = this.props.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> : this.renderDialog();
       if (this.props.mask) {
@@ -225,9 +234,9 @@ export default class Dialog extends PureComponent {
           className={"x-dialog-continer"
           }
         >
-          <div className="x-dialog" ref={this.setDialogRef} style={{ height: maskHeight ,zIndex: this.props.zIndex}}>
+          <div className="x-dialog" ref={this.setDialogRef} style={{ zIndex: this.props.zIndex}}>
             {DD}
-            <div style={{ height: maskHeight }} className="x-dialog-mask" onClick={this.maskHandle}></div>
+            <div style={maskStyle} className="x-dialog-mask" onClick={this.maskHandle}></div>
           </div>
         </div>
       } else {
