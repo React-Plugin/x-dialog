@@ -180,14 +180,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function show(config) {
 	      var myRef = _react2.default.createRef;
 	      var div = document.createDocumentFragment('div');
-	      var currentConfig = _extends({ children: config.content }, config, { isShow: true, ref: function ref(_ref) {
-	          return myRef = _ref;
-	        } });
+	      var f;
+	      var currentConfig = _extends({
+	        children: config.content }, config, { isShow: true, ref: function ref(_ref) {
+	          myRef = _ref;
+	          f && f(myRef);
+	          return myRef;
+	        }
+	      });
 	      function render(props) {
 	        _reactDom2.default.render(_react2.default.createElement(Dialog, props), div);
 	      }
 	      render(currentConfig);
-	      return myRef;
+	      return function (t) {
+	        f = t;
+	      };
 	    }
 	  }, {
 	    key: "hide",

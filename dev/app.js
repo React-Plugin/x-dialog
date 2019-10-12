@@ -69,6 +69,9 @@ class App extends React.Component {
   }
   showCatainer(){
     let ref = Dialog.show({mask:true,container:document.getElementById('container'), title:'标题',draggable:true,children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')});
+    setTimeout(()=>{
+      ref.hide();
+    },1000)
   }
   render() {
     console.log( {...this.state.dialog})

@@ -19,12 +19,21 @@ export default class Dialog extends Component {
   static show(config) {
     let myRef = React.createRef;
     let div = document.createDocumentFragment('div')
-    let currentConfig = { children: config.content, ...config, isShow: true, ref: ref => myRef = ref };
+    var f;
+    let currentConfig = {
+      children: config.content, ...config, isShow: true, ref: ref => {
+        myRef = ref;
+        f && f(myRef);
+        return myRef;
+      }
+    };
     function render(props) {
       ReactDOM.render(<Dialog {...props} />, div)
     }
     render(currentConfig);
-    return myRef;
+    return (t) => {
+      f = t;
+    };
   }
   static hide() {
     DialogPortal.hide();
@@ -40,7 +49,7 @@ export default class Dialog extends Component {
   static defaultProps = {
     isShow: false,
     mask: true,
-    container:document.body
+    container: document.body
   };
   // static getDerivedStateFromProps(props, state){
   //   if(state.isShow!==props.isShow){
@@ -54,7 +63,7 @@ export default class Dialog extends Component {
   }
   constructor(props) {
     super(props);
-    if(typeof props.zIndex !== 'undefined'){
+    if (typeof props.zIndex !== 'undefined') {
       Dialog.zIndex = props.zIndex;
     }
     this.state = { isShow: props.isShow, zIndex: Dialog.zIndex };
