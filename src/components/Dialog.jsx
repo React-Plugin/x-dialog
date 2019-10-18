@@ -23,7 +23,11 @@ export default class Dialog extends Component {
     let currentConfig = {
       children: config.content, ...config, isShow: true, ref: ref => {
         myRef = ref;
-        f && f(myRef);
+        //针对不同的版本进行兼容
+        let t = setTimeout(()=>{
+          clearTimeout(t);
+          f && f(myRef);
+        })
         return myRef;
       }
     };

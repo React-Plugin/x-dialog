@@ -184,7 +184,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var currentConfig = _extends({
 	        children: config.content }, config, { isShow: true, ref: function ref(_ref) {
 	          myRef = _ref;
-	          f && f(myRef);
+	          //针对不同的版本进行兼容
+	          var t = setTimeout(function () {
+	            clearTimeout(t);
+	            f && f(myRef);
+	          });
 	          return myRef;
 	        }
 	      });
