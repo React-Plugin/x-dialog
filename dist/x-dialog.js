@@ -178,7 +178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }], [{
 	    key: "show",
 	    value: function show(config) {
-	      var myRef = _react2.default.createRef;
+	      var myRef = _react2.default.createRef();
 	      var div = document.createDocumentFragment('div');
 	      var f;
 	      var currentConfig = _extends({

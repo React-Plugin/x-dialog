@@ -17,7 +17,7 @@ const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer;
 // let zIndex=9;
 export default class Dialog extends Component {
   static show(config) {
-    let myRef = React.createRef;
+    let myRef = React.createRef();
     let div = document.createDocumentFragment('div')
     var f;
     let currentConfig = {
