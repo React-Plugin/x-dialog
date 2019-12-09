@@ -92,6 +92,7 @@ export default class Dialog extends PureComponent {
         dialogList.splice(i, 1)
       }
     })
+    this.props.updateList(dialogList);
     document.removeEventListener("keydown", this.keyBind);
   }
   componentDidMount() {

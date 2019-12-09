@@ -241,7 +241,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "componentDidMount",
 	    value: function componentDidMount() {
-
+	      Dialog.topDialog = this;
 	      this.renderPortal();
 	    }
 	    //模拟render方法，调用portal组件时传入父级容器
@@ -282,6 +282,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Dialog;
 	}(_react.Component);
 
+	Dialog.defaultZIndex = 1000;
+	Dialog.zIndex = Dialog.defaultZIndex;
+	Dialog.topDialog = null;
 	Dialog.propTypes = {
 	  isShow: _propTypes2.default.bool.isRequired,
 	  mask: _propTypes2.default.bool,
@@ -309,6 +312,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.renderContent = function (local) {
 	    // console.log(this.props)
 	    var props = _extends({}, _this2.props);
+	    props.updateList = function (DialogList) {
+	      if (DialogList.length === 0) {
+	        Dialog.zIndex = Dialog.defaultZIndex;
+	        _this2.setState({ zIndex: Dialog.zIndex });
+	      }
+	    };
 	    props.afterHide = function () {
 	      _this2.props.afterHide && _this2.props.afterHide();
 	      _this2.hide();
@@ -323,14 +332,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  this.onFocus = function () {
-	    Dialog.zIndex++;
-	    _this2.setState({ zIndex: Dialog.zIndex });
+	    if (_this2 != Dialog.topDialog) {
+	      Dialog.topDialog = _this2;
+	      Dialog.zIndex++;
+	      _this2.setState({ zIndex: Dialog.zIndex });
+	    }
 	  };
 	};
 
 	exports.default = Dialog;
-
-	Dialog.zIndex = 1000;
 
 /***/ }),
 /* 2 */
@@ -1727,6 +1737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          dialogList.splice(i, 1);
 	        }
 	      });
+	      this.props.updateList(dialogList);
 	      document.removeEventListener("keydown", this.keyBind);
 	    }
 	  }, {

@@ -14,8 +14,11 @@ import I18n from 'x-i18n';
 
 const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer;
 
+
 // let zIndex=9;
 export default class Dialog extends Component {
+  static defaultZIndex = 1000;
+  static zIndex = Dialog.defaultZIndex;
   static show(config) {
     let myRef = React.createRef();
     let div = document.createDocumentFragment('div')
@@ -24,7 +27,7 @@ export default class Dialog extends Component {
       children: config.content, ...config, isShow: true, ref: ref => {
         myRef = ref;
         //针对不同的版本进行兼容
-        let t = setTimeout(()=>{
+        let t = setTimeout(() => {
           clearTimeout(t);
           f && f(myRef);
         })
@@ -39,6 +42,7 @@ export default class Dialog extends Component {
       f = t;
     };
   }
+  static topDialog = null;
   static hide() {
     DialogPortal.hide();
   }
@@ -90,7 +94,7 @@ export default class Dialog extends Component {
   }
   //初始化时插入父级和渲染一次portal组件
   componentDidMount() {
-
+    Dialog.topDialog = this;
     this.renderPortal();
   }
   //模拟render方法，调用portal组件时传入父级容器
@@ -121,6 +125,12 @@ export default class Dialog extends Component {
   renderContent = (local) => {
     // console.log(this.props)
     let props = { ...this.props };
+    props.updateList = (DialogList)=>{
+      if(DialogList.length===0){
+        Dialog.zIndex = Dialog.defaultZIndex;
+        this.setState({zIndex:Dialog.zIndex})
+      }
+    }
     props.afterHide = () => {
       this.props.afterHide && this.props.afterHide();
       this.hide();
@@ -137,8 +147,11 @@ export default class Dialog extends Component {
   }
 
   onFocus = () => {
-    Dialog.zIndex++;
-    this.setState({ zIndex: Dialog.zIndex });
+    if (this != Dialog.topDialog) {
+      Dialog.topDialog = this;
+      Dialog.zIndex++;
+      this.setState({ zIndex: Dialog.zIndex });
+    }
   }
   //组件销毁时触发,移除绑定
   componentWillUnmount() {
@@ -147,11 +160,9 @@ export default class Dialog extends Component {
       this.node.parentNode.removeChild(this.node);
       this.node = null;
     }
+    
   }
   render() {
     return null;
   }
 }
-
-
-Dialog.zIndex = 1000;
