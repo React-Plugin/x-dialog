@@ -75,6 +75,11 @@ class App extends React.Component {
       },10000)
     })
   }
+  reopen(e){
+    e.stopPropagation();
+    Dialog.show({mask:true, title:<button>标题</button>,draggable:true,children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')})(f=>{
+    })
+  }
   render() {
     console.log( {...this.state.dialog})
     return (
@@ -98,6 +103,7 @@ class App extends React.Component {
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
+          <button onClick={this.reopen.bind(this)}>再弹一个</button>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
