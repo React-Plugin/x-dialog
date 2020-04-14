@@ -74,7 +74,7 @@ export default class Dialog extends Component {
     if (typeof props.zIndex !== 'undefined') {
       Dialog.zIndex = props.zIndex;
     }
-    this.state = { isShow: props.isShow, zIndex: Dialog.zIndex };
+    this.state = { isShow: props.isShow, zIndex: Dialog.zIndex++ };
   }
   hide = () => {
     this.setState({ isShow: false }, () => {
@@ -108,7 +108,11 @@ export default class Dialog extends Component {
       dd = null;
     } else if (!this.node) {
       this.node = document.createElement("div");
-      this.props.container.appendChild(this.node);
+      if(typeof this.props.container ==='string'){
+        document.querySelector(this.props.container).appendChild(this.node);
+      }else{
+        this.props.container.appendChild(this.node);
+      }
       renderSubtreeIntoContainer(
         this,
         dd,

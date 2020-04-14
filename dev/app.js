@@ -39,8 +39,12 @@ class App extends React.Component {
     let state ={isShow:true,title:"这是一个隐藏的回调例子",afterHide:()=>alert('我又隐藏了')};
     this.setState({"dialog":state});
   }
+  open(e){
+    e.stopPropagation();
+    Dialog.show({content:'adfs'})
+  }
   showButtons(){
-    let state ={isShow:true,title:"这是一个自定义按钮的例子",buttons: <div><button className="d-ok" onClick={this.hide.bind(this)}>我知道了</button><button className="d-cancel" onClick={this.hide.bind(this)}>关闭</button></div>};
+    let state ={isShow:true,title:"这是一个自定义按钮的例子",buttons: <div><button className="d-ok" onClick={this.open.bind(this)}>我知道了</button><button className="d-cancel" onClick={this.hide.bind(this)}>关闭</button></div>};
     this.setState({"dialog":state});
   }
   hide(){
@@ -64,10 +68,11 @@ class App extends React.Component {
     Dialog.hideAll();
   }
   showCatainer(){
-    Dialog.show({mask:true,container:document.getElementById('container'), title:'标题',draggable:true,children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')})(f=>{
+    Dialog.show({mask:true,container:'#container', title:'标题',draggable:true,children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')})(f=>{
       setTimeout(()=>{
-        f.hide();
-      },1000)
+        // f.hide();
+        // Dialog.hide();
+      },10000)
     })
   }
   render() {

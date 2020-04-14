@@ -43,23 +43,40 @@ export default class Dialog extends PureComponent {
     container: document.body
   };
   container = document.documentElement;
-  bounds = 'html';
+  bounds = 'body';
   constructor(props) {
     super(props);
     this.id = +new Date();
     this.dialog = null;
     this.state = { isShow: props.isShow, defaultPosition: {} };
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
+    
+    this.maskWH = {
+      width: document.documentElement.offsetWidth,
+      height:document.documentElement.offsetHeight
+    }
     //容器配置
     if (document.body != this.props.container) {
-      this.container = this.props.container;
-      console.log('position', this.container.style.position)
+      this.container = document.querySelector(this.props.container) ;
+      
+      this.maskWH = {
+        width: this.container.offsetWidth,
+        height:this.container.offsetHeight
+      }
+      // console.log('position', this.container.style.position)
       if (this.container.style.position == 'static' || this.container.style.position == '') {
         this.container.style.position = 'relative';
-        this.bounds = 'parent';
-        // console.log({left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight})
-        // this.bounds = {left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight};
       }
+      // let node = this.container;
+      // //container只支持传dom或字符串
+      // if (typeof this.container === 'string') {
+      //   node = document.querySelector(this.container);
+      // }
+      // let nodeStyle = window.getComputedStyle(node);
+      // console.log(nodeStyle)
+      this.bounds = this.props.container;
+      // console.log({left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight})
+      // this.bounds = {left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight};
     } else {
       this.container = document.documentElement;
     }
@@ -218,30 +235,31 @@ export default class Dialog extends PureComponent {
     }
     // console.log(this.buttons);
     // console.log(this.state.bounds)
-    let maskStyle ={ }
-    if(this.container == document.body || this.container == document.documentElement ){
-      maskStyle  = { 
-        position:'fixed'
-      }
-    }else{
+    let maskStyle = {}
+    if (this.container == document.body || this.container == document.documentElement) {
       maskStyle = {
-        height:this.container.scrollHeight + 'px'
+        position: 'fixed'
       }
-    } 
+    } else {
+      maskStyle = {
+        height: this.container.scrollHeight + 'px'
+      }
+    }
     if (this.state.isShow) {
+      // console.log(this.bounds)
       let DD = this.props.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> : this.renderDialog();
       if (this.props.mask) {
         return <div
           className={"x-dialog-continer"
           }
         >
-          <div className="x-dialog" ref={this.setDialogRef} style={{ zIndex: this.props.zIndex}}>
+          <div className="x-dialog" ref={this.setDialogRef} style={{ zIndex: this.props.zIndex }}>
             {DD}
-            <div style={maskStyle} className="x-dialog-mask" onClick={this.maskHandle}></div>
+            <div style={maskStyle} className="x-dialog-mask" style={{ zIndex: this.props.zIndex - 1,...this.maskWH }} onClick={this.maskHandle}></div>
           </div>
         </div>
       } else {
-        return <div className="x-dialog" ref={this.setDialogRef} style={{zIndex: this.props.zIndex}}>
+        return <div className="x-dialog" ref={this.setDialogRef} style={{ zIndex: this.props.zIndex }}>
           {DD}
         </div>
       }
@@ -264,7 +282,16 @@ export default class Dialog extends PureComponent {
     //   : <div />;
   }
   static hide() {
-    lastDialog && lastDialog.hide();
+    if (dialogList.length) {
+      lastDialog = dialogList[0];
+      dialogList.forEach(item => {
+        // console.log(item)
+        if (lastDialog.instance.zIndex <= item.instance.zIndex) {
+          lastDialog = item;
+        }
+      });
+      lastDialog.instance.hide();
+    }
   }
   static hideAll() {
     dialogList.forEach(item => {
@@ -276,7 +303,9 @@ export default class Dialog extends PureComponent {
     this.props.onClick();
   }
   renderDialog() {
-    let { local, buttons, okCallback } = this.props;
+    //同步zindex至this
+    let { local, buttons, okCallback, zIndex } = this.props;
+    this.zIndex = zIndex;
     return <div
       className={"dialog-content " + this.props.className}
       ref="dialogContent"
@@ -286,7 +315,7 @@ export default class Dialog extends PureComponent {
         height: this.props.height || "auto",
         top: this.state.defaultPosition.y,
         left: this.state.defaultPosition.x,
-        zIndex: this.props.zIndex
+        zIndex: zIndex
       }}
     >
       {this.props.title
