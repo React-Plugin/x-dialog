@@ -74,7 +74,8 @@ export default class Dialog extends Component {
     if (typeof props.zIndex !== 'undefined') {
       Dialog.zIndex = props.zIndex;
     }
-    this.state = { isShow: props.isShow, zIndex: Dialog.zIndex++ };
+    Dialog.zIndex++
+    this.state = { isShow: props.isShow, zIndex: Dialog.zIndex };
   }
   hide = () => {
     this.setState({ isShow: false }, () => {

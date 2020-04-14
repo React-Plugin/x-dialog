@@ -222,7 +222,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof props.zIndex !== 'undefined') {
 	      Dialog.zIndex = props.zIndex;
 	    }
-	    _this.state = { isShow: props.isShow, zIndex: Dialog.zIndex++ };
+	    Dialog.zIndex++;
+	    _this.state = { isShow: props.isShow, zIndex: Dialog.zIndex };
 	    return _this;
 	  }
 
