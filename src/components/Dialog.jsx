@@ -66,7 +66,10 @@ export default class Dialog extends Component {
   // }
   componentWillReceiveProps(newProps) {
     if (newProps.isShow != this.state.isShow) {
-      this.setState({ isShow: newProps.isShow });
+      if( newProps.isShow){
+        Dialog.zIndex++
+      }
+      this.setState({ isShow: newProps.isShow ,zIndex:Dialog.zIndex});
     }
   }
   constructor(props) {

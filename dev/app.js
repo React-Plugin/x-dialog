@@ -9,7 +9,7 @@ Dialog.zIndex = 999;
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {dialog:{ isShow: false }};
+    this.state = {dialog:{ isShow: false },isShowDialog2:false};
   }
   noAction() {
     // this.setState({ isShow:true });
@@ -20,6 +20,9 @@ class App extends React.Component {
   defaultDialog(){
     let state ={isShow:true,title:"我是标题啊",zIndex:999, draggable:true,mask:false,local:local,okCallback:()=>{
       alert('我点了确定')
+    },afterHide:()=>{
+      this.state.dialog.isShow = false;
+      this.setState(this.state)
     }};    
     this.setState({"dialog":state});
   }
@@ -113,6 +116,19 @@ class App extends React.Component {
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           </div>
+        </Dialog>
+        <button onClick={e=>{
+          this.setState({isShowDialog2:true})
+        }}>第二弹窗</button>
+        <Dialog
+          isShow={this.state.isShowDialog2}
+          content="123132123123"
+          mask={false}
+          afterHide={()=>{
+            this.setState({isShowDialog2:false})
+          }}
+        >
+
         </Dialog>
       </div>
     )

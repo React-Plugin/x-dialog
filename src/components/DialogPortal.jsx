@@ -56,7 +56,7 @@ export default class Dialog extends PureComponent {
       height:document.documentElement.offsetHeight
     }
     //容器配置
-    if (document.body != this.props.container) {
+    if (document.body != this.props.container && typeof this.props.container ==='string') {
       this.container = document.querySelector(this.props.container) ;
       
       this.maskWH = {
@@ -77,8 +77,10 @@ export default class Dialog extends PureComponent {
       this.bounds = this.props.container;
       // console.log({left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight})
       // this.bounds = {left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight};
-    } else {
+    } else if(document.body == this.props.container) {
       this.container = document.documentElement;
+    }else{
+      this.container = this.props.container;
     }
     this.setDialogRef = element => {
       this.dialog = element;

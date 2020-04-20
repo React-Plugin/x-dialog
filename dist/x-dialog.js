@@ -172,7 +172,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // }
 	    value: function componentWillReceiveProps(newProps) {
 	      if (newProps.isShow != this.state.isShow) {
-	        this.setState({ isShow: newProps.isShow });
+	        if (newProps.isShow) {
+	          Dialog.zIndex++;
+	        }
+	        this.setState({ isShow: newProps.isShow, zIndex: Dialog.zIndex });
 	      }
 	    }
 	  }], [{
@@ -1711,7 +1714,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      width: document.documentElement.offsetWidth,
 	      height: document.documentElement.offsetHeight
 	      //容器配置
-	    };if (document.body != _this2.props.container) {
+	    };if (document.body != _this2.props.container && typeof _this2.props.container === 'string') {
 	      _this2.container = document.querySelector(_this2.props.container);
 
 	      _this2.maskWH = {
@@ -1731,8 +1734,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this2.bounds = _this2.props.container;
 	      // console.log({left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight})
 	      // this.bounds = {left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight};
-	    } else {
+	    } else if (document.body == _this2.props.container) {
 	      _this2.container = document.documentElement;
+	    } else {
+	      _this2.container = _this2.props.container;
 	    }
 	    _this2.setDialogRef = function (element) {
 	      _this2.dialog = element;
