@@ -60,13 +60,10 @@ export default class Dialog extends PureComponent {
       this.container = document.querySelector(this.props.container) ;
       
       this.maskWH = {
-        width: this.container.offsetWidth,
-        height:this.container.offsetHeight
+        width: this.container.clientWidth,
+        height:this.container.clientHeight
       }
       // console.log('position', this.container.style.position)
-      if (this.container.style.position == 'static' || this.container.style.position == '') {
-        this.container.style.position = 'relative';
-      }
       // let node = this.container;
       // //container只支持传dom或字符串
       // if (typeof this.container === 'string') {
@@ -81,6 +78,10 @@ export default class Dialog extends PureComponent {
       this.container = document.documentElement;
     }else{
       this.container = this.props.container;
+    }
+    let position = window.getComputedStyle( this.container).position;
+    if (document.body !== this.props.container &&(position == 'static' || position == '') ) {
+      this.container.style.position = 'relative';
     }
     this.setDialogRef = element => {
       this.dialog = element;
@@ -149,11 +150,26 @@ export default class Dialog extends PureComponent {
     } else {
       y = Math.max(0, parseInt((ch - dh) / 2)) + stop;
     }
-
+    x = sl + parseInt((this.container.clientWidth - _this.refs.dialogContent.offsetWidth) / 2);
+    //固定显示在四周 [left,right,top,bottom]
+    if(this.props.fixed ){
+      if(this.props.fixed.indexOf('left')!==-1){
+        x = 0;
+      }
+      if(this.props.fixed.indexOf('right')!==-1){
+        x = this.container.clientWidth - _this.refs.dialogContent.offsetWidth;
+      }
+      if(this.props.fixed.indexOf('top')!==-1){
+        y = 0;
+      }
+      if(this.props.fixed.indexOf('bottom')!==-1){
+        y = this.container.clientHeight - this.refs.dialogContent.offsetHeight;
+      }
+    }
     // console.log(ot,y)
     _this.setState({
       defaultPosition: {
-        x: sl + parseInt((this.container.clientWidth - _this.refs.dialogContent.offsetWidth) / 2),
+        x,
         y//: parseInt((this.container.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
       },
     }, () => {
