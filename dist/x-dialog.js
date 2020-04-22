@@ -339,7 +339,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  };
 
-	  this.onFocus = function () {
+	  this.onFocus = function (e) {
+	    e.stopPropagation();
 	    if (_this2 != Dialog.topDialog) {
 	      Dialog.topDialog = _this2;
 	      Dialog.zIndex++;
@@ -1715,9 +1716,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this2.props.maskHide && _this2.hide();
 	    };
 
-	    _this2.onFocus = function () {
+	    _this2.onFocus = function (e) {
+	      // 阻止与原生事件的冒泡
+	      e.nativeEvent.stopImmediatePropagation();
+	      e.stopPropagation();
 	      lastDialog = _this2;
-	      _this2.props.onClick();
+	      _this2.props.onClick(e);
 	    };
 
 	    _this2.id = +new Date();
@@ -1925,7 +1929,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _react2.default.createElement("div", {
 	        className: "dialog-content " + this.props.className,
 	        ref: "dialogContent",
-	        onClick: this.onFocus,
 	        style: {
 	          width: this.props.width || "auto",
 	          height: this.props.height || "auto",
@@ -1936,7 +1939,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }, this.props.title ? _react2.default.createElement("div", { className: "dialog-title", ref: "dialogHeader" }, _react2.default.createElement("h4", null, this.props.title), _react2.default.createElement("div", {
 	        onClick: this.hide.bind(this),
 	        className: "dialog-close-con"
-	      }, this.props.closeIcon)) : undefined, _react2.default.createElement("div", { className: "dialog-body", ref: "dialogBody" }, this.props.children), _react2.default.createElement("div", { ref: "dialogFooter" }, this.buttons ? _react2.default.createElement("div", { className: "dialog-action" }, this.buttons) : undefined));
+	      }, this.props.closeIcon)) : undefined, _react2.default.createElement("div", { className: "dialog-body", ref: "dialogBody", onClick: this.onFocus }, this.props.children), _react2.default.createElement("div", { ref: "dialogFooter" }, this.buttons ? _react2.default.createElement("div", { className: "dialog-action" }, this.buttons) : undefined));
 	    }
 	  }, {
 	    key: "render",

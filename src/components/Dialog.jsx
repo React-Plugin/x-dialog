@@ -154,7 +154,8 @@ export default class Dialog extends Component {
     }
   }
 
-  onFocus = () => {
+  onFocus = (e) => {
+    e.stopPropagation();
     if (this != Dialog.topDialog) {
       Dialog.topDialog = this;
       Dialog.zIndex++;

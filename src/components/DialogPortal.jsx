@@ -316,9 +316,12 @@ export default class Dialog extends PureComponent {
       item.instance.hide()
     });
   }
-  onFocus = () => {
+  onFocus = (e) => {
+    // 阻止与原生事件的冒泡
+    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
     lastDialog = this;
-    this.props.onClick();
+    this.props.onClick(e);
   }
   renderDialog() {
     //同步zindex至this
@@ -327,7 +330,6 @@ export default class Dialog extends PureComponent {
     return <div
       className={"dialog-content " + this.props.className}
       ref="dialogContent"
-      onClick={this.onFocus}
       style={{
         width: this.props.width || "auto",
         height: this.props.height || "auto",
@@ -347,7 +349,7 @@ export default class Dialog extends PureComponent {
           </div>
         </div>
         : undefined}
-      <div className="dialog-body" ref="dialogBody">
+      <div className="dialog-body" ref="dialogBody" onClick={this.onFocus}>
         {this.props.children}
       </div>
       <div ref="dialogFooter">
