@@ -1754,6 +1754,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this2.container = document.documentElement;
 	    } else {
 	      _this2.container = _this2.props.container;
+	      _this2.maskWH = {
+	        width: _this2.container.clientWidth,
+	        height: _this2.container.clientHeight
+	      };
 	    }
 	    var position = window.getComputedStyle(_this2.container).position;
 	    if (document.body !== _this2.props.container && (position == 'static' || position == '')) {

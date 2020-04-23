@@ -78,6 +78,10 @@ export default class Dialog extends PureComponent {
       this.container = document.documentElement;
     }else{
       this.container = this.props.container;
+      this.maskWH = {
+        width: this.container.clientWidth,
+        height:this.container.clientHeight
+      }
     }
     let position = window.getComputedStyle( this.container).position;
     if (document.body !== this.props.container &&(position == 'static' || position == '') ) {
