@@ -148,7 +148,7 @@ export default class Dialog extends PureComponent {
     let stop = this.container.scrollTop;
     let ot = parseInt(_this.refs.dialogContent.offsetTop);
     let sl = this.container.scrollLeft;
-    let x = 0, y = 0;
+    let x = 0, y = 0,x2=null,y2=null;
     if (ot < 0) {
       y = 0;
     } else {
@@ -159,22 +159,28 @@ export default class Dialog extends PureComponent {
     if(this.props.fixed ){
       if(this.props.fixed.indexOf('left')!==-1){
         x = 0;
+        x2=null;
       }
       if(this.props.fixed.indexOf('right')!==-1){
-        x = this.container.clientWidth - _this.refs.dialogContent.offsetWidth;
+        x = null;
+        x2 =  0;
       }
       if(this.props.fixed.indexOf('top')!==-1){
         y = 0;
+        y2 = null;
       }
       if(this.props.fixed.indexOf('bottom')!==-1){
-        y = this.container.clientHeight - this.refs.dialogContent.offsetHeight;
+        y = null;
+        y2 = 0 ;
       }
     }
     // console.log(ot,y)
     _this.setState({
       defaultPosition: {
         x,
-        y//: parseInt((this.container.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
+        y,
+        x2,
+        y2
       },
     }, () => {
       _this.props.afterShow();
@@ -185,10 +191,12 @@ export default class Dialog extends PureComponent {
       newProps.height || parseInt(this.container.clientHeight);
     if (height >= maxHeight) {
       _this.refs.dialogContent.style.height = maxHeight + "px";
+      let headHeight = _this.refs.dialogHeader?_this.refs.dialogHeader.offsetHeight : 0;
+      let footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight :0 ;
       let bodyHeight =
         maxHeight -
-        (_this.refs.dialogHeader.offsetHeight || 0) -
-        (_this.refs.dialogFooter.offsetHeight || 0) - 2;
+        headHeight -
+        footHeight - 2;
       _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
       // console.log(bodyHeight);
       // console.log(
@@ -331,15 +339,21 @@ export default class Dialog extends PureComponent {
     //同步zindex至this
     let { local, buttons, okCallback, zIndex } = this.props;
     this.zIndex = zIndex;
+    let {x,x2,y,y2} = this.state.defaultPosition;
+    let position = {
+      left: x===null?'auto':x,
+      right: x2===null?'auto':x2,
+      top: y===null?'auto':y,
+      bottom:y2===null?'auto':y2
+    }
     return <div
       className={"dialog-content " + this.props.className}
       ref="dialogContent"
       style={{
         width: this.props.width || "auto",
         height: this.props.height || "auto",
-        top: this.state.defaultPosition.y,
-        left: this.state.defaultPosition.x,
-        zIndex: zIndex
+        zIndex: zIndex,
+        ...position
       }}
     >
       {this.props.title

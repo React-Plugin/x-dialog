@@ -1662,7 +1662,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var ot = parseInt(_this.refs.dialogContent.offsetTop);
 	      var sl = _this2.container.scrollLeft;
 	      var x = 0,
-	          y = 0;
+	          y = 0,
+	          x2 = null,
+	          y2 = null;
 	      if (ot < 0) {
 	        y = 0;
 	      } else {
@@ -1673,22 +1675,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (_this2.props.fixed) {
 	        if (_this2.props.fixed.indexOf('left') !== -1) {
 	          x = 0;
+	          x2 = null;
 	        }
 	        if (_this2.props.fixed.indexOf('right') !== -1) {
-	          x = _this2.container.clientWidth - _this.refs.dialogContent.offsetWidth;
+	          x = null;
+	          x2 = 0;
 	        }
 	        if (_this2.props.fixed.indexOf('top') !== -1) {
 	          y = 0;
+	          y2 = null;
 	        }
 	        if (_this2.props.fixed.indexOf('bottom') !== -1) {
-	          y = _this2.container.clientHeight - _this2.refs.dialogContent.offsetHeight;
+	          y = null;
+	          y2 = 0;
 	        }
 	      }
 	      // console.log(ot,y)
 	      _this.setState({
 	        defaultPosition: {
 	          x: x,
-	          y: y //: parseInt((this.container.clientHeight - this.refs.dialogContent.offsetHeight) / 2)
+	          y: y,
+	          x2: x2,
+	          y2: y2
 	        }
 	      }, function () {
 	        _this.props.afterShow();
@@ -1697,7 +1705,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var maxHeight = newProps.height || parseInt(_this2.container.clientHeight);
 	      if (height >= maxHeight) {
 	        _this.refs.dialogContent.style.height = maxHeight + "px";
-	        var bodyHeight = maxHeight - (_this.refs.dialogHeader.offsetHeight || 0) - (_this.refs.dialogFooter.offsetHeight || 0) - 2;
+	        var headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
+	        var footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
+	        var bodyHeight = maxHeight - headHeight - footHeight - 2;
 	        _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
 	        // console.log(bodyHeight);
 	        // console.log(
@@ -1930,16 +1940,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	          zIndex = _props2.zIndex;
 
 	      this.zIndex = zIndex;
+	      var _state$defaultPositio = this.state.defaultPosition,
+	          x = _state$defaultPositio.x,
+	          x2 = _state$defaultPositio.x2,
+	          y = _state$defaultPositio.y,
+	          y2 = _state$defaultPositio.y2;
+
+	      var position = {
+	        left: x === null ? 'auto' : x,
+	        right: x2 === null ? 'auto' : x2,
+	        top: y === null ? 'auto' : y,
+	        bottom: y2 === null ? 'auto' : y2
+	      };
 	      return _react2.default.createElement("div", {
 	        className: "dialog-content " + this.props.className,
 	        ref: "dialogContent",
-	        style: {
+	        style: _extends({
 	          width: this.props.width || "auto",
 	          height: this.props.height || "auto",
-	          top: this.state.defaultPosition.y,
-	          left: this.state.defaultPosition.x,
 	          zIndex: zIndex
-	        }
+	        }, position)
 	      }, this.props.title ? _react2.default.createElement("div", { className: "dialog-title", ref: "dialogHeader" }, _react2.default.createElement("h4", null, this.props.title), _react2.default.createElement("div", {
 	        onClick: this.hide.bind(this),
 	        className: "dialog-close-con"
