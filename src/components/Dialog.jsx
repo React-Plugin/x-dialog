@@ -14,7 +14,6 @@ import I18n from 'x-i18n';
 
 const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer;
 
-
 // let zIndex=9;
 export default class Dialog extends Component {
   static defaultZIndex = 1000;

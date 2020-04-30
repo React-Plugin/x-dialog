@@ -1730,7 +1730,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // 阻止与原生事件的冒泡
 	      e.nativeEvent.stopImmediatePropagation();
 	      e.stopPropagation();
-	      lastDialog = _this2;
+	      // lastDialog = this;
 	      _this2.props.onClick(e);
 	    };
 
@@ -1804,18 +1804,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "componentWillUnmount",
 	    value: function componentWillUnmount() {
-	      var _this4 = this;
-
 	      this.clearTimer();
 	      // console.log("unmount");
-	      lastDialog = null;
+	      // lastDialog = null;
+	      this.destory();
+	      document.removeEventListener("keydown", this.keyBind);
+	    }
+	    //销毁时更新dialogList;
+
+	  }, {
+	    key: "destory",
+	    value: function destory() {
+	      var _this4 = this;
+
 	      dialogList.forEach(function (item, i) {
 	        if (item.id === _this4.id) {
 	          dialogList.splice(i, 1);
 	        }
 	      });
 	      this.props.updateList(dialogList);
-	      document.removeEventListener("keydown", this.keyBind);
 	    }
 	  }, {
 	    key: "componentDidMount",
@@ -1825,7 +1832,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.props.isShow) {
 	        this.show(this.props);
 	      }
-	      lastDialog = this;
+	      // lastDialog = this;
 	      dialogList.push({ instance: this, id: this.id });
 	    }
 	  }, {
@@ -1857,10 +1864,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // this._hide();
 	      if (this.dialog) {
 	        var cls = this.dialog.className;
-	        this.dialog.className = cls.replace("opacity-animate", "opacity-animate-hide");
+	        this.dialog.addEventListener('transitionend', this._hide.bind(this));
+	        this.dialog.className = cls.replace("opacity-animate", " opacity-animate-hide ");
+	        this.destory();
 	      }
 	      // this._hide();
-	      this.dialog.addEventListener('transitionend', this._hide.bind(this));
 	      // setTimeout(this._hide.bind(this), 3000);
 	    }
 	  }, {
@@ -1974,14 +1982,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "hide",
 	    value: function hide() {
 	      if (dialogList.length) {
-	        lastDialog = dialogList[0];
-	        dialogList.forEach(function (item) {
-	          // console.log(item)
-	          if (lastDialog.instance.zIndex <= item.instance.zIndex) {
-	            lastDialog = item;
-	          }
+	        // lastDialog = dialogList[0];
+	        // dialogList.forEach(item => {
+	        //   // console.log(item)
+	        //   if (lastDialog.instance.zIndex <= item.instance.zIndex) {
+	        //     lastDialog = item;
+	        //   }
+	        // });
+	        dialogList.sort(function (a, b) {
+	          a.instance.zIndex - b.instance.zIndex;
 	        });
-	        lastDialog.instance.hide();
+	        // lastDialog.instance.hide();
+	        dialogList[dialogList.length - 1].instance.hide();
 	      }
 	    }
 	  }, {

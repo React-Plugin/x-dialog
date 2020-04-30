@@ -50,18 +50,18 @@ export default class Dialog extends PureComponent {
     this.dialog = null;
     this.state = { isShow: props.isShow, defaultPosition: {} };
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
-    
+
     this.maskWH = {
       width: document.documentElement.offsetWidth,
-      height:document.documentElement.offsetHeight
+      height: document.documentElement.offsetHeight
     }
     //容器配置
-    if (document.body != this.props.container && typeof this.props.container ==='string') {
-      this.container = document.querySelector(this.props.container) ;
-      
+    if (document.body != this.props.container && typeof this.props.container === 'string') {
+      this.container = document.querySelector(this.props.container);
+
       this.maskWH = {
         width: this.container.clientWidth,
-        height:this.container.clientHeight
+        height: this.container.clientHeight
       }
       // console.log('position', this.container.style.position)
       // let node = this.container;
@@ -74,17 +74,17 @@ export default class Dialog extends PureComponent {
       this.bounds = this.props.container;
       // console.log({left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight})
       // this.bounds = {left: 0, top: 0, right: this.container.clientWidth, bottom: this.container.clientHeight};
-    } else if(document.body == this.props.container) {
+    } else if (document.body == this.props.container) {
       this.container = document.documentElement;
-    }else{
+    } else {
       this.container = this.props.container;
       this.maskWH = {
         width: this.container.clientWidth,
-        height:this.container.clientHeight
+        height: this.container.clientHeight
       }
     }
-    let position = window.getComputedStyle( this.container).position;
-    if (document.body !== this.props.container &&(position == 'static' || position == '') ) {
+    let position = window.getComputedStyle(this.container).position;
+    if (document.body !== this.props.container && (position == 'static' || position == '')) {
       this.container.style.position = 'relative';
     }
     this.setDialogRef = element => {
@@ -110,14 +110,18 @@ export default class Dialog extends PureComponent {
   componentWillUnmount() {
     this.clearTimer();
     // console.log("unmount");
-    lastDialog = null;
+    // lastDialog = null;
+    this.destory();
+    document.removeEventListener("keydown", this.keyBind);
+  }
+  //销毁时更新dialogList;
+  destory(){
     dialogList.forEach((item, i) => {
       if (item.id === this.id) {
         dialogList.splice(i, 1)
       }
     })
     this.props.updateList(dialogList);
-    document.removeEventListener("keydown", this.keyBind);
   }
   componentDidMount() {
     // console.log(this.dialog)
@@ -125,7 +129,7 @@ export default class Dialog extends PureComponent {
     if (this.props.isShow) {
       this.show(this.props)
     }
-    lastDialog = this;
+    // lastDialog = this;
     dialogList.push({ instance: this, id: this.id });
   }
   keyBind = (e) => {
@@ -148,7 +152,7 @@ export default class Dialog extends PureComponent {
     let stop = this.container.scrollTop;
     let ot = parseInt(_this.refs.dialogContent.offsetTop);
     let sl = this.container.scrollLeft;
-    let x = 0, y = 0,x2=null,y2=null;
+    let x = 0, y = 0, x2 = null, y2 = null;
     if (ot < 0) {
       y = 0;
     } else {
@@ -156,22 +160,22 @@ export default class Dialog extends PureComponent {
     }
     x = sl + parseInt((this.container.clientWidth - _this.refs.dialogContent.offsetWidth) / 2);
     //固定显示在四周 [left,right,top,bottom]
-    if(this.props.fixed ){
-      if(this.props.fixed.indexOf('left')!==-1){
+    if (this.props.fixed) {
+      if (this.props.fixed.indexOf('left') !== -1) {
         x = 0;
-        x2=null;
+        x2 = null;
       }
-      if(this.props.fixed.indexOf('right')!==-1){
+      if (this.props.fixed.indexOf('right') !== -1) {
         x = null;
-        x2 =  0;
+        x2 = 0;
       }
-      if(this.props.fixed.indexOf('top')!==-1){
+      if (this.props.fixed.indexOf('top') !== -1) {
         y = 0;
         y2 = null;
       }
-      if(this.props.fixed.indexOf('bottom')!==-1){
+      if (this.props.fixed.indexOf('bottom') !== -1) {
         y = null;
-        y2 = 0 ;
+        y2 = 0;
       }
     }
     // console.log(ot,y)
@@ -191,8 +195,8 @@ export default class Dialog extends PureComponent {
       newProps.height || parseInt(this.container.clientHeight);
     if (height >= maxHeight) {
       _this.refs.dialogContent.style.height = maxHeight + "px";
-      let headHeight = _this.refs.dialogHeader?_this.refs.dialogHeader.offsetHeight : 0;
-      let footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight :0 ;
+      let headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
+      let footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
       let bodyHeight =
         maxHeight -
         headHeight -
@@ -228,13 +232,14 @@ export default class Dialog extends PureComponent {
     // this._hide();
     if (this.dialog) {
       let cls = this.dialog.className;
+      this.dialog.addEventListener('transitionend', this._hide.bind(this));
       this.dialog.className = cls.replace(
         "opacity-animate",
-        "opacity-animate-hide"
+        " opacity-animate-hide "
       );
+      this.destory();
     }
     // this._hide();
-    this.dialog.addEventListener('transitionend', this._hide.bind(this));
     // setTimeout(this._hide.bind(this), 3000);
   }
   _hide() {
@@ -285,7 +290,7 @@ export default class Dialog extends PureComponent {
         >
           <div className="x-dialog" ref={this.setDialogRef} style={{ zIndex: this.props.zIndex }}>
             {DD}
-            <div style={maskStyle} className="x-dialog-mask" style={{ zIndex: this.props.zIndex - 1,...this.maskWH }} onClick={this.maskHandle}></div>
+            <div style={maskStyle} className="x-dialog-mask" style={{ zIndex: this.props.zIndex - 1, ...this.maskWH }} onClick={this.maskHandle}></div>
           </div>
         </div>
       } else {
@@ -313,14 +318,18 @@ export default class Dialog extends PureComponent {
   }
   static hide() {
     if (dialogList.length) {
-      lastDialog = dialogList[0];
-      dialogList.forEach(item => {
-        // console.log(item)
-        if (lastDialog.instance.zIndex <= item.instance.zIndex) {
-          lastDialog = item;
-        }
-      });
-      lastDialog.instance.hide();
+      // lastDialog = dialogList[0];
+      // dialogList.forEach(item => {
+      //   // console.log(item)
+      //   if (lastDialog.instance.zIndex <= item.instance.zIndex) {
+      //     lastDialog = item;
+      //   }
+      // });
+      dialogList.sort((a, b) => {
+        a.instance.zIndex - b.instance.zIndex;
+      })
+      // lastDialog.instance.hide();
+      dialogList[dialogList.length - 1].instance.hide();
     }
   }
   static hideAll() {
@@ -332,19 +341,19 @@ export default class Dialog extends PureComponent {
     // 阻止与原生事件的冒泡
     e.nativeEvent.stopImmediatePropagation();
     e.stopPropagation();
-    lastDialog = this;
+    // lastDialog = this;
     this.props.onClick(e);
   }
   renderDialog() {
     //同步zindex至this
     let { local, buttons, okCallback, zIndex } = this.props;
     this.zIndex = zIndex;
-    let {x,x2,y,y2} = this.state.defaultPosition;
+    let { x, x2, y, y2 } = this.state.defaultPosition;
     let position = {
-      left: x===null?'auto':x,
-      right: x2===null?'auto':x2,
-      top: y===null?'auto':y,
-      bottom:y2===null?'auto':y2
+      left: x === null ? 'auto' : x,
+      right: x2 === null ? 'auto' : x2,
+      top: y === null ? 'auto' : y,
+      bottom: y2 === null ? 'auto' : y2
     }
     return <div
       className={"dialog-content " + this.props.className}

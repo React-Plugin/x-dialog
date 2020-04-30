@@ -6,6 +6,7 @@ import en from 'x-i18n/lib/components/en';
 let local= en.Dialog;
 var appElement = document.getElementById('example');
 Dialog.zIndex = 999;
+window.Dialog = Dialog;
 class App extends React.Component {
   constructor(props) {
     super(props);
