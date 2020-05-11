@@ -13,6 +13,8 @@
 .x-dialog {
   -webkit-transition: opacity 0.2s linear;
   transition: opacity 0.2s linear; }
+  .x-dialog, .x-dialog * {
+    box-sizing: border-box; }
   .x-dialog.opacity-animate {
     opacity: 1; }
   .x-dialog.opacity-animate-hide {

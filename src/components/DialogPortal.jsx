@@ -10,6 +10,7 @@ import React, { PureComponent } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import Draggable from 'react-draggable';
+import EleResize from 'jsresize';
 let lastDialog = null, dialogList = [];
 export default class Dialog extends PureComponent {
   static propTypes = {
@@ -115,7 +116,7 @@ export default class Dialog extends PureComponent {
     document.removeEventListener("keydown", this.keyBind);
   }
   //销毁时更新dialogList;
-  destory(){
+  destory() {
     dialogList.forEach((item, i) => {
       if (item.id === this.id) {
         dialogList.splice(i, 1)
@@ -193,14 +194,14 @@ export default class Dialog extends PureComponent {
     let height = parseInt(_this.refs.dialogContent.offsetHeight);
     let maxHeight =
       newProps.height || parseInt(this.container.clientHeight);
+    let headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
+    let footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
+    let bodyHeight =
+      maxHeight -
+      headHeight -
+      footHeight - 2;
     if (height >= maxHeight) {
       _this.refs.dialogContent.style.height = maxHeight + "px";
-      let headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
-      let footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
-      let bodyHeight =
-        maxHeight -
-        headHeight -
-        footHeight - 2;
       _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
       // console.log(bodyHeight);
       // console.log(
@@ -209,6 +210,8 @@ export default class Dialog extends PureComponent {
       //   this.refs.dialogFooter.offsetHeight,
       //   this.refs.dialogBody.style.height
       // );
+    } else {
+      _this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight - y) + "px";
     }
     // _this.refs.dialogContent.style.zIndex = _this.props.zIndex;
     // _this.dialog.style.height = _this.refs.dialogBody.clientHeight+'px';
@@ -224,8 +227,24 @@ export default class Dialog extends PureComponent {
       //   clearTimeout(st);
       //     this.setPosition(newProps);
       // }, 0);
+      //这里绑定resize事件进行maxheight值重置
+      // EleResize.on(this.refs.dialogContent,()=>{
+      //   this.resetMaxHeight(newProps);
+      // })
     });
     this.timerHide(newProps);
+  }
+  resetMaxHeight(newProps){
+    let _this = this;
+    let maxHeight = newProps.height || parseInt(this.container.clientHeight);
+    let headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
+    let footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
+    let bodyHeight =
+      maxHeight -
+      headHeight -
+      footHeight - 2;
+    let y = window.getComputedStyle(this.refs.dialogContent).top;
+    this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight - y) + "px";
   }
   hide() {
     // console.log("hide");

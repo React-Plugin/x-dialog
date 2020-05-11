@@ -10,7 +10,7 @@ window.Dialog = Dialog;
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {dialog:{ isShow: false },isShowDialog2:false};
+    this.state = {dialog:{ isShow: false },isShowDialog2:false,content:'我是内容'};
   }
   noAction() {
     // this.setState({ isShow:true });
@@ -72,12 +72,22 @@ class App extends React.Component {
     Dialog.hideAll();
   }
   showCatainer(){
-    Dialog.show({mask:true,container:'#container', title:'标题',draggable:true,children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')})(f=>{
+    Dialog.show({mask:true,container:'#container', title:'标题',draggable:true,children:this.state.content,afterHide:()=>alert('我又隐藏了')})(f=>{
       setTimeout(()=>{
         // f.hide();
         // Dialog.hide();
+        
       },10000)
     })
+    setTimeout(()=>{
+      // f.hide();
+      // Dialog.hide();
+      let str = this.state.content;
+      for(let i = 0 ;i <10;i++){
+        str+=str;
+      }
+      document.getElementsByClassName('dialog-body')[0].innerHTML=str;
+    },2000)
   }
   reopen(e){
     e.stopPropagation();

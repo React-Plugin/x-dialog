@@ -122,7 +122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _DialogPortal2 = _interopRequireDefault(_DialogPortal);
 
-	var _xI18n = __webpack_require__(15);
+	var _xI18n = __webpack_require__(16);
 
 	var _xI18n2 = _interopRequireDefault(_xI18n);
 
@@ -1592,6 +1592,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
 
+	var _jsresize = __webpack_require__(15);
+
+	var _jsresize2 = _interopRequireDefault(_jsresize);
+
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
 	}
@@ -1703,11 +1707,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	      var height = parseInt(_this.refs.dialogContent.offsetHeight);
 	      var maxHeight = newProps.height || parseInt(_this2.container.clientHeight);
+	      var headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
+	      var footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
+	      var bodyHeight = maxHeight - headHeight - footHeight - 2;
 	      if (height >= maxHeight) {
 	        _this.refs.dialogContent.style.height = maxHeight + "px";
-	        var headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
-	        var footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
-	        var bodyHeight = maxHeight - headHeight - footHeight - 2;
 	        _this.refs.dialogBody.style.height = Math.max(0, bodyHeight) + "px";
 	        // console.log(bodyHeight);
 	        // console.log(
@@ -1716,6 +1720,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //   this.refs.dialogFooter.offsetHeight,
 	        //   this.refs.dialogBody.style.height
 	        // );
+	      } else {
+	        _this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight - y) + "px";
 	      }
 	      // _this.refs.dialogContent.style.zIndex = _this.props.zIndex;
 	      // _this.dialog.style.height = _this.refs.dialogBody.clientHeight+'px';
@@ -1854,8 +1860,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //   clearTimeout(st);
 	        //     this.setPosition(newProps);
 	        // }, 0);
+	        //这里绑定resize事件进行maxheight值重置
+	        // EleResize.on(this.refs.dialogContent,()=>{
+	        //   this.resetMaxHeight(newProps);
+	        // })
 	      });
 	      this.timerHide(newProps);
+	    }
+	  }, {
+	    key: "resetMaxHeight",
+	    value: function resetMaxHeight(newProps) {
+	      var _this = this;
+	      var maxHeight = newProps.height || parseInt(this.container.clientHeight);
+	      var headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
+	      var footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
+	      var bodyHeight = maxHeight - headHeight - footHeight - 2;
+	      var y = window.getComputedStyle(this.refs.dialogContent).top;
+	      this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight - y) + "px";
 	    }
 	  }, {
 	    key: "hide",
@@ -4265,11 +4286,133 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 15 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/*
+	 * @Descripttion: div resize事件实现
+	 * @Author: tianxiangbing
+	 * @Date: 2020-05-11 16:58:25
+	 * @LastEditTime: 2020-05-11 17:00:33
+	 * @github: https://github.com/tianxiangbing
+	 */
+	var EleResize = {
+	    _handleResize: function _handleResize(e) {
+	        var ele = e.target || e.srcElement;
+	        var trigger = ele.__resizeTrigger__;
+	        if (trigger) {
+	            var handlers = trigger.__z_resizeListeners;
+	            if (handlers) {
+	                var size = handlers.length;
+	                for (var i = 0; i < size; i++) {
+	                    var h = handlers[i];
+	                    var handler = h.handler;
+	                    var context = h.context;
+	                    handler.apply(context, [e]);
+	                }
+	            }
+	        }
+	    },
+	    _removeHandler: function _removeHandler(ele, handler, context) {
+	        var handlers = ele.__z_resizeListeners;
+	        if (handlers) {
+	            var size = handlers.length;
+	            for (var i = 0; i < size; i++) {
+	                var h = handlers[i];
+	                if (h.handler === handler && h.context === context) {
+	                    handlers.splice(i, 1);
+	                    return;
+	                }
+	            }
+	        }
+	    },
+	    _createResizeTrigger: function _createResizeTrigger(ele) {
+	        var obj = document.createElement('object');
+	        obj.setAttribute('style', 'display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden;opacity: 0; pointer-events: none; z-index: -1;');
+	        obj.onload = EleResize._handleObjectLoad;
+	        obj.type = 'text/html';
+	        ele.appendChild(obj);
+	        obj.data = 'about:blank';
+	        return obj;
+	    },
+	    _handleObjectLoad: function _handleObjectLoad(evt) {
+	        this.contentDocument.defaultView.__resizeTrigger__ = this.__resizeElement__;
+	        this.contentDocument.defaultView.addEventListener('resize', EleResize._handleResize);
+	    }
+	};
+	if (document.attachEvent) {
+	    //ie9-10
+	    EleResize.on = function (ele, handler, context) {
+	        var handlers = ele.__z_resizeListeners;
+	        if (!handlers) {
+	            handlers = [];
+	            ele.__z_resizeListeners = handlers;
+	            ele.__resizeTrigger__ = ele;
+	            ele.attachEvent('onresize', EleResize._handleResize);
+	        }
+	        handlers.push({
+	            handler: handler,
+	            context: context
+	        });
+	    };
+	    EleResize.off = function (ele, handler, context) {
+	        var handlers = ele.__z_resizeListeners;
+	        if (handlers) {
+	            EleResize._removeHandler(ele, handler, context);
+	            if (handlers.length === 0) {
+	                ele.detachEvent('onresize', EleResize._handleResize);
+	                delete ele.__z_resizeListeners;
+	            }
+	        }
+	    };
+	} else {
+	    EleResize.on = function (ele, handler, context) {
+	        var handlers = ele.__z_resizeListeners;
+	        if (!handlers) {
+	            handlers = [];
+	            ele.__z_resizeListeners = handlers;
+
+	            if (getComputedStyle(ele, null).position === 'static') {
+	                ele.style.position = 'relative';
+	            }
+	            var obj = EleResize._createResizeTrigger(ele);
+	            ele.__resizeTrigger__ = obj;
+	            obj.__resizeElement__ = ele;
+	        }
+	        handlers.push({
+	            handler: handler,
+	            context: context
+	        });
+	    };
+	    EleResize.off = function (ele, handler, context) {
+	        var handlers = ele.__z_resizeListeners;
+	        if (handlers) {
+	            EleResize._removeHandler(ele, handler, context);
+	            if (handlers.length === 0) {
+	                var trigger = ele.__resizeTrigger__;
+	                if (trigger) {
+	                    trigger.contentDocument.defaultView.removeEventListener('resize', EleResize._handleResize);
+	                    ele.removeChild(trigger);
+	                    delete ele.__resizeTrigger__;
+	                }
+	                delete ele.__z_resizeListeners;
+	            }
+	        }
+	    };
+	}
+	exports.default = EleResize;
+
+/***/ }),
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _I18n = __webpack_require__(16);
+	var _I18n = __webpack_require__(17);
 
 	var _I18n2 = _interopRequireDefault(_I18n);
 
@@ -4286,7 +4429,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4307,7 +4450,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _zh_CN = __webpack_require__(17);
+	var _zh_CN = __webpack_require__(18);
 
 	var _zh_CN2 = _interopRequireDefault(_zh_CN);
 
@@ -4413,7 +4556,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = LocalReceiver;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 	'use strict';
