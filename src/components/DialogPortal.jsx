@@ -228,9 +228,9 @@ export default class Dialog extends PureComponent {
       //     this.setPosition(newProps);
       // }, 0);
       //这里绑定resize事件进行maxheight值重置
-      // EleResize.on(this.refs.dialogContent,()=>{
-      //   this.resetMaxHeight(newProps);
-      // })
+      EleResize.on(this.refs.dialogContent,()=>{
+        this.resetMaxHeight(newProps);
+      })
     });
     this.timerHide(newProps);
   }
@@ -243,7 +243,9 @@ export default class Dialog extends PureComponent {
       maxHeight -
       headHeight -
       footHeight - 2;
-    let y = window.getComputedStyle(this.refs.dialogContent).top;
+      debugger
+    let cs = window.getComputedStyle(this.refs.dialogContent);
+    let y = +cs.top+ cs.getPropertyValue('transform').match(/(\d+)/gi)[5]||0;
     this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight - y) + "px";
   }
   hide() {

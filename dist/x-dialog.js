@@ -1861,9 +1861,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //     this.setPosition(newProps);
 	        // }, 0);
 	        //这里绑定resize事件进行maxheight值重置
-	        // EleResize.on(this.refs.dialogContent,()=>{
-	        //   this.resetMaxHeight(newProps);
-	        // })
+	        _jsresize2.default.on(_this5.refs.dialogContent, function () {
+	          _this5.resetMaxHeight(newProps);
+	        });
 	      });
 	      this.timerHide(newProps);
 	    }
@@ -1875,7 +1875,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
 	      var footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
 	      var bodyHeight = maxHeight - headHeight - footHeight - 2;
-	      var y = window.getComputedStyle(this.refs.dialogContent).top;
+	      debugger;
+	      var cs = window.getComputedStyle(this.refs.dialogContent);
+	      var y = +cs.top + cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0;
 	      this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight - y) + "px";
 	    }
 	  }, {
