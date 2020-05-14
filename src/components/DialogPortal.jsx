@@ -228,9 +228,9 @@ export default class Dialog extends PureComponent {
       //     this.setPosition(newProps);
       // }, 0);
       //这里绑定resize事件进行maxheight值重置
-      EleResize.on(this.refs.dialogContent,()=>{
-        this.resetMaxHeight(newProps);
-      })
+      // EleResize.on(this.refs.dialogContent,()=>{
+      //   this.resetMaxHeight(newProps);
+      // })
     });
     this.timerHide(newProps);
   }

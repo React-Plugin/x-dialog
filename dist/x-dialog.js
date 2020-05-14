@@ -1861,9 +1861,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //     this.setPosition(newProps);
 	        // }, 0);
 	        //这里绑定resize事件进行maxheight值重置
-	        _jsresize2.default.on(_this5.refs.dialogContent, function () {
-	          _this5.resetMaxHeight(newProps);
-	        });
+	        // EleResize.on(this.refs.dialogContent,()=>{
+	        //   this.resetMaxHeight(newProps);
+	        // })
 	      });
 	      this.timerHide(newProps);
 	    }
