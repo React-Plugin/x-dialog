@@ -234,7 +234,7 @@ export default class Dialog extends PureComponent {
     });
     this.timerHide(newProps);
   }
-  resetMaxHeight(newProps){
+  resetMaxHeight(newProps) {
     let _this = this;
     let maxHeight = newProps.height || parseInt(this.container.clientHeight);
     let headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
@@ -243,9 +243,9 @@ export default class Dialog extends PureComponent {
       maxHeight -
       headHeight -
       footHeight - 2;
-      debugger
+    debugger
     let cs = window.getComputedStyle(this.refs.dialogContent);
-    let y = +cs.top+ cs.getPropertyValue('transform').match(/(\d+)/gi)[5]||0;
+    let y = +cs.top + cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0;
     this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight - y) + "px";
   }
   hide() {
@@ -354,9 +354,12 @@ export default class Dialog extends PureComponent {
     }
   }
   static hideAll() {
-    dialogList.forEach(item => {
-      item.instance.hide()
-    });
+    // dialogList.forEach(item => {
+    //   item.instance.hide()
+    // });
+    for (let l = dialogList.length - 1; l >= 0; l--) {
+      dialogList[l].instance.hide();
+    }
   }
   onFocus = (e) => {
     // 阻止与原生事件的冒泡

@@ -2022,9 +2022,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "hideAll",
 	    value: function hideAll() {
-	      dialogList.forEach(function (item) {
-	        item.instance.hide();
-	      });
+	      // dialogList.forEach(item => {
+	      //   item.instance.hide()
+	      // });
+	      for (var l = dialogList.length - 1; l >= 0; l--) {
+	        dialogList[l].instance.hide();
+	      }
 	    }
 	  }]);
 
