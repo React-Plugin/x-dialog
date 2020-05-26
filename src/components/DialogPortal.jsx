@@ -211,7 +211,7 @@ export default class Dialog extends PureComponent {
       //   this.refs.dialogBody.style.height
       // );
     } else {
-      _this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight - y) + "px";
+      _this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight) + "px";
     }
     // _this.refs.dialogContent.style.zIndex = _this.props.zIndex;
     // _this.dialog.style.height = _this.refs.dialogBody.clientHeight+'px';
@@ -246,7 +246,7 @@ export default class Dialog extends PureComponent {
     debugger
     let cs = window.getComputedStyle(this.refs.dialogContent);
     let y = +cs.top + cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0;
-    this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight - y) + "px";
+    this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight) + "px";
   }
   hide() {
     // console.log("hide");
