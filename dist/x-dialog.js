@@ -1855,11 +1855,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this = this;
 	      this.clearTimer();
 	      this.setState({ isShow: true }, function () {
-	        _this5.setPosition(newProps);
-	        // let st = setTimeout(() => {
-	        //   clearTimeout(st);
-	        //     this.setPosition(newProps);
-	        // }, 0);
+	        // this.setPosition(newProps);
+	        var st = setTimeout(function () {
+	          clearTimeout(st);
+	          _this5.setPosition(newProps);
+	        }, 0);
 	        //这里绑定resize事件进行maxheight值重置
 	        // EleResize.on(this.refs.dialogContent,()=>{
 	        //   this.resetMaxHeight(newProps);

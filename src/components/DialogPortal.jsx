@@ -222,11 +222,11 @@ export default class Dialog extends PureComponent {
     let _this = this;
     this.clearTimer();
     this.setState({ isShow: true }, () => {
-      this.setPosition(newProps);
-      // let st = setTimeout(() => {
-      //   clearTimeout(st);
-      //     this.setPosition(newProps);
-      // }, 0);
+      // this.setPosition(newProps);
+      let st = setTimeout(() => {
+        clearTimeout(st);
+          this.setPosition(newProps);
+      }, 0);
       //这里绑定resize事件进行maxheight值重置
       // EleResize.on(this.refs.dialogContent,()=>{
       //   this.resetMaxHeight(newProps);
