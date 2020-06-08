@@ -145,6 +145,9 @@ export default class Dialog extends PureComponent {
   }
   setPosition = (newProps) => {
     let _this = this;
+    if(!this.dialog){
+      return;
+    }
     _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
     // console.log(this.refs.dialogContent.offsetHeight)
     // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
