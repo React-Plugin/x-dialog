@@ -151,6 +151,7 @@ export default class Dialog extends PureComponent {
     _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
     // console.log(this.refs.dialogContent.offsetHeight)
     // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+    _this.refs.dialogContent.style.height = 'auto';
     let ch = this.container.clientHeight;
     let dh = _this.refs.dialogContent.offsetHeight
     let stop = this.container.scrollTop;
@@ -183,17 +184,18 @@ export default class Dialog extends PureComponent {
       }
     }
     // console.log(ot,y)
-    _this.setState({
-      defaultPosition: {
-        x,
-        y,
-        x2,
-        y2
-      },
-    }, () => {
-      _this.props.afterShow();
-
-    });
+    if(x !==this.state.x || y !==this.state.y || x2 !==this.state.x2 || y2 !== this.state.y2){
+      _this.setState({
+        defaultPosition: {
+          x,
+          y,
+          x2,
+          y2
+        },
+      }, () => {
+        _this.props.afterShow();
+      });
+    }
     let height = parseInt(_this.refs.dialogContent.offsetHeight);
     let maxHeight =
       newProps.height || parseInt(this.container.clientHeight);
@@ -225,7 +227,7 @@ export default class Dialog extends PureComponent {
     let _this = this;
     this.clearTimer();
     this.setState({ isShow: true }, () => {
-      // this.setPosition(newProps);
+      this.setPosition(newProps);
       let st = setTimeout(() => {
         clearTimeout(st);
           this.setPosition(newProps);

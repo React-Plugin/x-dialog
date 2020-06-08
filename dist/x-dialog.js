@@ -1663,6 +1663,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
 	      // console.log(this.refs.dialogContent.offsetHeight)
 	      // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
+	      _this.refs.dialogContent.style.height = 'auto';
 	      var ch = _this2.container.clientHeight;
 	      var dh = _this.refs.dialogContent.offsetHeight;
 	      var stop = _this2.container.scrollTop;
@@ -1698,16 +1699,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	      // console.log(ot,y)
-	      _this.setState({
-	        defaultPosition: {
-	          x: x,
-	          y: y,
-	          x2: x2,
-	          y2: y2
-	        }
-	      }, function () {
-	        _this.props.afterShow();
-	      });
+	      if (x !== _this2.state.x || y !== _this2.state.y || x2 !== _this2.state.x2 || y2 !== _this2.state.y2) {
+	        _this.setState({
+	          defaultPosition: {
+	            x: x,
+	            y: y,
+	            x2: x2,
+	            y2: y2
+	          }
+	        }, function () {
+	          _this.props.afterShow();
+	        });
+	      }
 	      var height = parseInt(_this.refs.dialogContent.offsetHeight);
 	      var maxHeight = newProps.height || parseInt(_this2.container.clientHeight);
 	      var headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
@@ -1858,7 +1861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this = this;
 	      this.clearTimer();
 	      this.setState({ isShow: true }, function () {
-	        // this.setPosition(newProps);
+	        _this5.setPosition(newProps);
 	        var st = setTimeout(function () {
 	          clearTimeout(st);
 	          _this5.setPosition(newProps);
