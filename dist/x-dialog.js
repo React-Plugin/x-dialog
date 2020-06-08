@@ -1664,6 +1664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // console.log(this.refs.dialogContent.offsetHeight)
 	      // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
 	      _this.refs.dialogContent.style.height = 'auto';
+	      _this.refs.dialogBody.style.height = 'auto';
 	      var ch = _this2.container.clientHeight;
 	      var dh = _this.refs.dialogContent.offsetHeight;
 	      var stop = _this2.container.scrollTop;

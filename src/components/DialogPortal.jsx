@@ -152,6 +152,7 @@ export default class Dialog extends PureComponent {
     // console.log(this.refs.dialogContent.offsetHeight)
     // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
     _this.refs.dialogContent.style.height = 'auto';
+    _this.refs.dialogBody.style.height = 'auto';
     let ch = this.container.clientHeight;
     let dh = _this.refs.dialogContent.offsetHeight
     let stop = this.container.scrollTop;
