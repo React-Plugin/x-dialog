@@ -100,6 +100,9 @@ export default class Dialog extends PureComponent {
       this.hide(newProps);
     }
   }
+  shouldComponentUpdate(newProps,nextState){
+    return newProps.isShow!==this.props.isShow || this.state.isShow!==nextState.isShow ||  JSON.stringify(this.state.defaultPosition) !== JSON.stringify(nextState.defaultPosition);
+  }
   timerHide(newProps) {
     if (newProps.timer) {
       this.clearTimer();

@@ -1803,6 +1803,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
+	    key: "shouldComponentUpdate",
+	    value: function shouldComponentUpdate(newProps, nextState) {
+	      return newProps.isShow !== this.props.isShow || this.state.isShow !== nextState.isShow || JSON.stringify(this.state.defaultPosition) !== JSON.stringify(nextState.defaultPosition);
+	    }
+	  }, {
 	    key: "timerHide",
 	    value: function timerHide(newProps) {
 	      var _this3 = this;
