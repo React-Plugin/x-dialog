@@ -1802,11 +1802,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.hide(newProps);
 	      }
 	    }
-	  }, {
-	    key: "shouldComponentUpdate",
-	    value: function shouldComponentUpdate(newProps, nextState) {
-	      return newProps.isShow !== this.props.isShow || this.state.isShow !== nextState.isShow || JSON.stringify(this.state.defaultPosition) !== JSON.stringify(nextState.defaultPosition);
-	    }
+	    // shouldComponentUpdate(newProps,nextState){
+	    //   return newProps.isShow!==this.props.isShow || this.state.isShow!==nextState.isShow ||  JSON.stringify(this.state.defaultPosition) !== JSON.stringify(nextState.defaultPosition);
+	    // }
+
 	  }, {
 	    key: "timerHide",
 	    value: function timerHide(newProps) {

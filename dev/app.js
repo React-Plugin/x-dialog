@@ -93,6 +93,7 @@ class App extends React.Component {
     e.stopPropagation();
     Dialog.show({mask:true, title:<button>标题</button>,draggable:true,children:'寒梅著花未感动中国械fd',afterHide:()=>alert('我又隐藏了')})(f=>{
     })
+    this.setState({ext:123})
   }
   render() {
     console.log( {...this.state.dialog})
@@ -118,6 +119,10 @@ class App extends React.Component {
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <button onClick={this.reopen.bind(this)}>再弹一个</button>
+          <button onClick={()=>{
+            this.setState({ext:333})
+          }}>test</button>
+          {this.state.ext}
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
