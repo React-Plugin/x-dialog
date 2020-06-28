@@ -47,7 +47,7 @@ export default class Dialog extends PureComponent {
   bounds = 'body';
   constructor(props) {
     super(props);
-    this.id = +new Date();
+    this.id = props.id || +new Date();
     this.dialog = null;
     this.state = { isShow: props.isShow, defaultPosition: {} };
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
@@ -252,7 +252,7 @@ export default class Dialog extends PureComponent {
       maxHeight -
       headHeight -
       footHeight - 2;
-    debugger
+    // debugger
     let cs = window.getComputedStyle(this.refs.dialogContent);
     let y = +cs.top + cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0;
     this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight) + "px";
@@ -274,7 +274,7 @@ export default class Dialog extends PureComponent {
   }
   _hide() {
     this.setState({ isShow: false }, () => {
-      this.props.afterHide();
+      this.props.afterHide(this.id);
     });
   }
   maskHandle = () => {
@@ -388,7 +388,7 @@ export default class Dialog extends PureComponent {
       top: y === null ? 'auto' : y,
       bottom: y2 === null ? 'auto' : y2
     }
-    return <div
+    return <div  onClick={this.onFocus}
       className={"dialog-content " + this.props.className}
       ref="dialogContent"
       style={{
@@ -409,7 +409,7 @@ export default class Dialog extends PureComponent {
           </div>
         </div>
         : undefined}
-      <div className="dialog-body" ref="dialogBody" onClick={this.onFocus}>
+      <div className="dialog-body" ref="dialogBody">
         {this.props.children}
       </div>
       <div ref="dialogFooter">

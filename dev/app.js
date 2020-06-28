@@ -123,6 +123,8 @@ class App extends React.Component {
             this.setState({ext:333})
           }}>test</button>
           {this.state.ext}
+          <a className="x-dialog-close">close1</a>
+          <a className="x-dialog-close">close2</a>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>

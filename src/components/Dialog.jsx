@@ -13,7 +13,7 @@ import DialogPortal from './DialogPortal';
 import I18n from 'x-i18n';
 
 const renderSubtreeIntoContainer = ReactDOM.unstable_renderSubtreeIntoContainer;
-
+let container = {};
 // let zIndex=9;
 export default class Dialog extends Component {
   static defaultZIndex = 1000;
@@ -31,8 +31,10 @@ export default class Dialog extends Component {
           f && f(myRef);
         })
         return myRef;
-      }
+      },
+      id:+new Date()
     };
+    container[currentConfig.id] = div;
     function render(props) {
       ReactDOM.render(<Dialog {...props} />, div)
     }
@@ -79,10 +81,16 @@ export default class Dialog extends Component {
     Dialog.zIndex++
     this.state = { isShow: props.isShow, zIndex: Dialog.zIndex };
   }
-  hide = () => {
+  hide = (id) => {
     this.setState({ isShow: false }, () => {
       if (this.node) {
-        ReactDOM.unmountComponentAtNode(this.node);
+        if(id && container[id]){
+          ReactDOM.unmountComponentAtNode(container[id]);
+          container[id]=null;
+          delete container[id];
+        }
+        let result = ReactDOM.unmountComponentAtNode(this.node);
+        // console.log(result)
         this.node.parentNode.removeChild(this.node)
         this.node = null;
       }
@@ -135,12 +143,12 @@ export default class Dialog extends Component {
     props.updateList = (DialogList)=>{
       if(DialogList.length===0){
         Dialog.zIndex = Dialog.defaultZIndex;
-        this.setState({zIndex:Dialog.zIndex})
+        // this.setState({zIndex:Dialog.zIndex})
       }
     }
-    props.afterHide = () => {
+    props.afterHide = (id) => {
       this.props.afterHide && this.props.afterHide();
-      this.hide();
+      this.hide(id);
     }
     if (this.state.isShow) {
       if (this.props.draggable) {
