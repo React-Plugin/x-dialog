@@ -372,7 +372,7 @@ export default class Dialog extends PureComponent {
   }
   onFocus = (e) => {
     // 阻止与原生事件的冒泡
-    if(e.target && e.target.tagName.toLowerCase() == 'button' && e.target.tagName.toLowerCase() == 'a'){
+    if(e.target && (e.target.tagName.toLowerCase() == 'button' || e.target.tagName.toLowerCase() == 'a')){
       return;
     }
     // lastDialog = this;

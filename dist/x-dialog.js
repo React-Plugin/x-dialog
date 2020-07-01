@@ -1749,7 +1749,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this2.onFocus = function (e) {
 	      // 阻止与原生事件的冒泡
-	      if (e.target && e.target.tagName.toLowerCase() == 'button' && e.target.tagName.toLowerCase() == 'a') {
+	      if (e.target && (e.target.tagName.toLowerCase() == 'button' || e.target.tagName.toLowerCase() == 'a')) {
 	        return;
 	      }
 	      // lastDialog = this;
