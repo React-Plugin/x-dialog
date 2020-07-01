@@ -53,8 +53,8 @@ export default class Dialog extends PureComponent {
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
 
     this.maskWH = {
-      width: document.documentElement.offsetWidth,
-      height: document.documentElement.offsetHeight
+      width: Math.max(document.documentElement.offsetWidth ,document.body.scrollWidth) ,
+      height: Math.max(document.documentElement.offsetHeight,document.body.scrollHeight,document.documentElement.clientHeight) 
     }
     //容器配置
     if (document.body != this.props.container && typeof this.props.container === 'string') {
@@ -372,8 +372,9 @@ export default class Dialog extends PureComponent {
   }
   onFocus = (e) => {
     // 阻止与原生事件的冒泡
-    e.nativeEvent.stopImmediatePropagation();
-    e.stopPropagation();
+    if(e.target && e.target.tagName.toLowerCase() == 'button' && e.target.tagName.toLowerCase() == 'a'){
+      return;
+    }
     // lastDialog = this;
     this.props.onClick(e);
   }

@@ -48,7 +48,7 @@ class App extends React.Component {
     Dialog.show({content:'adfs'})
   }
   showButtons(){
-    let state ={isShow:true,title:"这是一个自定义按钮的例子",buttons: <div><button className="d-ok" onClick={this.open.bind(this)}>我知道了</button><button className="d-cancel" onClick={this.hide.bind(this)}>关闭</button></div>};
+    let state ={isShow:true,width:500,title:"这是一个自定义按钮的例子",buttons: <div><button className="d-ok" onClick={this.open.bind(this)}>我知道了</button><button className="d-cancel" onClick={this.hide.bind(this)}>关闭</button></div>};
     this.setState({"dialog":state});
   }
   hide(){
@@ -61,7 +61,7 @@ class App extends React.Component {
       title: "这是一个传递样式的例子1",
       className:"myClass",
       zIndex:888,
-      
+      width:500
     };
     this.setState({dialog:state});
   }
@@ -110,7 +110,7 @@ class App extends React.Component {
         <button onClick={this.showButtons.bind(this)}>自定义按钮</button>
         <button onClick={this.showClassName.bind(this)}>传递样式名称</button>
         <button onClick={this.showCatainer.bind(this)}>弹在指定区域</button>
-        <div className="container" style={{backgroundColor:'#cccccc',height:'500px'}} id="container"></div>
+        <div className="container" style={{backgroundColor:'#cccccc',height:'200px'}} id="container"></div>
         <Dialog 
         {...this.state.dialog}
         >
