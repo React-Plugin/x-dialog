@@ -1687,7 +1687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else {
 	        y = Math.max(0, parseInt((ch - dh) / 2)) + stop;
 	      }
-	      x = sl + parseInt((_this2.container.clientWidth - _this.refs.dialogContent.offsetWidth) / 2);
+	      x = sl + parseInt((_this2.container.offsetWidth - _this.refs.dialogContent.offsetWidth) / 2);
 	      //固定显示在四周 [left,right,top,bottom]
 	      if (_this2.props.fixed) {
 	        if (_this2.props.fixed.indexOf('left') !== -1) {

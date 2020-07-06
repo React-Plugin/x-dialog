@@ -167,7 +167,7 @@ export default class Dialog extends PureComponent {
     } else {
       y = Math.max(0, parseInt((ch - dh) / 2)) + stop;
     }
-    x = sl + parseInt((this.container.clientWidth - _this.refs.dialogContent.offsetWidth) / 2);
+    x = sl + parseInt((this.container.offsetWidth - _this.refs.dialogContent.offsetWidth) / 2);
     //固定显示在四周 [left,right,top,bottom]
     if (this.props.fixed) {
       if (this.props.fixed.indexOf('left') !== -1) {
