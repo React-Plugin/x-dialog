@@ -318,13 +318,13 @@ export default class Dialog extends PureComponent {
           className={"x-dialog-continer"
           }
         >
-          <div className="x-dialog" ref={this.setDialogRef} style={{ zIndex: this.props.zIndex }}>
+          <div className="x-dialog" id={this.id} ref={this.setDialogRef} style={{ zIndex: this.props.zIndex }}>
             {DD}
             <div style={maskStyle} className="x-dialog-mask" style={{ zIndex: this.props.zIndex - 1, ...this.maskWH }} onClick={this.maskHandle}></div>
           </div>
         </div>
       } else {
-        return <div className="x-dialog" ref={this.setDialogRef} style={{ zIndex: this.props.zIndex }}>
+        return <div className="x-dialog" id={this.id} ref={this.setDialogRef} style={{ zIndex: this.props.zIndex }}>
           {DD}
         </div>
       }
@@ -389,7 +389,7 @@ export default class Dialog extends PureComponent {
       top: y === null ? 'auto' : y,
       bottom: y2 === null ? 'auto' : y2
     }
-    return <div  onClick={this.onFocus}
+    return <div 
       className={"dialog-content " + this.props.className}
       ref="dialogContent"
       style={{
@@ -410,7 +410,7 @@ export default class Dialog extends PureComponent {
           </div>
         </div>
         : undefined}
-      <div className="dialog-body" ref="dialogBody">
+      <div className="dialog-body" ref="dialogBody"  onClick={this.onFocus}>
         {this.props.children}
       </div>
       <div ref="dialogFooter">

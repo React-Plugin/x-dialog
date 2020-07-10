@@ -1958,9 +1958,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          return _react2.default.createElement("div", {
 	            className: "x-dialog-continer"
-	          }, _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef, style: { zIndex: this.props.zIndex } }, DD, _react2.default.createElement("div", (_React$createElement = { style: maskStyle, className: "x-dialog-mask" }, _defineProperty(_React$createElement, "style", _extends({ zIndex: this.props.zIndex - 1 }, this.maskWH)), _defineProperty(_React$createElement, "onClick", this.maskHandle), _React$createElement))));
+	          }, _react2.default.createElement("div", { className: "x-dialog", id: this.id, ref: this.setDialogRef, style: { zIndex: this.props.zIndex } }, DD, _react2.default.createElement("div", (_React$createElement = { style: maskStyle, className: "x-dialog-mask" }, _defineProperty(_React$createElement, "style", _extends({ zIndex: this.props.zIndex - 1 }, this.maskWH)), _defineProperty(_React$createElement, "onClick", this.maskHandle), _React$createElement))));
 	        } else {
-	          return _react2.default.createElement("div", { className: "x-dialog", ref: this.setDialogRef, style: { zIndex: this.props.zIndex } }, DD);
+	          return _react2.default.createElement("div", { className: "x-dialog", id: this.id, ref: this.setDialogRef, style: { zIndex: this.props.zIndex } }, DD);
 	        }
 	      } else {
 	        return null;
@@ -2003,7 +2003,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        top: y === null ? 'auto' : y,
 	        bottom: y2 === null ? 'auto' : y2
 	      };
-	      return _react2.default.createElement("div", { onClick: this.onFocus,
+	      return _react2.default.createElement("div", {
 	        className: "dialog-content " + this.props.className,
 	        ref: "dialogContent",
 	        style: _extends({
@@ -2014,7 +2014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }, this.props.title ? _react2.default.createElement("div", { className: "dialog-title", ref: "dialogHeader" }, _react2.default.createElement("h4", null, this.props.title), _react2.default.createElement("div", {
 	        onClick: this.hide.bind(this),
 	        className: "dialog-close-con"
-	      }, this.props.closeIcon)) : undefined, _react2.default.createElement("div", { className: "dialog-body", ref: "dialogBody" }, this.props.children), _react2.default.createElement("div", { ref: "dialogFooter" }, this.buttons ? _react2.default.createElement("div", { className: "dialog-action" }, this.buttons) : undefined));
+	      }, this.props.closeIcon)) : undefined, _react2.default.createElement("div", { className: "dialog-body", ref: "dialogBody", onClick: this.onFocus }, this.props.children), _react2.default.createElement("div", { ref: "dialogFooter" }, this.buttons ? _react2.default.createElement("div", { className: "dialog-action" }, this.buttons) : undefined));
 	    }
 	  }, {
 	    key: "render",
