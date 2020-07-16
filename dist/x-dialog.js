@@ -122,7 +122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _DialogPortal2 = _interopRequireDefault(_DialogPortal);
 
-	var _xI18n = __webpack_require__(16);
+	var _xI18n = __webpack_require__(15);
 
 	var _xI18n2 = _interopRequireDefault(_xI18n);
 
@@ -229,6 +229,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    Dialog.zIndex++;
 	    _this.state = { isShow: props.isShow, zIndex: Dialog.zIndex };
+	    _this.dialog = _react2.default.createRef();
 	    return _this;
 	  }
 
@@ -325,6 +326,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	  };
 
+	  this.maxreset = function (status) {
+	    // console.log('max',this.node)
+	    if (status === 'reset') {
+	      document.body.appendChild(_this2.node);
+	    } else {
+	      if (typeof _this2.props.container === 'string') {
+	        document.querySelector(_this2.props.container).appendChild(_this2.node);
+	      } else {
+	        _this2.props.container.appendChild(_this2.node);
+	      }
+	    }
+	  };
+
 	  this.renderContent = function (local) {
 	    // console.log(this.props)
 	    var props = _extends({}, _this2.props);
@@ -338,11 +352,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this2.props.afterHide && _this2.props.afterHide();
 	      _this2.hide(id);
 	    };
+	    props.maxreset = _this2.maxreset;
 	    if (_this2.state.isShow) {
 	      if (_this2.props.draggable) {
-	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, props, _this2.state, { local: local, onClick: _this2.onFocus }));
+	        return _react2.default.createElement(_DialogPortal2.default, _extends({ ref: function ref(_ref2) {
+	            return _this2.dialog = _ref2;
+	          } }, props, _this2.state, { local: local, onClick: _this2.onFocus }));
 	      } else {
-	        return _react2.default.createElement(_DialogPortal2.default, _extends({}, props, _this2.state, { local: local, onClick: _this2.onFocus }));
+	        return _react2.default.createElement(_DialogPortal2.default, _extends({ ref: function ref(_ref3) {
+	            return _this2.dialog = _ref3;
+	          } }, props, _this2.state, { local: local, onClick: _this2.onFocus }));
 	      }
 	    }
 	  };
@@ -1600,10 +1619,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
 
-	var _jsresize = __webpack_require__(15);
-
-	var _jsresize2 = _interopRequireDefault(_jsresize);
-
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
 	}
@@ -1641,6 +1656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Contact: 55342775@qq.com
 	   */
 
+	// import EleResize from 'jsresize';
 	var lastDialog = null,
 	    dialogList = [];
 
@@ -1671,7 +1687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
 	      // console.log(this.refs.dialogContent.offsetHeight)
 	      // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-	      _this.refs.dialogContent.style.height = _this2.props.height || 'auto';
+	      _this.refs.dialogContent.style.height = _this2.state.height; //this.props.height || 'auto';
 	      _this.refs.dialogBody.style.height = 'auto';
 	      var ch = _this2.container.clientHeight;
 	      var dh = _this.refs.dialogContent.offsetHeight;
@@ -1689,20 +1705,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      x = sl + parseInt((_this2.container.offsetWidth - _this.refs.dialogContent.offsetWidth) / 2);
 	      //固定显示在四周 [left,right,top,bottom]
-	      if (_this2.props.fixed) {
-	        if (_this2.props.fixed.indexOf('left') !== -1) {
+	      if (_this2.state.fixed) {
+	        if (_this2.state.fixed.indexOf('left') !== -1) {
 	          x = 0;
 	          x2 = null;
 	        }
-	        if (_this2.props.fixed.indexOf('right') !== -1) {
+	        if (_this2.state.fixed.indexOf('right') !== -1) {
 	          x = null;
 	          x2 = 0;
 	        }
-	        if (_this2.props.fixed.indexOf('top') !== -1) {
+	        if (_this2.state.fixed.indexOf('top') !== -1) {
 	          y = 0;
 	          y2 = null;
 	        }
-	        if (_this2.props.fixed.indexOf('bottom') !== -1) {
+	        if (_this2.state.fixed.indexOf('bottom') !== -1) {
 	          y = null;
 	          y2 = 0;
 	        }
@@ -1756,9 +1772,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _this2.props.onClick(e);
 	    };
 
+	    _this2.maxreset = function (e) {
+	      if (_this2.state.status === 'reset') {
+	        _this2.oldprops = { width: _this2.state.width, height: _this2.state.height, fixed: _this2.state.fixed, draggable: _this2.state.draggable };
+	        var maxWH = {
+	          fixed: ["left", "top"],
+	          draggable: false,
+	          width: Math.max(document.documentElement.offsetWidth, document.body.scrollWidth),
+	          height: Math.max(document.documentElement.offsetHeight, document.body.scrollHeight, document.documentElement.clientHeight)
+	        };
+	        _this2.setState(_extends({ status: 'max' }, maxWH), function () {
+	          _this2.setPosition(_this2.props);
+	        });
+	      } else {
+	        _this2.status = 'reset';
+	        _this2.setState(_extends({ status: 'reset' }, _this2.oldprops), function () {
+	          _this2.setPosition(_this2.props);
+	        });
+	      }
+	      _this2.props.maxreset && _this2.props.maxreset(_this2.state.status);
+	    };
+
+	    _this2.computeWH = function () {
+	      if (status === 'max') {
+	        _this2.setState({ height: document.body.clientHeight, width: document.body.clientWidth });
+	      }
+	    };
+
 	    _this2.id = props.id || +new Date();
 	    _this2.dialog = null;
-	    _this2.state = { isShow: props.isShow, defaultPosition: {} };
+	    _this2.state = { isShow: props.isShow, defaultPosition: {},
+	      height: props.height, width: props.width, fixed: props.fixed,
+	      draggable: props.draggable, status: 'reset' };
 	    _this2.keyBind = _this2.keyBind.bind(_this2); //方便移除事件绑定.每次bind会生成新的对象
 
 	    _this2.maskWH = {
@@ -1952,7 +1997,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      if (this.state.isShow) {
 	        // console.log(this.bounds)
-	        var DD = this.props.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: this.bounds }, this.renderDialog()) : this.renderDialog();
+	        var DD = this.state.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: this.bounds }, this.renderDialog()) : this.renderDialog();
 	        if (this.props.mask) {
 	          var _React$createElement;
 
@@ -2007,14 +2052,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        className: "dialog-content " + this.props.className,
 	        ref: "dialogContent",
 	        style: _extends({
-	          width: this.props.width || "auto",
-	          height: this.props.height || "auto",
+	          width: this.state.width || "auto",
+	          height: this.state.height,
 	          zIndex: zIndex
 	        }, position)
 	      }, this.props.title ? _react2.default.createElement("div", { className: "dialog-title", ref: "dialogHeader" }, _react2.default.createElement("h4", null, this.props.title), _react2.default.createElement("div", {
 	        onClick: this.hide.bind(this),
 	        className: "dialog-close-con"
-	      }, this.props.closeIcon)) : undefined, _react2.default.createElement("div", { className: "dialog-body", ref: "dialogBody", onClick: this.onFocus }, this.props.children), _react2.default.createElement("div", { ref: "dialogFooter" }, this.buttons ? _react2.default.createElement("div", { className: "dialog-action" }, this.buttons) : undefined));
+	      }, this.props.closeIcon), this.props.isMax ? _react2.default.createElement("div", { onClick: this.maxreset, className: "dailog-resetmax" }, this.state.status === 'max' ? this.props.resetIcon : this.props.maxIcon) : undefined) : undefined, _react2.default.createElement("div", { className: "dialog-body", ref: "dialogBody", onClick: this.onFocus }, this.props.children), _react2.default.createElement("div", { ref: "dialogFooter" }, this.buttons ? _react2.default.createElement("div", { className: "dialog-action" }, this.buttons) : undefined));
 	    }
 	  }, {
 	    key: "render",
@@ -2049,6 +2094,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        dialogList[l].instance.hide();
 	      }
 	    }
+	    // status = 'reset';
+	    //最大化还原
+
 	  }]);
 
 	  return Dialog;
@@ -2060,15 +2108,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  children: _propTypes2.default.node,
 	  className: _propTypes2.default.string,
 	  zIndex: _propTypes2.default.number,
-	  height: _propTypes2.default.number,
+	  height: _propTypes2.default.any,
 	  buttons: _propTypes2.default.any,
 	  closeIcon: _propTypes2.default.node,
+	  maxIcon: _propTypes2.default.node,
+	  resetIcon: _propTypes2.default.node,
 	  afterHide: _propTypes2.default.func,
 	  afterShow: _propTypes2.default.func,
 	  okCallback: _propTypes2.default.func,
 	  dragHandle: _propTypes2.default.string,
 	  draggable: _propTypes2.default.bool,
-	  maskHide: _propTypes2.default.bool
+	  maskHide: _propTypes2.default.bool,
+	  isMax: _propTypes2.default.bool
 	};
 	Dialog.defaultProps = {
 	  isShow: false,
@@ -2077,12 +2128,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  zIndex: 0,
 	  maskHide: true,
 	  closeIcon: _react2.default.createElement("button", { className: "dialog-close" }, _react2.default.createElement("span", null, "\xD7")),
+	  maxIcon: _react2.default.createElement("button", { className: "dialog-max" }, _react2.default.createElement("span", null, "\u2610")),
+	  resetIcon: _react2.default.createElement("button", { className: "dialog-reset" }, _react2.default.createElement("span", null, "\u2750")),
 	  dragHandle: '.dialog-title',
 	  draggable: false,
 	  afterHide: function afterHide() {},
 	  afterShow: function afterShow() {},
 	  okCallback: function okCallback() {},
-	  container: document.body
+	  height: 'auto',
+	  width: 'auto',
+	  container: document.body,
+	  isMax: false
 	};
 	exports.default = Dialog;
 
@@ -4311,133 +4367,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 15 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	/*
-	 * @Descripttion: div resize事件实现
-	 * @Author: tianxiangbing
-	 * @Date: 2020-05-11 16:58:25
-	 * @LastEditTime: 2020-05-11 17:00:33
-	 * @github: https://github.com/tianxiangbing
-	 */
-	var EleResize = {
-	    _handleResize: function _handleResize(e) {
-	        var ele = e.target || e.srcElement;
-	        var trigger = ele.__resizeTrigger__;
-	        if (trigger) {
-	            var handlers = trigger.__z_resizeListeners;
-	            if (handlers) {
-	                var size = handlers.length;
-	                for (var i = 0; i < size; i++) {
-	                    var h = handlers[i];
-	                    var handler = h.handler;
-	                    var context = h.context;
-	                    handler.apply(context, [e]);
-	                }
-	            }
-	        }
-	    },
-	    _removeHandler: function _removeHandler(ele, handler, context) {
-	        var handlers = ele.__z_resizeListeners;
-	        if (handlers) {
-	            var size = handlers.length;
-	            for (var i = 0; i < size; i++) {
-	                var h = handlers[i];
-	                if (h.handler === handler && h.context === context) {
-	                    handlers.splice(i, 1);
-	                    return;
-	                }
-	            }
-	        }
-	    },
-	    _createResizeTrigger: function _createResizeTrigger(ele) {
-	        var obj = document.createElement('object');
-	        obj.setAttribute('style', 'display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden;opacity: 0; pointer-events: none; z-index: -1;');
-	        obj.onload = EleResize._handleObjectLoad;
-	        obj.type = 'text/html';
-	        ele.appendChild(obj);
-	        obj.data = 'about:blank';
-	        return obj;
-	    },
-	    _handleObjectLoad: function _handleObjectLoad(evt) {
-	        this.contentDocument.defaultView.__resizeTrigger__ = this.__resizeElement__;
-	        this.contentDocument.defaultView.addEventListener('resize', EleResize._handleResize);
-	    }
-	};
-	if (document.attachEvent) {
-	    //ie9-10
-	    EleResize.on = function (ele, handler, context) {
-	        var handlers = ele.__z_resizeListeners;
-	        if (!handlers) {
-	            handlers = [];
-	            ele.__z_resizeListeners = handlers;
-	            ele.__resizeTrigger__ = ele;
-	            ele.attachEvent('onresize', EleResize._handleResize);
-	        }
-	        handlers.push({
-	            handler: handler,
-	            context: context
-	        });
-	    };
-	    EleResize.off = function (ele, handler, context) {
-	        var handlers = ele.__z_resizeListeners;
-	        if (handlers) {
-	            EleResize._removeHandler(ele, handler, context);
-	            if (handlers.length === 0) {
-	                ele.detachEvent('onresize', EleResize._handleResize);
-	                delete ele.__z_resizeListeners;
-	            }
-	        }
-	    };
-	} else {
-	    EleResize.on = function (ele, handler, context) {
-	        var handlers = ele.__z_resizeListeners;
-	        if (!handlers) {
-	            handlers = [];
-	            ele.__z_resizeListeners = handlers;
-
-	            if (getComputedStyle(ele, null).position === 'static') {
-	                ele.style.position = 'relative';
-	            }
-	            var obj = EleResize._createResizeTrigger(ele);
-	            ele.__resizeTrigger__ = obj;
-	            obj.__resizeElement__ = ele;
-	        }
-	        handlers.push({
-	            handler: handler,
-	            context: context
-	        });
-	    };
-	    EleResize.off = function (ele, handler, context) {
-	        var handlers = ele.__z_resizeListeners;
-	        if (handlers) {
-	            EleResize._removeHandler(ele, handler, context);
-	            if (handlers.length === 0) {
-	                var trigger = ele.__resizeTrigger__;
-	                if (trigger) {
-	                    trigger.contentDocument.defaultView.removeEventListener('resize', EleResize._handleResize);
-	                    ele.removeChild(trigger);
-	                    delete ele.__resizeTrigger__;
-	                }
-	                delete ele.__z_resizeListeners;
-	            }
-	        }
-	    };
-	}
-	exports.default = EleResize;
-
-/***/ }),
-/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _I18n = __webpack_require__(17);
+	var _I18n = __webpack_require__(16);
 
 	var _I18n2 = _interopRequireDefault(_I18n);
 
@@ -4454,7 +4388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4475,7 +4409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _zh_CN = __webpack_require__(18);
+	var _zh_CN = __webpack_require__(17);
 
 	var _zh_CN2 = _interopRequireDefault(_zh_CN);
 
@@ -4581,7 +4515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = LocalReceiver;
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 	'use strict';

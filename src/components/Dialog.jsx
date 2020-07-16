@@ -80,6 +80,7 @@ export default class Dialog extends Component {
     }
     Dialog.zIndex++
     this.state = { isShow: props.isShow, zIndex: Dialog.zIndex };
+    this.dialog = React.createRef();
   }
   hide = (id) => {
     this.setState({ isShow: false }, () => {
@@ -137,6 +138,18 @@ export default class Dialog extends Component {
       );
     }
   }
+  maxreset = (status)=>{
+    // console.log('max',this.node)
+    if(status === 'reset'){
+      document.body.appendChild(this.node)
+    }else{
+      if(typeof this.props.container ==='string'){
+        document.querySelector(this.props.container).appendChild(this.node);
+      }else{
+        this.props.container.appendChild(this.node);
+      }
+    }
+  }
   renderContent = (local) => {
     // console.log(this.props)
     let props = { ...this.props };
@@ -150,13 +163,14 @@ export default class Dialog extends Component {
       this.props.afterHide && this.props.afterHide();
       this.hide(id);
     }
+    props.maxreset = this.maxreset;
     if (this.state.isShow) {
       if (this.props.draggable) {
         return (
-          <DialogPortal {...props} {...this.state} local={local} onClick={this.onFocus} />
+          <DialogPortal ref={ref=>this.dialog=ref} {...props} {...this.state} local={local} onClick={this.onFocus} />
         )
       } else {
-        return <DialogPortal {...props} {...this.state} local={local} onClick={this.onFocus} />
+        return <DialogPortal ref={ref=>this.dialog=ref} {...props} {...this.state} local={local} onClick={this.onFocus} />
       }
     }
   }

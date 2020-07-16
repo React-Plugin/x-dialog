@@ -13,6 +13,21 @@
 .x-dialog {
   -webkit-transition: opacity 0.2s linear;
   transition: opacity 0.2s linear; }
+  .x-dialog .dailog-resetmax {
+    float: right;
+    color: #000;
+    opacity: .5;
+    margin-right: 5px; }
+    .x-dialog .dailog-resetmax:hover {
+      opacity: 1; }
+    .x-dialog .dailog-resetmax button {
+      cursor: pointer;
+      font-weight: bold;
+      line-height: 1;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: none; }
   .x-dialog, .x-dialog * {
     box-sizing: border-box; }
   .x-dialog.opacity-animate {
@@ -32,15 +47,6 @@
       box-sizing: inherit;
       overflow: auto; }
     .x-dialog .dialog-content .dialog-title {
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
-      -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-      justify-content: space-between;
       padding: 15px;
       border-bottom: 1px solid #f5f5f5; }
       .x-dialog .dialog-content .dialog-title h4 {

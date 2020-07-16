@@ -10,7 +10,7 @@ import React, { PureComponent } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import Draggable from 'react-draggable';
-import EleResize from 'jsresize';
+// import EleResize from 'jsresize';
 let lastDialog = null, dialogList = [];
 export default class Dialog extends PureComponent {
   static propTypes = {
@@ -19,15 +19,18 @@ export default class Dialog extends PureComponent {
     children: PropTypes.node,
     className: PropTypes.string,
     zIndex: PropTypes.number,
-    height: PropTypes.number,
+    height: PropTypes.any,
     buttons: PropTypes.any,
     closeIcon: PropTypes.node,
+    maxIcon: PropTypes.node,
+    resetIcon: PropTypes.node,
     afterHide: PropTypes.func,
     afterShow: PropTypes.func,
     okCallback: PropTypes.func,
     dragHandle: PropTypes.string,
     draggable: PropTypes.bool,
-    maskHide: PropTypes.bool
+    maskHide: PropTypes.bool,
+    isMax:PropTypes.bool
   };
   static defaultProps = {
     isShow: false,
@@ -35,13 +38,18 @@ export default class Dialog extends PureComponent {
     className: "",
     zIndex: 0,
     maskHide: true,
-    closeIcon: <button className="dialog-close"><span>×</span></button>,
+    closeIcon: <button className="dialog-close" ><span>×</span></button>,
+    maxIcon: <button className="dialog-max" ><span>☐</span></button>,
+    resetIcon: <button className="dialog-reset"><span>❐</span></button>,
     dragHandle: '.dialog-title',
     draggable: false,
     afterHide: () => { },
     afterShow: () => { },
     okCallback: () => { },
-    container: document.body
+    height:'auto',
+    width:'auto',
+    container: document.body,
+    isMax:false
   };
   container = document.documentElement;
   bounds = 'body';
@@ -49,7 +57,9 @@ export default class Dialog extends PureComponent {
     super(props);
     this.id = props.id || +new Date();
     this.dialog = null;
-    this.state = { isShow: props.isShow, defaultPosition: {} };
+    this.state = { isShow: props.isShow, defaultPosition: {} ,
+    height:props.height,width:props.width,fixed:props.fixed,
+    draggable:props.draggable,status:'reset'};
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
 
     this.maskWH = {
@@ -154,7 +164,7 @@ export default class Dialog extends PureComponent {
     _this.dialog.className ? _this.dialog.className += " opacity-animate" : undefined;
     // console.log(this.refs.dialogContent.offsetHeight)
     // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
-    _this.refs.dialogContent.style.height = this.props.height || 'auto';
+    _this.refs.dialogContent.style.height = this.state.height//this.props.height || 'auto';
     _this.refs.dialogBody.style.height = 'auto';
     let ch = this.container.clientHeight;
     let dh = _this.refs.dialogContent.offsetHeight
@@ -169,20 +179,20 @@ export default class Dialog extends PureComponent {
     }
     x = sl + parseInt((this.container.offsetWidth - _this.refs.dialogContent.offsetWidth) / 2);
     //固定显示在四周 [left,right,top,bottom]
-    if (this.props.fixed) {
-      if (this.props.fixed.indexOf('left') !== -1) {
+    if (this.state.fixed) {
+      if (this.state.fixed.indexOf('left') !== -1) {
         x = 0;
         x2 = null;
       }
-      if (this.props.fixed.indexOf('right') !== -1) {
+      if (this.state.fixed.indexOf('right') !== -1) {
         x = null;
         x2 = 0;
       }
-      if (this.props.fixed.indexOf('top') !== -1) {
+      if (this.state.fixed.indexOf('top') !== -1) {
         y = 0;
         y2 = null;
       }
-      if (this.props.fixed.indexOf('bottom') !== -1) {
+      if (this.state.fixed.indexOf('bottom') !== -1) {
         y = null;
         y2 = 0;
       }
@@ -312,7 +322,7 @@ export default class Dialog extends PureComponent {
     }
     if (this.state.isShow) {
       // console.log(this.bounds)
-      let DD = this.props.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> : this.renderDialog();
+      let DD = this.state.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> : this.renderDialog();
       if (this.props.mask) {
         return <div
           className={"x-dialog-continer"
@@ -378,6 +388,33 @@ export default class Dialog extends PureComponent {
     // lastDialog = this;
     this.props.onClick(e);
   }
+  // status = 'reset';
+  //最大化还原
+  maxreset=(e)=>{
+    if(this.state.status === 'reset'){
+      this.oldprops={width:this.state.width,height:this.state.height,fixed:this.state.fixed,draggable:this.state.draggable}
+      var maxWH = {
+        fixed:["left","top"],
+        draggable:false,
+        width: Math.max(document.documentElement.offsetWidth ,document.body.scrollWidth) ,
+        height: Math.max(document.documentElement.offsetHeight,document.body.scrollHeight,document.documentElement.clientHeight) 
+      }
+      this.setState({status:'max',...maxWH},()=>{
+        this.setPosition(this.props);
+      })
+    }else{
+      this.status = 'reset';
+      this.setState({status:'reset',...this.oldprops},()=>{
+        this.setPosition(this.props);
+      })
+    }
+    this.props.maxreset && this.props.maxreset(this.state.status);
+  }
+  computeWH=()=>{
+    if(status === 'max'){
+      this.setState({height:document.body.clientHeight,width:document.body.clientWidth})
+    }
+  }
   renderDialog() {
     //同步zindex至this
     let { local, buttons, okCallback, zIndex } = this.props;
@@ -393,8 +430,8 @@ export default class Dialog extends PureComponent {
       className={"dialog-content " + this.props.className}
       ref="dialogContent"
       style={{
-        width: this.props.width || "auto",
-        height: this.props.height || "auto",
+        width: this.state.width || "auto",
+        height: this.state.height,
         zIndex: zIndex,
         ...position
       }}
@@ -408,6 +445,12 @@ export default class Dialog extends PureComponent {
           >
             {this.props.closeIcon}
           </div>
+          {this.props.isMax ?
+          <div onClick={this.maxreset} className="dailog-resetmax">
+            {this.state.status==='max'?this.props.resetIcon:this.props.maxIcon}
+          </div>
+          :undefined
+          }
         </div>
         : undefined}
       <div className="dialog-body" ref="dialogBody"  onClick={this.onFocus}>

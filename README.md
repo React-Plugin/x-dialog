@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 
+ * @Author: tianxiangbing
+ * @Date: 2018-11-21 15:36:18
+ * @LastEditTime: 2020-07-16 18:00:09
+ * @github: https://github.com/tianxiangbing
+ -->
 # x-dialog
 
 > reactjs的弹窗浮层组件 
@@ -84,5 +91,7 @@ Dialog.hide();//关闭当前
     关闭所有显示的窗口
 ## zIndex 
     zIndex值，默认1000
+## isMax 
+    是否显示最大化、还原按钮
 ### 关于作者
 [https://github.com/tianxiangbing](https://github.com/tianxiangbing)

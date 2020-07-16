@@ -72,7 +72,7 @@ class App extends React.Component {
     Dialog.hideAll();
   }
   showCatainer(){
-    Dialog.show({mask:true,container:'#container', title:'标题',draggable:true,children:this.state.content,afterHide:()=>alert('我又隐藏了')})(f=>{
+    Dialog.show({isMax:true, mask:true,container:'#container', title:'标题',draggable:true,children:this.state.content,afterHide:()=>alert('我又隐藏了')})(f=>{
       setTimeout(()=>{
         // f.hide();
         // Dialog.hide();
@@ -81,12 +81,12 @@ class App extends React.Component {
     })
     setTimeout(()=>{
       // f.hide();
-      // Dialog.hide();
-      let str = this.state.content;
-      for(let i = 0 ;i <10;i++){
-        str+=str;
-      }
-      document.getElementsByClassName('dialog-body')[0].innerHTML=str;
+      // // Dialog.hide();
+      // let str = this.state.content;
+      // for(let i = 0 ;i <10;i++){
+      //   str+=str;
+      // }
+      // document.getElementsByClassName('dialog-body')[0].innerHTML=str;
     },2000)
   }
   reopen(e){
