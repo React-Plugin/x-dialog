@@ -1783,11 +1783,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        _this2.setState(_extends({ status: 'max' }, maxWH), function () {
 	          _this2.setPosition(_this2.props);
+	          _this2.props.resizeCallback(_this2.state.status);
 	        });
 	      } else {
 	        _this2.status = 'reset';
 	        _this2.setState(_extends({ status: 'reset' }, _this2.oldprops), function () {
 	          _this2.setPosition(_this2.props);
+	          _this2.props.resizeCallback(_this2.state.status);
 	        });
 	      }
 	      _this2.props.maxreset && _this2.props.maxreset(_this2.state.status);
@@ -2056,7 +2058,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          height: this.state.height,
 	          zIndex: zIndex
 	        }, position)
-	      }, this.props.title ? _react2.default.createElement("div", { className: "dialog-title", ref: "dialogHeader" }, _react2.default.createElement("h4", null, this.props.title), _react2.default.createElement("div", {
+	      }, this.props.title ? _react2.default.createElement("div", { className: "dialog-title " + this.props.titleClassName, ref: "dialogHeader" }, _react2.default.createElement("h4", null, this.props.title), _react2.default.createElement("div", {
 	        onClick: this.hide.bind(this),
 	        className: "dialog-close-con"
 	      }, this.props.closeIcon), this.props.isMax ? _react2.default.createElement("div", { onClick: this.maxreset, className: "dailog-resetmax" }, this.state.status === 'max' ? this.props.resetIcon : this.props.maxIcon) : undefined) : undefined, _react2.default.createElement("div", { className: "dialog-body", ref: "dialogBody", onClick: this.onFocus }, this.props.children), _react2.default.createElement("div", { ref: "dialogFooter" }, this.buttons ? _react2.default.createElement("div", { className: "dialog-action" }, this.buttons) : undefined));
@@ -2119,7 +2121,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  dragHandle: _propTypes2.default.string,
 	  draggable: _propTypes2.default.bool,
 	  maskHide: _propTypes2.default.bool,
-	  isMax: _propTypes2.default.bool
+	  isMax: _propTypes2.default.bool,
+	  titleClassName: _propTypes2.default.string
 	};
 	Dialog.defaultProps = {
 	  isShow: false,
@@ -2138,7 +2141,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  height: 'auto',
 	  width: 'auto',
 	  container: document.body,
-	  isMax: false
+	  isMax: false,
+	  titleClassName: ''
 	};
 	exports.default = Dialog;
 

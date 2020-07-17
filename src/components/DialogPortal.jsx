@@ -30,7 +30,8 @@ export default class Dialog extends PureComponent {
     dragHandle: PropTypes.string,
     draggable: PropTypes.bool,
     maskHide: PropTypes.bool,
-    isMax:PropTypes.bool
+    isMax:PropTypes.bool,
+    titleClassName:PropTypes.string
   };
   static defaultProps = {
     isShow: false,
@@ -49,7 +50,8 @@ export default class Dialog extends PureComponent {
     height:'auto',
     width:'auto',
     container: document.body,
-    isMax:false
+    isMax:false,
+    titleClassName:''
   };
   container = document.documentElement;
   bounds = 'body';
@@ -401,11 +403,13 @@ export default class Dialog extends PureComponent {
       }
       this.setState({status:'max',...maxWH},()=>{
         this.setPosition(this.props);
+        this.props.resizeCallback(this.state.status);
       })
     }else{
       this.status = 'reset';
       this.setState({status:'reset',...this.oldprops},()=>{
         this.setPosition(this.props);
+        this.props.resizeCallback(this.state.status);
       })
     }
     this.props.maxreset && this.props.maxreset(this.state.status);
@@ -437,7 +441,7 @@ export default class Dialog extends PureComponent {
       }}
     >
       {this.props.title
-        ? <div className="dialog-title" ref="dialogHeader">
+        ? <div className={"dialog-title "+this.props.titleClassName} ref="dialogHeader">
           <h4>{this.props.title}</h4>
           <div
             onClick={this.hide.bind(this)}
