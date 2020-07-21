@@ -32,7 +32,7 @@ export default class Dialog extends Component {
         })
         return myRef;
       },
-      id:+new Date()
+      id: +new Date()
     };
     container[currentConfig.id] = div;
     function render(props) {
@@ -67,10 +67,10 @@ export default class Dialog extends Component {
   // }
   componentWillReceiveProps(newProps) {
     if (newProps.isShow != this.state.isShow) {
-      if( newProps.isShow){
+      if (newProps.isShow) {
         Dialog.zIndex++
       }
-      this.setState({ isShow: newProps.isShow ,zIndex:Dialog.zIndex});
+      this.setState({ isShow: newProps.isShow, zIndex: Dialog.zIndex });
     }
   }
   constructor(props) {
@@ -85,9 +85,9 @@ export default class Dialog extends Component {
   hide = (id) => {
     this.setState({ isShow: false }, () => {
       if (this.node) {
-        if(id && container[id]){
+        if (id && container[id]) {
           ReactDOM.unmountComponentAtNode(container[id]);
-          container[id]=null;
+          container[id] = null;
           delete container[id];
         }
         let result = ReactDOM.unmountComponentAtNode(this.node);
@@ -120,9 +120,9 @@ export default class Dialog extends Component {
       dd = null;
     } else if (!this.node) {
       this.node = document.createElement("div");
-      if(typeof this.props.container ==='string'){
+      if (typeof this.props.container === 'string') {
         document.querySelector(this.props.container).appendChild(this.node);
-      }else{
+      } else {
         this.props.container.appendChild(this.node);
       }
       renderSubtreeIntoContainer(
@@ -138,14 +138,20 @@ export default class Dialog extends Component {
       );
     }
   }
-  maxreset = (status)=>{
+  maxreset = (status) => {
     // console.log('max',this.node)
-    if(status === 'reset'){
-      document.body.appendChild(this.node)
-    }else{
-      if(typeof this.props.container ==='string'){
+    if (status === 'reset') {
+      let maxContainer = document.body;
+      if(typeof this.props.maxContainer === 'string'){
+        maxContainer = document.querySelector(this.props.maxContainer)
+      }else if (typeof this.props.maxContainer === 'object') {
+        maxContainer = this.props.maxContainer;
+      }
+      maxContainer.appendChild(this.node);
+    } else {
+      if (typeof this.props.container === 'string') {
         document.querySelector(this.props.container).appendChild(this.node);
-      }else{
+      } else {
         this.props.container.appendChild(this.node);
       }
     }
@@ -153,8 +159,8 @@ export default class Dialog extends Component {
   renderContent = (local) => {
     // console.log(this.props)
     let props = { ...this.props };
-    props.updateList = (DialogList)=>{
-      if(DialogList.length===0){
+    props.updateList = (DialogList) => {
+      if (DialogList.length === 0) {
         Dialog.zIndex = Dialog.defaultZIndex;
         // this.setState({zIndex:Dialog.zIndex})
       }
@@ -167,10 +173,10 @@ export default class Dialog extends Component {
     if (this.state.isShow) {
       if (this.props.draggable) {
         return (
-          <DialogPortal ref={ref=>this.dialog=ref} {...props} {...this.state} local={local} onClick={this.onFocus} />
+          <DialogPortal ref={ref => this.dialog = ref} {...props} {...this.state} local={local} onClick={this.onFocus} />
         )
       } else {
-        return <DialogPortal ref={ref=>this.dialog=ref} {...props} {...this.state} local={local} onClick={this.onFocus} />
+        return <DialogPortal ref={ref => this.dialog = ref} {...props} {...this.state} local={local} onClick={this.onFocus} />
       }
     }
   }
@@ -189,8 +195,8 @@ export default class Dialog extends Component {
       ReactDOM.unmountComponentAtNode(this.node);
       this.node.parentNode.removeChild(this.node);
       this.node = null;
+      this.props.afterHide && this.props.afterHide()
     }
-    
   }
   render() {
     return null;

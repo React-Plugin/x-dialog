@@ -80,11 +80,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
 
 	var _extends = Object.assign || function (target) {
 	  for (var i = 1; i < arguments.length; i++) {
@@ -139,12 +145,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _possibleConstructorReturn(self, call) {
 	  if (!self) {
 	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+	  }return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
 	}
 
 	function _inherits(subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	} /*
 	   * Created with Visual Studio Code.
@@ -281,6 +287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _reactDom2.default.unmountComponentAtNode(this.node);
 	        this.node.parentNode.removeChild(this.node);
 	        this.node = null;
+	        this.props.afterHide && this.props.afterHide();
 	      }
 	    }
 	  }, {
@@ -329,7 +336,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.maxreset = function (status) {
 	    // console.log('max',this.node)
 	    if (status === 'reset') {
-	      document.body.appendChild(_this2.node);
+	      var maxContainer = document.body;
+	      if (typeof _this2.props.maxContainer === 'string') {
+	        maxContainer = document.querySelector(_this2.props.maxContainer);
+	      } else if (_typeof(_this2.props.maxContainer) === 'object') {
+	        maxContainer = _this2.props.maxContainer;
+	      }
+	      maxContainer.appendChild(_this2.node);
 	    } else {
 	      if (typeof _this2.props.container === 'string') {
 	        document.querySelector(_this2.props.container).appendChild(_this2.node);
@@ -1577,7 +1590,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -1591,6 +1604,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }return target;
+	};
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	  return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 	};
 
 	var _createClass = function () {
@@ -1640,12 +1659,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _possibleConstructorReturn(self, call) {
 	  if (!self) {
 	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+	  }return call && ((typeof call === "undefined" ? "undefined" : _typeof2(call)) === "object" || typeof call === "function") ? call : self;
 	}
 
 	function _inherits(subClass, superClass) {
 	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof2(superClass)));
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	} /*
 	   * Created with Visual Studio Code.
@@ -1774,22 +1793,28 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this2.maxreset = function (e) {
 	      if (_this2.state.status === 'reset') {
+	        var maxContainer = document.body;
+	        if (typeof _this2.props.maxContainer === 'string') {
+	          maxContainer = document.querySelector(_this2.props.maxContainer);
+	        } else if (_typeof(_this2.props.maxContainer) === 'object') {
+	          maxContainer = _this2.props.maxContainer;
+	        }
 	        _this2.oldprops = { width: _this2.state.width, height: _this2.state.height, fixed: _this2.state.fixed, draggable: _this2.state.draggable };
 	        var maxWH = {
 	          fixed: ["left", "top"],
 	          draggable: false,
-	          width: Math.max(document.documentElement.offsetWidth, document.body.scrollWidth),
-	          height: Math.max(document.documentElement.offsetHeight, document.body.scrollHeight, document.documentElement.clientHeight)
+	          width: maxContainer.scrollWidth,
+	          height: maxContainer.scrollHeight
 	        };
 	        _this2.setState(_extends({ status: 'max' }, maxWH), function () {
 	          _this2.setPosition(_this2.props);
-	          _this2.props.resizeCallback(_this2.state.status);
+	          _this2.props.resizeCallback && _this2.props.resizeCallback(_this2.state.status);
 	        });
 	      } else {
 	        _this2.status = 'reset';
 	        _this2.setState(_extends({ status: 'reset' }, _this2.oldprops), function () {
 	          _this2.setPosition(_this2.props);
-	          _this2.props.resizeCallback(_this2.state.status);
+	          _this2.props.resizeCallback && _this2.props.resizeCallback(_this2.state.status);
 	        });
 	      }
 	      _this2.props.maxreset && _this2.props.maxreset(_this2.state.status);

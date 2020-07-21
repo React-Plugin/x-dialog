@@ -394,22 +394,28 @@ export default class Dialog extends PureComponent {
   //最大化还原
   maxreset=(e)=>{
     if(this.state.status === 'reset'){
+      let maxContainer = document.body;
+      if(typeof this.props.maxContainer === 'string'){
+        maxContainer = document.querySelector(this.props.maxContainer)
+      }else if (typeof this.props.maxContainer === 'object') {
+        maxContainer = this.props.maxContainer;
+      }
       this.oldprops={width:this.state.width,height:this.state.height,fixed:this.state.fixed,draggable:this.state.draggable}
       var maxWH = {
         fixed:["left","top"],
         draggable:false,
-        width: Math.max(document.documentElement.offsetWidth ,document.body.scrollWidth) ,
-        height: Math.max(document.documentElement.offsetHeight,document.body.scrollHeight,document.documentElement.clientHeight) 
+        width: maxContainer.scrollWidth ,
+        height: maxContainer.scrollHeight
       }
       this.setState({status:'max',...maxWH},()=>{
         this.setPosition(this.props);
-        this.props.resizeCallback(this.state.status);
+        this.props.resizeCallback && this.props.resizeCallback(this.state.status);
       })
     }else{
       this.status = 'reset';
       this.setState({status:'reset',...this.oldprops},()=>{
         this.setPosition(this.props);
-        this.props.resizeCallback(this.state.status);
+        this.props.resizeCallback && this.props.resizeCallback(this.state.status);
       })
     }
     this.props.maxreset && this.props.maxreset(this.state.status);

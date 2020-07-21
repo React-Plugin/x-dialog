@@ -72,7 +72,7 @@ class App extends React.Component {
     Dialog.hideAll();
   }
   showCatainer(){
-    Dialog.show({isMax:true, mask:true,container:'#container', title:'标题',draggable:true,children:this.state.content,afterHide:()=>alert('我又隐藏了')})(f=>{
+    Dialog.show({isMax:true,maxContainer:'#container', mask:true,container:'#container', title:'标题',draggable:true,children:this.state.content,afterHide:()=>alert('我又隐藏了')})(f=>{
       setTimeout(()=>{
         // f.hide();
         // Dialog.hide();
