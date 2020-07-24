@@ -1799,15 +1799,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else if (_typeof(_this2.props.maxContainer) === 'object') {
 	          maxContainer = _this2.props.maxContainer;
 	        }
-	        _this2.oldprops = { width: _this2.state.width, height: _this2.state.height, fixed: _this2.state.fixed, draggable: _this2.state.draggable };
+	        _this2.oldprops = { mask: _this2.state.mask, fixed: _this2.state.fixed, draggable: _this2.state.draggable, defaultPosition: _this2.state.defaultPosition };
 	        var maxWH = {
-	          fixed: ["left", "top"],
+	          fixed: ["left", "top", "right", "bottom"],
+	          defaultPosition: { x: 0, x2: 0, y: 0, y2: 0 },
 	          draggable: false,
-	          width: maxContainer.scrollWidth,
-	          height: maxContainer.scrollHeight
+	          mask: false
 	        };
 	        _this2.setState(_extends({ status: 'max' }, maxWH), function () {
-	          _this2.setPosition(_this2.props);
+	          // this.setPosition(this.props);
 	          _this2.props.resizeCallback && _this2.props.resizeCallback(_this2.state.status);
 	        });
 	      } else {
@@ -1828,9 +1828,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this2.id = props.id || +new Date();
 	    _this2.dialog = null;
-	    _this2.state = { isShow: props.isShow, defaultPosition: {},
+	    _this2.state = {
+	      isShow: props.isShow, defaultPosition: {},
 	      height: props.height, width: props.width, fixed: props.fixed,
-	      draggable: props.draggable, status: 'reset' };
+	      draggable: props.draggable, status: 'reset',
+	      mask: props.mask
+	    };
 	    _this2.keyBind = _this2.keyBind.bind(_this2); //方便移除事件绑定.每次bind会生成新的对象
 
 	    _this2.maskWH = {
@@ -1907,6 +1910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // lastDialog = null;
 	      this.destory();
 	      document.removeEventListener("keydown", this.keyBind);
+	      // window.removeEventListener('resize', this.computeHeight, false);
 	    }
 	    //销毁时更新dialogList;
 
@@ -1932,7 +1936,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      // lastDialog = this;
 	      dialogList.push({ instance: this, id: this.id });
+	      // window.addEventListener('resize', this.computeHeight, false)
 	    }
+	    // computeHeight=()=>{
+	    //   if(this.state.status =='max'){
+	    //     let maxContainer = document.body;
+	    //     if(typeof this.props.maxContainer === 'string'){
+	    //       maxContainer = document.querySelector(this.props.maxContainer)
+	    //     }else if (typeof this.props.maxContainer === 'object') {
+	    //       maxContainer = this.props.maxContainer;
+	    //     }
+	    //     var maxWH = {
+	    //       width: maxContainer.scrollWidth ,
+	    //       height: maxContainer.scrollHeight
+	    //     }
+	    //     this.setState({...maxWH},()=>{
+	    //       this.setPosition(this.props);
+	    //       this.props.resizeCallback && this.props.resizeCallback(this.state.status);
+	    //     })
+	    //   }
+	    // }
+
 	  }, {
 	    key: "clearTimer",
 	    value: function clearTimer() {
@@ -2025,7 +2049,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.state.isShow) {
 	        // console.log(this.bounds)
 	        var DD = this.state.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: this.bounds }, this.renderDialog()) : this.renderDialog();
-	        if (this.props.mask) {
+	        if (this.state.mask) {
 	          var _React$createElement;
 
 	          return _react2.default.createElement("div", {

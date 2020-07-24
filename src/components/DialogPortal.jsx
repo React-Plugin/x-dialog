@@ -59,9 +59,12 @@ export default class Dialog extends PureComponent {
     super(props);
     this.id = props.id || +new Date();
     this.dialog = null;
-    this.state = { isShow: props.isShow, defaultPosition: {} ,
-    height:props.height,width:props.width,fixed:props.fixed,
-    draggable:props.draggable,status:'reset'};
+    this.state = { 
+      isShow: props.isShow, defaultPosition: {} ,
+      height:props.height,width:props.width,fixed:props.fixed,
+      draggable:props.draggable,status:'reset',
+      mask:props.mask,
+  };
     this.keyBind = this.keyBind.bind(this); //方便移除事件绑定.每次bind会生成新的对象
 
     this.maskWH = {
@@ -129,6 +132,7 @@ export default class Dialog extends PureComponent {
     // lastDialog = null;
     this.destory();
     document.removeEventListener("keydown", this.keyBind);
+    // window.removeEventListener('resize', this.computeHeight, false);
   }
   //销毁时更新dialogList;
   destory() {
@@ -147,7 +151,26 @@ export default class Dialog extends PureComponent {
     }
     // lastDialog = this;
     dialogList.push({ instance: this, id: this.id });
+    // window.addEventListener('resize', this.computeHeight, false)
   }
+  // computeHeight=()=>{
+  //   if(this.state.status =='max'){
+  //     let maxContainer = document.body;
+  //     if(typeof this.props.maxContainer === 'string'){
+  //       maxContainer = document.querySelector(this.props.maxContainer)
+  //     }else if (typeof this.props.maxContainer === 'object') {
+  //       maxContainer = this.props.maxContainer;
+  //     }
+  //     var maxWH = {
+  //       width: maxContainer.scrollWidth ,
+  //       height: maxContainer.scrollHeight
+  //     }
+  //     this.setState({...maxWH},()=>{
+  //       this.setPosition(this.props);
+  //       this.props.resizeCallback && this.props.resizeCallback(this.state.status);
+  //     })
+  //   }
+  // }
   keyBind = (e) => {
     // console.log(e);
     if (e.keyCode === 27) {
@@ -325,7 +348,7 @@ export default class Dialog extends PureComponent {
     if (this.state.isShow) {
       // console.log(this.bounds)
       let DD = this.state.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> : this.renderDialog();
-      if (this.props.mask) {
+      if (this.state.mask) {
         return <div
           className={"x-dialog-continer"
           }
@@ -400,15 +423,15 @@ export default class Dialog extends PureComponent {
       }else if (typeof this.props.maxContainer === 'object') {
         maxContainer = this.props.maxContainer;
       }
-      this.oldprops={width:this.state.width,height:this.state.height,fixed:this.state.fixed,draggable:this.state.draggable}
+      this.oldprops={mask:this.state.mask, fixed:this.state.fixed,draggable:this.state.draggable,defaultPosition:this.state.defaultPosition}
       var maxWH = {
-        fixed:["left","top"],
+        fixed:["left","top","right","bottom"],
+        defaultPosition:{x:0,x2:0,y:0,y2:0},
         draggable:false,
-        width: maxContainer.scrollWidth ,
-        height: maxContainer.scrollHeight
+        mask:false
       }
       this.setState({status:'max',...maxWH},()=>{
-        this.setPosition(this.props);
+        // this.setPosition(this.props);
         this.props.resizeCallback && this.props.resizeCallback(this.state.status);
       })
     }else{

@@ -2,7 +2,7 @@
  * @Descripttion: 
  * @Author: tianxiangbing
  * @Date: 2018-11-21 15:36:18
- * @LastEditTime: 2020-07-16 18:00:09
+ * @LastEditTime: 2020-07-24 11:22:43
  * @github: https://github.com/tianxiangbing
  -->
 # x-dialog
@@ -93,5 +93,7 @@ Dialog.hide();//关闭当前
     zIndex值，默认1000
 ## isMax 
     是否显示最大化、还原按钮
+## maxContainer
+    最大化的容器dom，默认为body
 ### 关于作者
 [https://github.com/tianxiangbing](https://github.com/tianxiangbing)
