@@ -423,10 +423,12 @@ export default class Dialog extends PureComponent {
       }else if (typeof this.props.maxContainer === 'object') {
         maxContainer = this.props.maxContainer;
       }
-      this.oldprops={mask:this.state.mask, fixed:this.state.fixed,draggable:this.state.draggable,defaultPosition:this.state.defaultPosition}
+      this.oldprops={width:this.state.width,hegiht:this.state.height, mask:this.state.mask, fixed:this.state.fixed,draggable:this.state.draggable,defaultPosition:this.state.defaultPosition}
       var maxWH = {
         fixed:["left","top","right","bottom"],
         defaultPosition:{x:0,x2:0,y:0,y2:0},
+        width:'auto',
+        height:'auto',
         draggable:false,
         mask:false
       }

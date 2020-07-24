@@ -1799,10 +1799,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else if (_typeof(_this2.props.maxContainer) === 'object') {
 	          maxContainer = _this2.props.maxContainer;
 	        }
-	        _this2.oldprops = { mask: _this2.state.mask, fixed: _this2.state.fixed, draggable: _this2.state.draggable, defaultPosition: _this2.state.defaultPosition };
+	        _this2.oldprops = { width: _this2.state.width, hegiht: _this2.state.height, mask: _this2.state.mask, fixed: _this2.state.fixed, draggable: _this2.state.draggable, defaultPosition: _this2.state.defaultPosition };
 	        var maxWH = {
 	          fixed: ["left", "top", "right", "bottom"],
 	          defaultPosition: { x: 0, x2: 0, y: 0, y2: 0 },
+	          width: 'auto',
+	          height: 'auto',
 	          draggable: false,
 	          mask: false
 	        };
