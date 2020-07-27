@@ -299,7 +299,7 @@ export default class Dialog extends PureComponent {
       let cls = this.dialog.className;
       this.dialog.addEventListener('transitionend', this._hide.bind(this));
       this.dialog.className = cls.replace(
-        "opacity-animate",
+        /(opacity-animate)?/,
         " opacity-animate-hide "
       );
       this.destory();
