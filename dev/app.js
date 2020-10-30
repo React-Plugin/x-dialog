@@ -7,6 +7,24 @@ let local= en.Dialog;
 var appElement = document.getElementById('example');
 Dialog.zIndex = 999;
 window.Dialog = Dialog;
+class Test extends React.Component{
+  constructor(props){
+    super(props);
+    console.log('constructor.....')
+    this.state={text:''}
+  }
+  componentDidMount(){
+    // this.setState({text:Math.random()})
+    console.log('componentDidMount.....'+this.state.text);
+  }
+  onclick(){
+    this.setState({text:Math.random()})
+  }
+  render(){
+    console.log('render.....')
+    return <div>test......{this.state.text} <button onClick={this.onclick.bind(this)}>click</button></div>
+  }
+}
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -72,14 +90,18 @@ class App extends React.Component {
     Dialog.hideAll();
   }
   showCatainer(){
-    Dialog.show({isMax:true,maxContainer:'#container', mask:true,container:'#container', title:'标题',draggable:true,children:this.state.content,afterHide:()=>alert('我又隐藏了')})(f=>{
+    Dialog.show({isMax:true,maxContainer:'#container', 
+    mask:true,
+    container:'#container', title:'标题',draggable:true,
+    children:<Test/>,
+    afterHide:()=>alert('我又隐藏了')})(f=>{
       setTimeout(()=>{
         // f.hide();
         // Dialog.hide();
         
       },10000)
     })
-    setTimeout(()=>{
+    // setTimeout(()=>{
       // f.hide();
       // // Dialog.hide();
       // let str = this.state.content;
@@ -87,7 +109,7 @@ class App extends React.Component {
       //   str+=str;
       // }
       // document.getElementsByClassName('dialog-body')[0].innerHTML=str;
-    },2000)
+    // },2000)
   }
   reopen(e){
     e.stopPropagation();

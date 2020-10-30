@@ -1805,8 +1805,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          defaultPosition: { x: 0, x2: 0, y: 0, y2: 0 },
 	          width: 'auto',
 	          height: 'auto',
-	          draggable: false,
-	          mask: false
+	          draggable: false
+	          // mask:false
 	        };
 	        _this2.setState(_extends({ status: 'max' }, maxWH), function () {
 	          // this.setPosition(this.props);
@@ -2050,7 +2050,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      if (this.state.isShow) {
 	        // console.log(this.bounds)
-	        var DD = this.state.draggable ? _react2.default.createElement(_reactDraggable2.default, { handle: this.props.dragHandle || ".dialog-title", bounds: this.bounds }, this.renderDialog()) : this.renderDialog();
+	        var position = void 0;
+	        if (!this.state.draggable) {
+	          position = { x: 0, y: 0 };
+	        }
+	        var DD = _react2.default.createElement(_reactDraggable2.default, { position: position, disabled: !this.state.draggable, handle: this.props.dragHandle || ".dialog-title", bounds: this.bounds }, this.renderDialog());
 	        if (this.state.mask) {
 	          var _React$createElement;
 

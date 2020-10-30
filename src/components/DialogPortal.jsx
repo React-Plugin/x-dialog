@@ -347,7 +347,11 @@ export default class Dialog extends PureComponent {
     }
     if (this.state.isShow) {
       // console.log(this.bounds)
-      let DD = this.state.draggable ? <Draggable handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> : this.renderDialog();
+      let position;
+      if(!this.state.draggable){
+        position={x:0,y:0}
+      }
+      let DD = <Draggable position={position} disabled={!this.state.draggable} handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> ;
       if (this.state.mask) {
         return <div
           className={"x-dialog-continer"
@@ -430,7 +434,7 @@ export default class Dialog extends PureComponent {
         width:'auto',
         height:'auto',
         draggable:false,
-        mask:false
+        // mask:false
       }
       this.setState({status:'max',...maxWH},()=>{
         // this.setPosition(this.props);
