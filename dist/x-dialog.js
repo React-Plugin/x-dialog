@@ -1696,6 +1696,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // console.log(this.dialog)
 	        _this2.hide();
 	      }
+	      // if(e.keyCode ==13){
+	      //   this.setPosition(this.props);
+	      // }
+	    };
+
+	    _this2.checkPosition = function () {
+	      var height = _this2.refs.dialogContent.offsetHeight;
+	      if (_this2.oldHeight !== height) {
+	        _this2.oldHeight = height;
+	        var stop = _this2.container.scrollTop;
+	        var conHeight = _this2.container.clientHeight;
+	        var posY = _this2.state.defaultPosition.y + height + _this2.dragPosition.y;
+	        var buttomY = conHeight + stop;
+	        // let pos = 
+	        //判断是否超出底边界
+	        if (posY > buttomY) {
+	          var y = buttomY - height - _this2.dragPosition.y;
+	          // this.state.defaultPosition.y + this.dragPosition.y + this.refs.dialogContent;
+	          _this2.setState({ defaultPosition: { x: _this2.state.defaultPosition.x, y: y } }, function () {
+	            //判断头部是否超出顶边界
+	            //如果超出，修改内容高度
+	            if (_this2.refs.dialogContent.offsetTop < 0) {
+	              var headHeight = _this2.refs.dialogHeader ? _this2.refs.dialogHeader.offsetHeight : 0;
+	              var footHeight = _this2.refs.dialogFooter ? _this2.refs.dialogFooter.offsetHeight : 0;
+	              var bodyHeight = conHeight - footHeight - headHeight - 2;
+	              _this2.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight) + "px";
+	              _this2.setState({ defaultPosition: { x: _this2.state.defaultPosition.x, y: stop } });
+	            }
+	          });
+	        }
+	      }
+	      window.requestAnimationFrame ? _this2.frameId = window.requestAnimationFrame(_this2.checkPosition) : null;
 	    };
 
 	    _this2.setPosition = function (newProps) {
@@ -1707,7 +1739,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // console.log(this.refs.dialogContent.offsetHeight)
 	      // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
 	      _this.refs.dialogContent.style.height = _this2.state.height; //this.props.height || 'auto';
-	      _this.refs.dialogBody.style.height = 'auto';
+	      _this.refs.dialogBody.style.height = _this2.props.bodyHeight ? _this2.props.bodyHeight : 'auto';
 	      var ch = _this2.container.clientHeight;
 	      var dh = _this.refs.dialogContent.offsetHeight;
 	      var stop = _this2.container.scrollTop;
@@ -1780,6 +1812,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    _this2.maskHandle = function () {
 	      _this2.props.maskHide && _this2.hide();
+	    };
+
+	    _this2.onDragStop = function (e, data) {
+	      _this2.dragPosition = data;
 	    };
 
 	    _this2.onFocus = function (e) {
@@ -1875,6 +1911,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this2.setDialogRef = function (element) {
 	      _this2.dialog = element;
 	    };
+	    _this2.dragPosition = { x: 0, y: 0 };
 	    return _this2;
 	  }
 
@@ -1913,6 +1950,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.destory();
 	      document.removeEventListener("keydown", this.keyBind);
 	      // window.removeEventListener('resize', this.computeHeight, false);
+	      window.cancelAnimationFrame && this.frameId ? window.cancelAnimationFrame(this.frameId) : null;
 	    }
 	    //销毁时更新dialogList;
 
@@ -1939,6 +1977,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // lastDialog = this;
 	      dialogList.push({ instance: this, id: this.id });
 	      // window.addEventListener('resize', this.computeHeight, false)
+	      window.requestAnimationFrame ? this.frameId = window.requestAnimationFrame(this.checkPosition) : null;
 	    }
 	    // computeHeight=()=>{
 	    //   if(this.state.status =='max'){
@@ -2054,7 +2093,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!this.state.draggable) {
 	          position = { x: 0, y: 0 };
 	        }
-	        var DD = _react2.default.createElement(_reactDraggable2.default, { position: position, disabled: !this.state.draggable, handle: this.props.dragHandle || ".dialog-title", bounds: this.bounds }, this.renderDialog());
+	        var DD = _react2.default.createElement(_reactDraggable2.default, { onStop: this.onDragStop, position: position, disabled: !this.state.draggable, handle: this.props.dragHandle || ".dialog-title", bounds: this.bounds }, this.renderDialog());
 	        if (this.state.mask) {
 	          var _React$createElement;
 

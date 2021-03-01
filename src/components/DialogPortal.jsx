@@ -106,6 +106,7 @@ export default class Dialog extends PureComponent {
     this.setDialogRef = element => {
       this.dialog = element;
     };
+    this.dragPosition = {x:0,y:0};
   }
   componentWillReceiveProps(newProps) {
     // console.log(newProps.isShow, this.state.isShow);
@@ -133,6 +134,7 @@ export default class Dialog extends PureComponent {
     this.destory();
     document.removeEventListener("keydown", this.keyBind);
     // window.removeEventListener('resize', this.computeHeight, false);
+    window.cancelAnimationFrame &&this.frameId ? window.cancelAnimationFrame(this.frameId):null;
   }
   //销毁时更新dialogList;
   destory() {
@@ -152,6 +154,7 @@ export default class Dialog extends PureComponent {
     // lastDialog = this;
     dialogList.push({ instance: this, id: this.id });
     // window.addEventListener('resize', this.computeHeight, false)
+    window.requestAnimationFrame ? this.frameId = window.requestAnimationFrame(this.checkPosition):null;
   }
   // computeHeight=()=>{
   //   if(this.state.status =='max'){
@@ -177,6 +180,37 @@ export default class Dialog extends PureComponent {
       // console.log(this.dialog)
       this.hide();
     }
+    // if(e.keyCode ==13){
+    //   this.setPosition(this.props);
+    // }
+  }
+  checkPosition=()=>{
+    let height = this.refs.dialogContent.offsetHeight;
+    if(this.oldHeight !==height ){
+      this.oldHeight = height;
+      let stop = this.container.scrollTop;
+      let conHeight = this.container.clientHeight;
+      let posY = this.state.defaultPosition.y + height + this.dragPosition.y;
+      let buttomY  = conHeight + stop;
+      // let pos = 
+      //判断是否超出底边界
+      if(posY > buttomY ){
+        let y = buttomY - height - this.dragPosition.y;
+        // this.state.defaultPosition.y + this.dragPosition.y + this.refs.dialogContent;
+        this.setState({defaultPosition:{x:this.state.defaultPosition.x,y}},()=>{
+          //判断头部是否超出顶边界
+          //如果超出，修改内容高度
+          if( this.refs.dialogContent.offsetTop<0 ){
+            let headHeight = this.refs.dialogHeader ? this.refs.dialogHeader.offsetHeight : 0;
+            let footHeight = this.refs.dialogFooter ? this.refs.dialogFooter.offsetHeight : 0;
+            let bodyHeight = conHeight - footHeight - headHeight - 2 ; 
+            this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight) + "px";
+            this.setState({defaultPosition:{x:this.state.defaultPosition.x,y:stop}});
+          }
+        });
+      }
+    }
+    window.requestAnimationFrame ? this.frameId = window.requestAnimationFrame(this.checkPosition):null;
   }
   clearTimer() {
     this.timer && clearTimeout(this.timer);
@@ -190,7 +224,7 @@ export default class Dialog extends PureComponent {
     // console.log(this.refs.dialogContent.offsetHeight)
     // console.log(-this.refs.dialogContent.offsetLeft,-this.refs.dialogContent.offsetTop)
     _this.refs.dialogContent.style.height = this.state.height//this.props.height || 'auto';
-    _this.refs.dialogBody.style.height = 'auto';
+    _this.refs.dialogBody.style.height = this.props.bodyHeight ? this.props.bodyHeight : 'auto';
     let ch = this.container.clientHeight;
     let dh = _this.refs.dialogContent.offsetHeight
     let stop = this.container.scrollTop;
@@ -315,6 +349,9 @@ export default class Dialog extends PureComponent {
   maskHandle = () => {
     this.props.maskHide && this.hide();
   }
+  onDragStop = (e,data)=>{
+    this.dragPosition = data;
+  }
   renderHTML() {
     let { local, buttons, okCallback } = this.props;
     if (typeof buttons === "undefined") {
@@ -351,7 +388,7 @@ export default class Dialog extends PureComponent {
       if(!this.state.draggable){
         position={x:0,y:0}
       }
-      let DD = <Draggable position={position} disabled={!this.state.draggable} handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> ;
+      let DD = <Draggable onStop={this.onDragStop} position={position} disabled={!this.state.draggable} handle={this.props.dragHandle || ".dialog-title"} bounds={this.bounds}>{this.renderDialog()}</Draggable> ;
       if (this.state.mask) {
         return <div
           className={"x-dialog-continer"

@@ -11,18 +11,18 @@ class Test extends React.Component{
   constructor(props){
     super(props);
     console.log('constructor.....')
-    this.state={text:''}
+    this.state={text:'',height:''}
   }
   componentDidMount(){
     // this.setState({text:Math.random()})
     console.log('componentDidMount.....'+this.state.text);
   }
   onclick(){
-    this.setState({text:Math.random()})
+    this.setState({text:Math.random(),height:300})
   }
   render(){
     console.log('render.....')
-    return <div>test......{this.state.text} <button onClick={this.onclick.bind(this)}>click</button></div>
+    return <div style={{height:this.state.height||'auto'}}>test......{this.state.text} <button onClick={this.onclick.bind(this)}>click</button></div>
   }
 }
 class App extends React.Component {
@@ -132,7 +132,7 @@ class App extends React.Component {
         <button onClick={this.showButtons.bind(this)}>自定义按钮</button>
         <button onClick={this.showClassName.bind(this)}>传递样式名称</button>
         <button onClick={this.showCatainer.bind(this)}>弹在指定区域</button>
-        <div className="container" style={{backgroundColor:'#cccccc',height:'200px'}} id="container"></div>
+        <div className="container" style={{backgroundColor:'#cccccc',height:'300px',overflow:'auto'}} id="container"></div>
         <Dialog 
         {...this.state.dialog}
         >
@@ -155,6 +155,8 @@ class App extends React.Component {
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
           <div>You're looking at an example modal in the dashboard theme.</div>
+          <button onClick={()=>{this.setState({higher:!this.state.higher})}}>点我升高</button>
+          {this.state.higher &&<div style={{height:400}}></div>}
           </div>
         </Dialog>
         <button onClick={e=>{
