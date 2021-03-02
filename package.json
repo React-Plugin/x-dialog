@@ -1,6 +1,6 @@
 {
   "name": "x-dialog",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "react dialog component",
   "main": "./lib/index.js",
   "repository": {

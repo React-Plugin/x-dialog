@@ -204,8 +204,9 @@ export default class Dialog extends PureComponent {
             let headHeight = this.refs.dialogHeader ? this.refs.dialogHeader.offsetHeight : 0;
             let footHeight = this.refs.dialogFooter ? this.refs.dialogFooter.offsetHeight : 0;
             let bodyHeight = conHeight - footHeight - headHeight - 2 ; 
-            this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight) + "px";
-            this.setState({defaultPosition:{x:this.state.defaultPosition.x,y:stop}});
+            let maxHeight = Math.max(0, bodyHeight)
+            this.refs.dialogBody.style.maxHeight = maxHeight + "px";
+            this.setState({defaultPosition:{x:this.state.defaultPosition.x,y: y +(this.refs.dialogBody.scrollHeight-maxHeight) }});
           }
         });
       }

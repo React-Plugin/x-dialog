@@ -1721,8 +1721,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	              var headHeight = _this2.refs.dialogHeader ? _this2.refs.dialogHeader.offsetHeight : 0;
 	              var footHeight = _this2.refs.dialogFooter ? _this2.refs.dialogFooter.offsetHeight : 0;
 	              var bodyHeight = conHeight - footHeight - headHeight - 2;
-	              _this2.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight) + "px";
-	              _this2.setState({ defaultPosition: { x: _this2.state.defaultPosition.x, y: stop } });
+	              var maxHeight = Math.max(0, bodyHeight);
+	              _this2.refs.dialogBody.style.maxHeight = maxHeight + "px";
+	              _this2.setState({ defaultPosition: { x: _this2.state.defaultPosition.x, y: y + (_this2.refs.dialogBody.scrollHeight - maxHeight) } });
 	            }
 	          });
 	        }
