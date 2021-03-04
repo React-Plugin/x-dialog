@@ -200,13 +200,19 @@ export default class Dialog extends PureComponent {
         this.setState({defaultPosition:{x:this.state.defaultPosition.x,y}},()=>{
           //判断头部是否超出顶边界
           //如果超出，修改内容高度
-          if( this.refs.dialogContent.offsetTop<0 ){
-            let headHeight = this.refs.dialogHeader ? this.refs.dialogHeader.offsetHeight : 0;
-            let footHeight = this.refs.dialogFooter ? this.refs.dialogFooter.offsetHeight : 0;
-            let bodyHeight = conHeight - footHeight - headHeight - 2 ; 
-            let maxHeight = Math.max(0, bodyHeight)
-            this.refs.dialogBody.style.maxHeight = maxHeight + "px";
-            this.setState({defaultPosition:{x:this.state.defaultPosition.x,y: y +(this.refs.dialogBody.scrollHeight-maxHeight) }});
+          try{
+            let cs = window.getComputedStyle(this.refs.dialogContent);
+            let yy = parseInt(cs.top) + parseInt(cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0);
+            if( yy <0 ){
+              let headHeight = this.refs.dialogHeader ? this.refs.dialogHeader.offsetHeight : 0;
+              let footHeight = this.refs.dialogFooter ? this.refs.dialogFooter.offsetHeight : 0;
+              let bodyHeight = conHeight - footHeight - headHeight - 2 ; 
+              let maxHeight = Math.max(0, bodyHeight)
+              this.refs.dialogBody.style.maxHeight = maxHeight + "px";
+              this.setState({defaultPosition:{x:this.state.defaultPosition.x,y: y +(this.refs.dialogBody.scrollHeight-maxHeight) }});
+            }
+          }catch(ex){
+            console.error(ex);
           }
         });
       }
@@ -323,8 +329,8 @@ export default class Dialog extends PureComponent {
       headHeight -
       footHeight - 2;
     // debugger
-    let cs = window.getComputedStyle(this.refs.dialogContent);
-    let y = +cs.top + cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0;
+    // let cs = window.getComputedStyle(this.refs.dialogContent);
+    // let y = +cs.top + cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0;
     this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight) + "px";
   }
   hide() {

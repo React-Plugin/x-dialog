@@ -1717,13 +1717,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this2.setState({ defaultPosition: { x: _this2.state.defaultPosition.x, y: y } }, function () {
 	            //判断头部是否超出顶边界
 	            //如果超出，修改内容高度
-	            if (_this2.refs.dialogContent.offsetTop < 0) {
-	              var headHeight = _this2.refs.dialogHeader ? _this2.refs.dialogHeader.offsetHeight : 0;
-	              var footHeight = _this2.refs.dialogFooter ? _this2.refs.dialogFooter.offsetHeight : 0;
-	              var bodyHeight = conHeight - footHeight - headHeight - 2;
-	              var maxHeight = Math.max(0, bodyHeight);
-	              _this2.refs.dialogBody.style.maxHeight = maxHeight + "px";
-	              _this2.setState({ defaultPosition: { x: _this2.state.defaultPosition.x, y: y + (_this2.refs.dialogBody.scrollHeight - maxHeight) } });
+	            try {
+	              var cs = window.getComputedStyle(_this2.refs.dialogContent);
+	              var yy = parseInt(cs.top) + parseInt(cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0);
+	              if (yy < 0) {
+	                var headHeight = _this2.refs.dialogHeader ? _this2.refs.dialogHeader.offsetHeight : 0;
+	                var footHeight = _this2.refs.dialogFooter ? _this2.refs.dialogFooter.offsetHeight : 0;
+	                var bodyHeight = conHeight - footHeight - headHeight - 2;
+	                var maxHeight = Math.max(0, bodyHeight);
+	                _this2.refs.dialogBody.style.maxHeight = maxHeight + "px";
+	                _this2.setState({ defaultPosition: { x: _this2.state.defaultPosition.x, y: y + (_this2.refs.dialogBody.scrollHeight - maxHeight) } });
+	              }
+	            } catch (ex) {
+	              console.error(ex);
 	            }
 	          });
 	        }
@@ -2034,8 +2040,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
 	      var bodyHeight = maxHeight - headHeight - footHeight - 2;
 	      // debugger
-	      var cs = window.getComputedStyle(this.refs.dialogContent);
-	      var y = +cs.top + cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0;
+	      // let cs = window.getComputedStyle(this.refs.dialogContent);
+	      // let y = +cs.top + cs.getPropertyValue('transform').match(/(\d+)/gi)[5] || 0;
 	      this.refs.dialogBody.style.maxHeight = Math.max(0, bodyHeight) + "px";
 	    }
 	  }, {
