@@ -278,7 +278,7 @@ export default class Dialog extends PureComponent {
     }
     let height = parseInt(_this.refs.dialogContent.offsetHeight);
     let maxHeight =
-      newProps.height || parseInt(this.container.clientHeight);
+      newProps.height ==='auto'|| !newProps.height ? parseInt(this.container.clientHeight):newProps.height;
     let headHeight = _this.refs.dialogHeader ? _this.refs.dialogHeader.offsetHeight : 0;
     let footHeight = _this.refs.dialogFooter ? _this.refs.dialogFooter.offsetHeight : 0;
     let bodyHeight =
